@@ -33,5 +33,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags:
-            ${{ secrets.DOCKERHUB_USERNAME }}/sound-crate:${{ github.sha }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/sound-crate:latest
+            - ${{ secrets.DOCKERHUB_USERNAME }}/sound-crate:${{ github.sha }}
+            - ${{ secrets.DOCKERHUB_USERNAME }}/sound-crate:latest
