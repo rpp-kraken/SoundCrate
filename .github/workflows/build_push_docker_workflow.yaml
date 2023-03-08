@@ -31,3 +31,23 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/sound-crate:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/sound-crate:latest
+
+  redeploy:
+    needs: build
+    runs-on: ubuntu-20.04
+
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Docker Pull and Run from EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ec2-52-40-14-204.us-west-2.compute.amazonaws.com
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            sudo docker stop $(sudo docker ps -a -q)
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/sound-crate
+            sudo docker run -dp 3000:3000 ${{ secrets.DOCKERHUB_USERNAME }}/sound-crate
