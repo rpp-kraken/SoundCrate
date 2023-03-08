@@ -1,5 +1,5 @@
 # Start with node image on alpine runner (alpine is very lightweight)
-FROM node:alpine3.16
+FROM node:16-alpine
 
 # Create a system user instead of running commands from root user (for security)
 # RUN addgroup app && adduser -S -G app app
