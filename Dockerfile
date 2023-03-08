@@ -2,8 +2,8 @@
 FROM node:alpine3.16
 
 # Create a system user instead of running commands from root user (for security)
-RUN addgroup app && adduser -S -G app app
-USER app
+# RUN addgroup app && adduser -S -G app app
+# USER app
 
 # Working directory from which to execute commands
 WORKDIR /app
