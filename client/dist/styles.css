@@ -1,0 +1,11 @@
+#navBar {
+  position: fixed;
+  bottom: 0;
+  background-color: #acace6;
+  width: 100%;
+  height: 10vh;
+}
+
+#songCard {
+  height: 90vh;
+}
