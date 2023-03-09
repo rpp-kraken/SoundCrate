@@ -46,9 +46,10 @@ jobs:
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 400 private_key
-          ssh -o StrictHostKeyChecking=no -i "private_key" ubuntu@ec2-52-40-14-204.us-west-2.compute.amazonaws.com
+          ssh -o StrictHostKeyChecking=no -i "private_key" ubuntu@ec2-52-40-14-204.us-west-2.compute.amazonaws.com '
 
-            sudo docker ps -aq | sudo xargs docker stop | sudo xargs docker rm
-            sudo docker image prune -af
-            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/sound-crate
+            sudo docker ps -aq | sudo xargs docker stop | sudo xargs docker rm &&
+            sudo docker image prune -af &&
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/sound-crate &&
             sudo docker run -dp 3000:3000 ${{ secrets.DOCKERHUB_USERNAME }}/sound-crate
+          '
