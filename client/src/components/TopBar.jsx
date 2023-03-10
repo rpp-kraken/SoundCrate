@@ -32,7 +32,7 @@ export default function TopBar({ imageUrl }) {
             </ListItem>
             <ListItem button>
               <ListItemIcon><Edit /></ListItemIcon>
-              <ListItemText primary="Edit Profile" />
+              <ListItemText primary={<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Edit Profile</a>} />
             </ListItem>
             <ListItem button>
               <ListItemIcon><MusicNote /></ListItemIcon>
@@ -50,20 +50,5 @@ export default function TopBar({ imageUrl }) {
         </div>
       </Drawer>
     </>
-  );
-}
-
-
-
-export default function TopBar({ imageUrl }) {
-  return (
-    <AppBar position="static">
-      <Toolbar>
-        <IconButton edge="start" color="inherit" aria-label="menu">
-          <Menu />
-        </IconButton>
-        <Avatar alt="Profile Picture" />
-      </Toolbar>
-    </AppBar>
   );
 }
