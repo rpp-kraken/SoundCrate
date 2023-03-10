@@ -1,0 +1,1 @@
+module.exports.clientID = process.env.GOOGLE_CLIENTID
