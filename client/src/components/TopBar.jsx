@@ -52,18 +52,3 @@ export default function TopBar({ imageUrl }) {
     </>
   );
 }
-
-
-
-export default function TopBar({ imageUrl }) {
-  return (
-    <AppBar position="static">
-      <Toolbar>
-        <IconButton edge="start" color="inherit" aria-label="menu">
-          <Menu />
-        </IconButton>
-        <Avatar alt="Profile Picture" />
-      </Toolbar>
-    </AppBar>
-  );
-}

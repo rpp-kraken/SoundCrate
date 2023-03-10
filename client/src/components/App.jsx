@@ -1,5 +1,4 @@
 import React from 'react';
-import {red} from '@mui/material/colors';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material/';
 import ThemeExample from './ThemeExample.jsx';
@@ -9,19 +8,25 @@ import NavBar from './NavBar.jsx';
 
 const theme = createTheme({
   palette: {
+    contrastThreshold: 4.5,
     primary: {
-      light: "",
-      main: "#7951A8",
-      dark: "",
+      light: "#a34ce7",
+      main: "#7E1BCC",
+      dark: "#541288",
     },
     secondary: {
-      main: "#9356A0",
+      light: "#e349f3",
+      main: "#CC0FE0",
+      dark: "#8b0a98",
     },
     background: {
-      default: "#69369E",
+      default: "#541288",
     },
     text: {
-      primary: "#e0c5ed",
+      primary: "#f5f3f6",
+    },
+    error: {
+      main: "#B00020",
     }
   },
   typography: {
@@ -29,30 +34,45 @@ const theme = createTheme({
     fontFamily2: 'Open Sans, sans-serif',
     fontSize: 16,
     h1: {
-      fontSize: '3rem',
+      fontSize: {
+        lg: 30,
+        md: 20,
+        sm: 15,
+        xs: 10
+      },
       fontWeight: 700,
-      lineHeight: 1.2,
+      lineHeight: 'calc(150%)',
     },
     h2: {
-      fontSize: '2.5rem',
+      fontSize: {
+        lg: 30,
+        md: 20,
+        sm: 15,
+        xs: 10
+      },
       fontWeight: 700,
-      lineHeight: 1.2,
+      lineHeight: 'calc(150%)',
     },
     h3: {
-      fontSize: '2rem',
+      fontSize: 'calc(22px + 0.390625vw',
       fontWeight: 700,
-      lineHeight: 1.2,
+      lineHeight: 'calc(150%)',
+    },
+    h4: {
+      fontSize: 'calc(20px + 0.390625vw',
+      fontWeight: 700,
+      lineHeight: 'calc(150%)',
     },
     bodyText: {
-      fontSize: '1rem',
-      fontWeight: 700,
-      lineHeight: 1.2,
+      fontSize: 'calc(16px + 0.390625vw',
+      fontWeight: 400,
+      lineHeight: 'calc(150%)',
     },
     bodyText2: {
       fontFamily: 'fontFamily2',
-      fontSize: '1rem',
-      fontWeight: 700,
-      lineHeight: 1.2,
+      fontSize: 'calc(16px + 0.390625vw',
+      fontWeight: 400,
+      lineHeight: 'calc(150%)',
     },
   },
 });
