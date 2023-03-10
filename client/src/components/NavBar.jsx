@@ -1,0 +1,24 @@
+import React, { useState } from 'react';
+import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
+import { Home, Search, Person } from '@material-ui/icons';
+import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+
+export default function NavBar() {
+  const [value, setValue] = React.useState(0);
+  return (
+    <BottomNavigation
+      id="navBar"
+      value={value}
+      onChange={(event, newValue) => {
+        setValue(newValue);
+      }}
+      showLabels
+    >
+      <BottomNavigationAction label="Home" icon={<Home />} />
+      <BottomNavigationAction label="Add" icon={<ControlPointIcon />} />
+      <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+    </BottomNavigation>
+  );
+}
