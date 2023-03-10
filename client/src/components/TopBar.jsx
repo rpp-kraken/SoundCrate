@@ -32,7 +32,7 @@ export default function TopBar({ imageUrl }) {
             </ListItem>
             <ListItem button>
               <ListItemIcon><Edit /></ListItemIcon>
-              <ListItemText primary="Edit Profile" />
+              <ListItemText primary={<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Edit Profile</a>} />
             </ListItem>
             <ListItem button>
               <ListItemIcon><MusicNote /></ListItemIcon>

@@ -4,6 +4,7 @@ import { Home, Search, Person } from '@material-ui/icons';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 
 export default function NavBar() {
   const [value, setValue] = React.useState(0);
@@ -16,9 +17,9 @@ export default function NavBar() {
       }}
       showLabels
     >
-      <BottomNavigationAction label="Home" icon={<Home />} />
-      <BottomNavigationAction label="Add" icon={<ControlPointIcon />} />
-      <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+      <BottomNavigationAction label="" icon={<Home />} />
+      <BottomNavigationAction label="" icon={<KeyboardVoiceIcon />} />
+      <BottomNavigationAction label="" icon={<FavoriteIcon />} />
     </BottomNavigation>
   );
 }
