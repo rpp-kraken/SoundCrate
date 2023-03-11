@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { AppBar, Toolbar, IconButton, Avatar, Button, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { Menu, AccountCircle, Edit, ExitToApp, MusicNote, Delete } from '@material-ui/icons';
+import { useTheme } from '@mui/material/styles';
 
 export default function TopBar({ imageUrl }) {
+  const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const toggleDrawer = () => {
@@ -11,7 +13,7 @@ export default function TopBar({ imageUrl }) {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="sticky" style={{ backgroundColor: theme.palette.primary.main }}>
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer}>
             <Menu />

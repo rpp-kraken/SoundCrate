@@ -9,56 +9,91 @@ export default function ThemeExample() {
   const theme = useTheme();
 
   var cardStyle = {
-    display: 'block',
-    width: '30vw',
+    display: 'flex',
     transitionDuration: '0.3s',
-    height: '30vw',
-    textAlign: 'center',
-    lineHeight: '30vw',
-    fontFamily: 'theme.typography.h1'
+    padding: '15px',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    minWidth: 'fit-content',
   }
 
   return (
-    <div>
-      <Typography variant="h1" component="h1" sx={{ fontFamily: 'h1' }}>
-        My Heading 1
-      </Typography>
-      <Typography variant="h2" component="h2" sx={{ fontFamily: 'h2' }}>
-        My Heading 2
-      </Typography>
-      <Typography variant="h3" component="h3" sx={{ fontFamily: 'h3' }}>
-        My Heading 3
-      </Typography>
-      <Typography variant="bodyText" component="p">
-        My Body Text 1
-      </Typography>
-      <Typography variant="bodyText2" component="p">
-        My Body Text 2
-      </Typography>
-      <Box sx={{ flexGrow: 1, marginTop: '15px' }}>
-        <Grid container spacing={2}>
-          <Grid item xs={4}>
-            <Card sx={{ ...cardStyle, textAlign: 'center', backgroundColor: theme.palette.primary.light}}>
-              <Typography variant="h2" component="h2" sx={{ fontFamily: 'h2' }}>Primary Color light</Typography>
-            </Card>
+    <>
+      <Box id='font-examples' sx={{ flexGrow: 1, width: '100%' }}>
+        <Grid container spacing={1} p={2} sx={{ backgroundColor: 'black', textAlign: 'center' }}>
+          <Grid item xs={12} sx={{ alignItems: 'center' }}>
+            <Typography variant='h1'>
+              My Heading 1
+            </Typography>
           </Grid>
-          <Grid item xs={4}>
-            <Card sx={{ ...cardStyle,  textAlign: 'center', backgroundColor: theme.palette.primary.main}}>Primary Color main</Card>
+          <Grid item xs={12}>
+            <Typography variant='h2'>
+              My Heading 2
+            </Typography>
           </Grid>
-          <Grid item xs={4}>
-            <Card sx={{ ...cardStyle,  textAlign: 'center', backgroundColor: theme.palette.primary.dark}}>Primary Color dark</Card>
+          <Grid item xs={12}>
+            <Typography variant='h3'>
+              My Heading 3
+            </Typography>
           </Grid>
-          <Grid item xs={4}>
-            <Card sx={{ ...cardStyle,  textAlign: 'center', backgroundColor: theme.palette.secondary.light}}>Secondary Color light</Card>
+          <Grid item xs={12}>
+            <Typography variant='h4'>
+              My Heading 4
+            </Typography>
           </Grid>
-          <Grid item xs={4}>
-            <Card sx={{ ...cardStyle,  textAlign: 'center', backgroundColor: theme.palette.secondary.main}}>Secondary Color main</Card>
+          <Grid item xs={12}>
+            <Typography variant='bodyText' component='p'>
+              My Body Text 1
+            </Typography>
           </Grid>
-          <Grid item xs={4}>
-            <Card sx={{ ...cardStyle, textAlign: 'center', backgroundColor: theme.palette.secondary.main}}>Secondary Color dark</Card>
+          <Grid item xs={12}>
+            <Typography variant='bodyText2' component='p'>
+              My Body Text 2
+            </Typography>
           </Grid>
         </Grid>
       </Box>
-    </div>
+
+      <Box id='color-palette-examples' sx={{ flexGrow: 1, minWidth: 'fit-content' }}>
+        <Grid container spacing={2} p={4} sx={{ backgroundColor: theme.palette.background.default }}>
+          <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center' }}>theme.palette.background.default</Typography>
+          <Grid item xs={12}>
+            <Card sx={{ ...cardStyle, backgroundColor: theme.palette.primary.light}}>
+              <Typography variant='h4'>theme.palette.primary.light</Typography>
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card sx={{ ...cardStyle, backgroundColor: theme.palette.primary.main}}>
+              <Typography variant='h4'>theme.palette.primary.main</Typography>
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card sx={{ ...cardStyle, backgroundColor: theme.palette.primary.dark}}>
+              <Typography variant='h4'>theme.palette.primary.dark</Typography>
+            </Card>
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={2} p={4} sx={{ backgroundColor: theme.palette.background.secondary }}>
+          <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center' }}>theme.palette.background.secondary</Typography>
+          <Grid item xs={12}>
+            <Card sx={{ ...cardStyle, backgroundColor: theme.palette.secondary.light}}>
+              <Typography variant='h4'>theme.palette.secondary.light</Typography>
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card sx={{ ...cardStyle, backgroundColor: theme.palette.secondary.main}}>
+              <Typography variant='h4'>theme.palette.secondary.main</Typography>
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card sx={{ ...cardStyle, backgroundColor: theme.palette.secondary.dark}}>
+              <Typography variant='h4'>theme.palette.secondary.dark</Typography>
+            </Card>
+          </Grid>
+        </Grid>
+      </Box>
+      </>
   );
 }
