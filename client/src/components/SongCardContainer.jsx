@@ -1,8 +1,10 @@
 import React from 'react';
 import { Card, CardContent, CardMedia, IconButton, Typography } from '@material-ui/core';
 import { FavoriteBorder, Favorite } from '@material-ui/icons';
+import { useTheme} from '@mui/material/styles';
 
 export default function SongCardContainer({ title, time, artist, artistImageUrl, isLiked }) {
+  const theme = useTheme();
   const [liked, setLiked] = React.useState(isLiked);
   const handleLikeClick = () => {
     setLiked(!liked);
