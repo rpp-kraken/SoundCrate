@@ -12,10 +12,10 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
         <CssBaseline/>
-        {/* <ThemeExample /> */}
-        <TopBar />
+        <ThemeExample />
+        {/* <TopBar />
         <SongCardContainer />
-        <NavBar />
+        <NavBar /> */}
     </ThemeProvider>
   );
 }
