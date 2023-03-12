@@ -7,8 +7,6 @@ import { GoogleLogin } from '@react-oauth/google';
 import SongCardContainer from './SongCardContainer.jsx';
 import NavBar from './NavBar.jsx';
 import theme from '../themes/default.jsx';
-import { GoogleLogin } from '@react-oauth/google';
-import Login from '../components/login/Login.jsx';
 
 
 export default function App() {
