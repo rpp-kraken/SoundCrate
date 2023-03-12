@@ -14,18 +14,20 @@ export default function SongCardContainer({ title, time, artist, artistImageUrl,
       id="songCard"
       raised
       style={{
-        margin: "10px",
-        backgroundColor: theme.palette.background.secondary,
+        margin: '15px',
+        backgroundColor: theme.palette.primary.main,
         color: theme.palette.text.primary,
+        borderRadius: 0,
+        minHeight: '16vh'
       }}
     >
       <CardMedia
-        component="img"
-        image=""
-        style={{ objectFit: "contain", color: theme.palette.text.primary }}
+        component='img'
+        image=''
+        style={{ objectFit: 'contain', color: theme.palette.text.primary }}
       />
       <CardContent>
-        <Typography variant="h5" component="h5">
+        <Typography variant='h5' component='h5'>
           Is Cool!
         </Typography>
         <Typography>

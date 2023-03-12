@@ -13,12 +13,12 @@ export default function TopBar({ imageUrl }) {
 
   return (
     <>
-      <AppBar position="sticky" style={{ backgroundColor: theme.palette.primary.main }}>
+      <AppBar position="sticky" style={{ backgroundColor: theme.palette.background.secondary, height: '16vh', justifyContent: 'center', boxShadow: 'none' }}>
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer}>
             <Menu />
           </IconButton>
-          <Avatar alt="Profile Picture" />
+          <Avatar alt="Profile Picture"  style={{ height: '50px', width: '50px' }}/>
         </Toolbar>
       </AppBar>
       <Drawer anchor="left" open={openDrawer} onClose={toggleDrawer}>

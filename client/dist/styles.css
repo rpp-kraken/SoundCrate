@@ -1,10 +1,7 @@
-#navBar {
-  position: fixed;
-  bottom: 0;
-  width: 100vw;
+.MuiBottomNavigationAction-root {
+  color: #ffffff !important;
 }
 
-#songCard {
-  margin: 10px;
+.MuiBottomNavigationAction-root.Mui-selected {
+  color: #b061ff !important;
 }
-

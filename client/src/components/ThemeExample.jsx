@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Card  } from '@mui/material';
+import { Typography, Card, TableCell  } from '@mui/material';
 import { useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -20,6 +20,7 @@ export default function ThemeExample() {
 
   return (
     <>
+      <TableCell sx={{ padding: 0 }}>
       <Box id='font-examples' sx={{ flexGrow: 1, width: '100%' }}>
         <Grid container spacing={1} p={2} sx={{ backgroundColor: 'black', textAlign: 'center' }}>
           <Grid item xs={12} sx={{ alignItems: 'center' }}>
@@ -94,6 +95,7 @@ export default function ThemeExample() {
           </Grid>
         </Grid>
       </Box>
+      </TableCell>
       </>
   );
 }

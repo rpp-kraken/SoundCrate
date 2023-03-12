@@ -19,7 +19,7 @@ export default function NavBar() {
         setValue(newValue);
       }}
       showLabels
-      style={{ backgroundColor: theme.palette.primary.main }}
+      style={{ backgroundColor: '#0A0F12', position: 'fixed', bottom: 0, width: '100vw', height: '10vh' }}
     >
       <BottomNavigationAction label="" icon={<Home />} />
       <BottomNavigationAction label="" icon={<KeyboardVoiceIcon />} />
