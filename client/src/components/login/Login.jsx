@@ -11,7 +11,7 @@ export default function Login(props) {
   };
 
   return (
-    <div>
+    <div data-testid="google-oauth">
       <h2>Google Login</h2>
       <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
     </div>
