@@ -1,5 +1,8 @@
+require('dotenv').config()
 const express = require('express');
 const app = express();
+const multer = require('multer');
+const { handleUpload } = require('./controllers/index');
 
 app.use(express.static('./client/dist'));
 const upload = multer();
@@ -13,6 +16,7 @@ app.post('/upload', upload.fields([
 ]), handleUpload);
 
 const port = process.env.PORT || 3000;
+
 app.listen(port, () => {
   console.log(`listening on port ${port}...`);
 });
