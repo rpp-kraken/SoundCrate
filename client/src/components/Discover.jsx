@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { createTheme } from '@mui/material/styles';
 import SongCard from './SongCard.jsx'
 
-
 export default function Discover(props) {
   return (
     <div>
@@ -10,7 +9,7 @@ export default function Discover(props) {
       {console.log(props)}
       {props.songs.map((song, i) => {
         return (
-          <SongCardContainer
+          <SongCard
             key={i}
             title={song.title}
             playCount={song.play_count}
