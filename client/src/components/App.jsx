@@ -29,7 +29,8 @@ export default function App() {
     // 'https://dl.dropboxusercontent.com/s/1emccgj2kebg72a/Transient.m4a?dl=0',
     // 'https://dl.dropboxusercontent.com/s/c9aome2s0wr4ym7/Cymatics%20-%2021%20Inch%20Ride%20-%20Velocity%204.wav?dl=0',
     // 'https://dl.dropboxusercontent.com/s/3e7cinfd5ib9u5d/one%20two.m4a?dl=0',
-    'https://dl.dropboxusercontent.com/s/d539eig06ioc35s/one%20two.webm?dl=0',
+    // 'https://dl.dropboxusercontent.com/s/d539eig06ioc35s/one%20two.webm?dl=0',
+    'https://soundcrate.s3.us-east-2.amazonaws.com/9308db8f-dbd0-4ca7-b236-eda4f4b56b11.m4a'
   ];
 
   return (
@@ -39,7 +40,7 @@ export default function App() {
       {view === 'profile' && <Profile />}
       {view === 'create' && <Create />}
       {view === 'discover' && <Discover />}
-      {listOfTracks.map((urlTrack, i) => { return <Play trackUrl={urlTrack} index={i} key={i} /> })}
+      {listOfTracks.map((trackUrl, i) => { return <Play trackUrl={trackUrl} index={i} key={i} /> })}
       {/* {view === 'play' && <Play />} */}
       {view === 'publish' && <Publish />}
       {view === 'theme' && <ThemeExample />}
