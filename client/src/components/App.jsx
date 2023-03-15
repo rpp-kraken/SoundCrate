@@ -12,7 +12,6 @@ import Play from './Play.jsx';
 import Publish from './Publish.jsx';
 
 
-
 export default function App() {
   const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
   const [view, setView] = useState('profile');
