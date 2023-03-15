@@ -22,7 +22,7 @@
   "homepage": "https://github.com/rpp-kraken/SoundCrate#readme",
   "jest": {
     "verbose": true,
-    "testEnvironment": "node",
+    "testEnvironment": "jsdom",
     "coverageReporters": [ "text" ],
     "coveragePathIgnorePatterns": [ "/node_modules/" ]
   },
