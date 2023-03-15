@@ -4,12 +4,14 @@ import { CssBaseline } from '@mui/material/';
 import theme from '../themes/default.jsx';
 import ThemeExample from './ThemeExample.jsx';
 import TopBar from './TopBar.jsx';
+import Discover from './Discover.jsx'
 import SongCard from './SongCard.jsx';
 import NavBar from './NavBar.jsx';
 import Create from './Create.jsx';
 import Profile from './Profile.jsx';
 import Play from './Play.jsx';
 import Publish from './Publish.jsx';
+import {songData} from '../../../DummyData/dummyData.js'
 
 export default function App() {
   const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
@@ -17,7 +19,7 @@ export default function App() {
   // Play View: For Testing our S3 Bucket
   const [listOfTracks, setListOfTracks] = useState(['https://soundcrate.s3.us-east-2.amazonaws.com/9308db8f-dbd0-4ca7-b236-eda4f4b56b11.m4a']);
 
-  const [view, setView] = useState('create')
+  const [view, setView] = useState('')
 
   return (
     <ThemeProvider theme={theme}>
@@ -25,7 +27,7 @@ export default function App() {
       {view !== 'profile' && <TopBar />}
       {view === 'profile' && <Profile />}
       {view === 'create' && <Create />}
-      {view === 'discover' && <Discover />}
+      {view === 'discover' && <Discover songs={songData} />}
       {/* {listOfTracks.map((trackUrl, i) => { return <Play trackUrl={trackUrl} index={i} key={i} /> })} */}
       {/* {view === 'play' && <Play />} */}
       {view === 'publish' && <Publish />}
