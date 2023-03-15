@@ -14,20 +14,37 @@ import Publish from './Publish.jsx';
 
 export default function App() {
   const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
-  const [view, setView] = useState('songcard');
+
+  const [listOfTracks, setListOfTracks] = useState(['https://dl.dropboxusercontent.com/s/d539eig06ioc35s/one%20two.webm?dl=0']);
+
+  // const [view, setView] = useState('profile')
+  // const [view, setView] = useState('create')
+  const [view, setView] = useState('play')
+
+
+  let trackUrlSources = [
+    // 'https://s3-us-west-1.amazonaws.com/leesamples/samples/Rhythmics/60+bpm/Ping+Pong+Ping.mp3',
+    // 'https://dl.dropboxusercontent.com/s/w303ydczmgrkfh8/New%20Recording%2075.m4a?dl=0',
+    // 'https://tonejs.github.io/audio/berklee/gong_1.mp3',
+    // 'https://dl.dropboxusercontent.com/s/1emccgj2kebg72a/Transient.m4a?dl=0',
+    // 'https://dl.dropboxusercontent.com/s/c9aome2s0wr4ym7/Cymatics%20-%2021%20Inch%20Ride%20-%20Velocity%204.wav?dl=0',
+    // 'https://dl.dropboxusercontent.com/s/3e7cinfd5ib9u5d/one%20two.m4a?dl=0',
+    'https://dl.dropboxusercontent.com/s/d539eig06ioc35s/one%20two.webm?dl=0',
+  ];
 
   return (
     <ThemeProvider theme={theme}>
-        <CssBaseline/>
-        {view !== 'profile' && <TopBar />}
-        {view === 'profile' && <Profile />}
-        {view === 'create' && <Create />}
-        {view === 'discover' && <Discover />}
-        {view === 'play' && <Play />}
-        {view === 'publish' && <Publish />}
-        {view === 'theme' && <ThemeExample />}
-        {view === 'songcard' && <SongCard />}
-        {view !== 'profile' && <NavBar />}
+      <CssBaseline />
+      {view !== 'profile' && <TopBar />}
+      {view === 'profile' && <Profile />}
+      {view === 'create' && <Create />}
+      {view === 'discover' && <Discover />}
+      {listOfTracks.map((urlTrack, i) => { return <Play trackUrl={urlTrack} index={i} key={i} /> })}
+      {/* {view === 'play' && <Play />} */}
+      {view === 'publish' && <Publish />}
+      {view === 'theme' && <ThemeExample />}
+      {view === 'songcard' && <SongCard />}
+      {view !== 'profile' && <NavBar />}
     </ThemeProvider>
   );
 }
