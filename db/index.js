@@ -1,11 +1,11 @@
 require('dotenv').config();
 const Pool = require('pg-pool');
 const pool = new Pool ({
-  host: process.env.HOST,
+  host: process.env.DB_HOST,
   port: 5432,
   database: 'soundcrate',
-  user: process.env.USER,
-  password: process.env.PASSWORD,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
   max: 20,
   idleTimeoutMillis: 1000
 });
