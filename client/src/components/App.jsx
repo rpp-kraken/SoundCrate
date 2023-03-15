@@ -4,7 +4,7 @@ import { CssBaseline } from '@mui/material/';
 import theme from '../themes/default.jsx';
 import ThemeExample from './ThemeExample.jsx';
 import TopBar from './TopBar.jsx';
-import SongCardContainer from './SongCardContainer.jsx';
+import SongCard from './SongCard.jsx';
 import NavBar from './NavBar.jsx';
 import Create from './Create.jsx';
 import Profile from './Profile.jsx';
@@ -15,20 +15,20 @@ import Publish from './Publish.jsx';
 
 export default function App() {
   const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
-  const [view, setView] = useState('songcard');
+  const [view, setView] = useState('profile');
 
   return (
     <ThemeProvider theme={theme}>
         <CssBaseline/>
-        <TopBar />
+        {view !== 'profile' && <TopBar />}
         {view === 'profile' && <Profile />}
         {view === 'create' && <Create />}
         {view === 'discover' && <Discover />}
         {view === 'play' && <Play />}
         {view === 'publish' && <Publish />}
         {view === 'theme' && <ThemeExample />}
-        {view === 'songcard' && <SongCardContainer />}
-        <NavBar />
+        {view === 'songcard' && <SongCard />}
+        {view !== 'profile' && <NavBar />}
     </ThemeProvider>
   );
 }
