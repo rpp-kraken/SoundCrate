@@ -23,12 +23,12 @@ export default function SongCardContainer({ title, time, artist, artistImageUrl,
     >
       <CardMedia
         component='img'
-        image=''
+        image= {`${artistImageUrl}`}
         style={{ objectFit: 'contain', color: theme.palette.text.primary }}
       />
       <CardContent>
         <Typography variant='h5' component='h5'>
-          Is Cool!
+          {title}
         </Typography>
         <Typography>
           5 hours - Aaron Miller
