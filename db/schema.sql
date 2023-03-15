@@ -4,7 +4,10 @@ CREATE TABLE IF NOT EXISTS users (
   email VARCHAR(100),
   bio VARCHAR(250),
   path_to_pic VARCHAR(250),
-  username VARCHAR(100)
+  username VARCHAR(100),
+  tier1 BOOLEAN,
+  tier2 BOOLEAN,
+  tier3 BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS songs (
@@ -20,7 +23,7 @@ CREATE TABLE IF NOT EXISTS songs (
     REFERENCES users(id)
 );
 
-CREATE TABLE IF NOT EXISTS tags (
+CREATE TABLE IF NOT EXISTS song_tags (
   id VARCHAR(150) PRIMARY KEY,
   name VARCHAR(100),
   song_id VARCHAR(150),
