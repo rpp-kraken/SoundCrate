@@ -4,7 +4,7 @@
   "description": "A Sound Mixing Application",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
     "build-dev": "webpack --watch",
     "start-dev": "nodemon ./server/index.js",
     "build": "webpack",
@@ -21,7 +21,10 @@
   },
   "homepage": "https://github.com/rpp-kraken/SoundCrate#readme",
   "jest": {
-    "verbose": true
+    "verbose": true,
+    "testEnvironment": "jsdom",
+    "coverageReporters": [ "text" ],
+    "coveragePathIgnorePatterns": [ "/node_modules/" ]
   },
   "dependencies": {
     "@babel/cli": "^7.21.0",
