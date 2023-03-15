@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createTheme } from '@mui/material/styles';
-import SongCardContainer from './SongCardContainer.jsx'
+import SongCard from './SongCard.jsx'
 
 
 export default function Discover(props) {
