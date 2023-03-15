@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AppBar, Toolbar, IconButton, Avatar, Button, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { Menu, AccountCircle, Edit, ExitToApp, MusicNote, Delete } from '@material-ui/icons';
 import { useTheme } from '@mui/material/styles';
+import Login from '../components/login/Login.jsx';
 
 export default function TopBar({ imageUrl }) {
   const theme = useTheme();
@@ -15,7 +16,7 @@ export default function TopBar({ imageUrl }) {
     <>
       <AppBar position="sticky" style={{ backgroundColor: theme.palette.background.secondary, height: '16vh', justifyContent: 'center', boxShadow: 'none' }}>
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer}>
+          <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer} data-testid="drawer">
             <Menu />
           </IconButton>
           <Avatar alt="Profile Picture"  style={{ height: '50px', width: '50px' }}/>
@@ -28,6 +29,9 @@ export default function TopBar({ imageUrl }) {
           onKeyDown={toggleDrawer}
         >
           <List>
+            <ListItem>
+              <Login />
+            </ListItem>
             <ListItem>
               <ListItemIcon><AccountCircle /></ListItemIcon>
               <ListItemText primary="My Account" />

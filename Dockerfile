@@ -10,7 +10,7 @@ WORKDIR /app
 
 # Copy files to container's filesystem and install dependencies
 COPY package*.json .
-RUN npm install
+RUN npm install --legacy-peer-deps
 COPY . .
 
 # Build the webpack bundle
