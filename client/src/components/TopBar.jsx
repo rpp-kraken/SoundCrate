@@ -30,7 +30,7 @@ export default function TopBar({ imageUrl }) {
           onKeyDown={toggleDrawer}
         >
           <List>
-            <ListItem>
+            <ListItem button>
               <Login />
             </ListItem>
             <ListItem>
