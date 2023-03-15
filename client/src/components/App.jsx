@@ -19,7 +19,7 @@ export default function App() {
   // Play View: For Testing our S3 Bucket
   const [listOfTracks, setListOfTracks] = useState(['https://soundcrate.s3.us-east-2.amazonaws.com/9308db8f-dbd0-4ca7-b236-eda4f4b56b11.m4a']);
 
-  const [view, setView] = useState('')
+  const [view, setView] = useState('create')
 
   return (
     <ThemeProvider theme={theme}>
