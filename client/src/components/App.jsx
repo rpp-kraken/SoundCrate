@@ -14,7 +14,7 @@ import Publish from './Publish.jsx';
 
 export default function App() {
   const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
-  const [view, setView] = useState('profile');
+  const [view, setView] = useState('songcard');
 
   return (
     <ThemeProvider theme={theme}>
