@@ -1,0 +1,14 @@
+version: '4.16'
+services:
+  db:
+    image: postgres:alpine
+    restart: always
+    container_name: boc-sc_c
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 'password'
+      POSTGRES_DB: soundcrate-test
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/create_tables.sql
