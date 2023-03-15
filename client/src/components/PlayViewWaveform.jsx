@@ -34,7 +34,9 @@ const PlayViewWaveform = (props) => {
 					waveColor: '#211027',
 					progressColor: '#69207F',
 					responsive: true,
-					autoPlay: true
+					autoPlay: true,
+					barWidth: 3,
+					barHeight: 7,
 					// plugins: [
 					// 	TimelinePlugin.create({
 					// 		container: '#wave-timeline',
@@ -220,11 +222,22 @@ const PlayViewWaveform = (props) => {
 							<i className='material-icons'>play_arrow</i>
 						) : null
 						} */}
-						{initLoad === false && playing ? (
-							<i className='material-icons'>pause</i>
+
+						{playing ? (
+							initLoad === false ? (
+								<i className='material-icons'>pause</i>
+							) : (
+								<i className='material-icons'>unmute play view</i>
+							)
 						) : (
 							<i className='material-icons'>play_arrow</i>
 						)}
+
+						{/* {initLoad === false && playing ? (
+							<i className='material-icons'>pause</i>
+						) : (
+							<i className='material-icons'>play_arrow</i>
+						)} */}
 					</button>
 					<button
 						title='reload'
