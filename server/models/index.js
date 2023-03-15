@@ -10,8 +10,8 @@ module.exports = {
       data.fav_count, data.path_to_artwork, user_id.rows[0].id]);
   },
 
-  addTags: async (tagsArray, titleOfSong) => {
-    tagsArray = tagsArray.split(',');
+  addTags: async (tags, titleOfSong) => {
+    const tagsArray = tags.split(',');
     const songId = await db.query(`SELECT id FROM songs WHERE title = '${titleOfSong}'`);
     tagsArray.forEach(tag => {
       const tagId = uuid();
