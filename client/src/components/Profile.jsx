@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-<<<<<<< HEAD
 import { Typography, Card, TableCell, Button  } from '@mui/material';
 import { Avatar } from '@material-ui/core';
 import { useTheme} from '@mui/material/styles';
@@ -54,15 +53,5 @@ export default function Profile() {
         </Grid>
       </Grid>
     </Box>
-=======
-import { createTheme } from '@mui/material/styles';
-
-
-export default function Profile() {
-  return (
-    <div>
-      <h3>Profile view</h3>
-    </div>
->>>>>>> 232f0249df5711f3b21c1c69b9abd8fa0334deaf
   );
 }
