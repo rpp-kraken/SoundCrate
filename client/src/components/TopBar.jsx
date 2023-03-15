@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AppBar, Toolbar, IconButton, Avatar, Button, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { Menu, AccountCircle, Edit, ExitToApp, MusicNote, Delete } from '@material-ui/icons';
+import { Menu, AccountCircle, Edit,  ExitToApp, MusicNote, Delete } from '@material-ui/icons';
+import LoginIcon from '@mui/icons-material/Login';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import Login from '../components/login/Login.jsx';
@@ -31,6 +32,7 @@ export default function TopBar({ imageUrl }) {
         >
           <List>
             <ListItem button>
+              <ListItemIcon><LoginIcon /></ListItemIcon>
               <Login />
             </ListItem>
             <ListItem>

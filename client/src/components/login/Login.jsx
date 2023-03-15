@@ -10,10 +10,8 @@ export default function Login(props) {
   });
 
   return (
-    <div data-testid="google-oauth">
-      <button onClick={() => login()}>
-        Login
-      </button>
+    <div data-testid="google-oauth" onClick={() => login()}>
+      Login
     </div>
   );
 }
