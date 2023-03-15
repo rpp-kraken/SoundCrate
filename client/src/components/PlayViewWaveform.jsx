@@ -18,7 +18,7 @@ const PlayViewWaveform = (props) => {
 
 	const [playing, setPlaying] = useState(true); // to keep track whether audio is currently playing or not
 	const [volume, setVolume] = useState(1); // to control volume level of the audio. 0-mute, 1-max
-	const [zoom, setZoom] = useState(1); // to control the zoom level of the waveform
+	const [initLoad, setInitLoad] = useState(true); // init load play button ternary
 	const [duration, setDuration] = useState(0); // duration is used to set the default region of selection for trimming the audio
 
 	// create the waveform inside the correct component
@@ -34,6 +34,7 @@ const PlayViewWaveform = (props) => {
 					waveColor: '#211027',
 					progressColor: '#69207F',
 					responsive: true,
+					autoPlay: true
 					// plugins: [
 					// 	TimelinePlugin.create({
 					// 		container: '#wave-timeline',
@@ -54,10 +55,11 @@ const PlayViewWaveform = (props) => {
 
 	useEffect(() => {
 		if (wavesurferObj) {
+			console.log("🚀 ~ file: PlayViewWaveform.jsx:58 ~ useEffect ~ wavesurferObj:", wavesurferObj)
 			// once the waveform is ready, play the audio
 			wavesurferObj.on('ready', () => {
 				wavesurferObj.play();
-				wavesurferObj.enableDragSelection({}); // to select the region to be trimmed
+				// wavesurferObj.enableDragSelection({}); // to select the region to be trimmed
 				setDuration(Math.floor(wavesurferObj.getDuration())); // set the duration in local state
 			});
 
@@ -72,13 +74,13 @@ const PlayViewWaveform = (props) => {
 			});
 
 			// if multiple regions are created, then remove all the previous regions so that only 1 is present at any given time
-			wavesurferObj.on('region-updated', (region) => {
-				const regions = region.wavesurfer.regions.list;
-				const keys = Object.keys(regions);
-				if (keys.length > 1) {
-					regions[keys[0]].remove();
-				}
-			});
+			// 	wavesurferObj.on('region-updated', (region) => {
+			// 		const regions = region.wavesurfer.regions.list;
+			// 		const keys = Object.keys(regions);
+			// 		if (keys.length > 1) {
+			// 			regions[keys[0]].remove();
+			// 		}
+			// 	});
 		}
 	}, [wavesurferObj]);
 
@@ -87,26 +89,24 @@ const PlayViewWaveform = (props) => {
 		if (wavesurferObj) wavesurferObj.setVolume(volume);
 	}, [volume, wavesurferObj]);
 
-	// set zoom level of the wavesurfer object, whenever the zoom variable in state is changed
-	useEffect(() => {
-		if (wavesurferObj) wavesurferObj.zoom(zoom);
-	}, [zoom, wavesurferObj]);
+
 
 	// when the duration of the audio is available, set the length of the region depending on it, so as to not exceed the total lenght of the audio
 	useEffect(() => {
 		if (duration && wavesurferObj) {
 			// add a region with default length
-			wavesurferObj.addRegion({
-				start: Math.floor(duration / 2) - Math.floor(duration) / 5, // time in seconds
-				end: Math.floor(duration / 2), // time in seconds
-				color: 'hsla(265, 100%, 86%, 0.4)', // color of the selected region, light hue of purple
-			});
+			// wavesurferObj.addRegion({
+			// 	start: Math.floor(duration / 2) - Math.floor(duration) / 5, // time in seconds
+			// 	end: Math.floor(duration / 2), // time in seconds
+			// 	color: 'hsla(265, 100%, 86%, 0.4)', // color of the selected region, light hue of purple
+			// });
 		}
 	}, [duration, wavesurferObj]);
 
 	const handlePlayPause = (e) => {
 		wavesurferObj.playPause();
 		setPlaying(!playing);
+		setInitLoad(false);
 	};
 
 	const handleReload = (e) => {
@@ -120,9 +120,6 @@ const PlayViewWaveform = (props) => {
 		setVolume(e.target.value);
 	};
 
-	const handleZoomSlider = (e) => {
-		setZoom(e.target.value);
-	};
 
 	const handleTrim = (e) => {
 		if (wavesurferObj) {
@@ -199,26 +196,11 @@ const PlayViewWaveform = (props) => {
 
 	return (
 		<section className='waveform-container'>
-			{/* <button
-				title='play/pause'
-				className='controls'
-				onClick={handlePlayPause}>
-				{playing ? (
-					<i className='material-icons'>pause</i>
-				) : (
-					<i className='material-icons'>play_arrow</i>
-				)}
-			</button> */}
 			<div ref={wavesurferRef} id='waveform' />
 			<div ref={timelineRef} id='wave-timeline' />
 			<div className='all-controls'>
 				<div className='left-container'>
-					{/* <button
-						title='reload'
-						className='controls'
-						onClick={handleReload}>
-						<i className='material-icons'>replay</i>
-					</button> */}
+
 					{/* <button className='trim' onClick={handleTrim}>
 						<i
 							style={{
@@ -230,6 +212,26 @@ const PlayViewWaveform = (props) => {
 						</i>
 						Trim
 					</button> */}
+					<button
+						title='play/pause'
+						className='controls'
+						onClick={handlePlayPause}>
+						{/* {initLoad === true ? (
+							<i className='material-icons'>play_arrow</i>
+						) : null
+						} */}
+						{initLoad === false && playing ? (
+							<i className='material-icons'>pause</i>
+						) : (
+							<i className='material-icons'>play_arrow</i>
+						)}
+					</button>
+					<button
+						title='reload'
+						className='controls'
+						onClick={handleReload}>
+						<i className='material-icons'>replay</i>
+					</button>
 				</div>
 				<div className='right-container'>
 					<div className='volume-slide-container'>
