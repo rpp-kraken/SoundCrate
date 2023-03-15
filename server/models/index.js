@@ -7,13 +7,7 @@ module.exports = {
     var user_id =  await db.query(`SELECT id FROM users WHERE name = '${data.user}'`);
     return db.query(`INSERT INTO songs (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`, [songId, data.title, data.created_at, data.path_to_song, data.play_count,
-      data.fav_count, data.path_to_artwork, user_id.rows[0].id])
-      .then(result => {
-        return result
-      })
-      .catch(err => {
-        return err;
-      });
+      data.fav_count, data.path_to_artwork, user_id.rows[0].id]);
   },
 
   addTags: async (tagsArray, titleOfSong) => {

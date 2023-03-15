@@ -2,10 +2,10 @@ require('dotenv').config()
 const express = require('express');
 const app = express();
 const multer = require('multer');
-const { handleUpload } = require('./controllers/index');
+const { handleUpload } = require('./controllers/handleUpload');
+const upload = multer();
 
 app.use(express.static('./client/dist'));
-const upload = multer();
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
