@@ -13,9 +13,7 @@ import App from '../client/src/components/App.jsx';
 
 let renderComponent = () => {
   return render(<GoogleOAuthProvider clientId="167666531989-d7dfo41ka45sqoc28pbjilvkr9892up3.apps.googleusercontent.com">
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <App />
   </GoogleOAuthProvider>)
 }
 
