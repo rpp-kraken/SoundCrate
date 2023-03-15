@@ -35,11 +35,8 @@ CREATE TABLE IF NOT EXISTS favorites (
   id VARCHAR(150) PRIMARY KEY,
   user_id VARCHAR(150),
   song_id VARCHAR(150),
-  artist_id VARCHAR(150),
   FOREIGN KEY(user_id)
     REFERENCES users(id),
   FOREIGN KEY(song_id)
-    REFERENCES songs(id),
-  FOREIGN KEY(artist_id)
-    REFERENCES users(id)
+    REFERENCES songs(id)
 );
