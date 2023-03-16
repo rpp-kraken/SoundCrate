@@ -14,12 +14,12 @@ import Publish from './Publish.jsx';
 
 export default function App() {
   const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
-  const [view, setView] = useState('songcard');
+  const [view, setView] = useState('theme');
 
   return (
     <ThemeProvider theme={theme}>
         <CssBaseline/>
-        {view !== 'profile' && <TopBar />}
+        {view !== 'profile' && view !== 'theme' && <TopBar />}
         {view === 'profile' && <Profile />}
         {view === 'create' && <Create />}
         {view === 'discover' && <Discover />}
@@ -27,7 +27,7 @@ export default function App() {
         {view === 'publish' && <Publish />}
         {view === 'theme' && <ThemeExample />}
         {view === 'songcard' && <SongCard />}
-        {view !== 'profile' && <NavBar />}
+        {view !== 'profile' && view !== 'theme' && <NavBar />}
     </ThemeProvider>
   );
 }

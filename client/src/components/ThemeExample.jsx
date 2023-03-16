@@ -21,7 +21,7 @@ export default function ThemeExample() {
   return (
     <>
       <TableCell sx={{ padding: 0 }}>
-        <Box id='font-examples' sx={{ flexGrow: 1, width: '100%' }}>
+        <Box id='font-examples' sx={{ width: '100%' }}>
           <Grid container spacing={1} p={2} sx={{ backgroundColor: 'black', textAlign: 'center' }}>
             <Grid item xs={12} sx={{ alignItems: 'center' }}>
               <Typography variant='h1'>
@@ -58,7 +58,7 @@ export default function ThemeExample() {
 
         <Box id='color-palette-examples' sx={{ flexGrow: 1, minWidth: 'fit-content' }}>
           <Grid container spacing={2} p={4} sx={{ backgroundColor: theme.palette.background.default }}>
-            <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center' }}>theme.palette.background.default</Typography>
+            <Typography variant='bodyText' sx={{ width: '100%', textAlign: 'center' }}>theme.palette.background.default</Typography>
             <Grid item xs={12}>
               <Card sx={{ ...cardStyle, backgroundColor: theme.palette.primary.light}}>
                 <Typography variant='h4'>theme.palette.primary.light</Typography>
@@ -77,7 +77,7 @@ export default function ThemeExample() {
           </Grid>
 
           <Grid container spacing={2} p={4} sx={{ backgroundColor: theme.palette.background.secondary }}>
-            <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center' }}>theme.palette.background.secondary</Typography>
+            <Typography variant='bodyText' sx={{ width: '100%', textAlign: 'center' }}>theme.palette.background.secondary</Typography>
             <Grid item xs={12}>
               <Card sx={{ ...cardStyle, backgroundColor: theme.palette.secondary.light}}>
                 <Typography variant='h4'>theme.palette.secondary.light</Typography>
