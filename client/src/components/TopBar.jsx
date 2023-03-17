@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import Login from '../components/login/Login.jsx';
 
-export default function TopBar({ imageUrl }) {
+export default function TopBar({setUser, imageURL}) {
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -33,7 +33,7 @@ export default function TopBar({ imageUrl }) {
           <List>
             <ListItem button>
               <ListItemIcon><LoginIcon /></ListItemIcon>
-              <Login />
+              <Login setUser={setUser}/>
             </ListItem>
             <ListItem>
               <ListItemIcon><AccountCircle /></ListItemIcon>
