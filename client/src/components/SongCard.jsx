@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Card, CardContent, CardMedia, IconButton, Typography } from '@material-ui/core';
 import { FavoriteBorder, Favorite } from '@material-ui/icons';
 import { useTheme } from '@mui/material/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@mui/material/Box';
+import Play from './Play.jsx';
 
 const useStyles = makeStyles({
   card: {
@@ -27,13 +28,21 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SongCard({ title, time, artist, artistImageUrl, isLiked, likedCount, playCount }) {
+export default function SongCard({ title, time, artist, path_to_song, artistImageUrl, isLiked, likedCount, playCount }) {
   const theme = useTheme();
-  const [liked, setLiked] = React.useState(isLiked);
+  const [liked, setLiked] = useState(isLiked);
+  const [playViewOpen, setPlayViewOpen] = useState(false);
+
   const handleLikeClick = () => {
     setLiked(!liked);
   };
   const classes = useStyles();
+
+  const onClickOpenPlayView = (event) => {
+    console.log("🚀 ~ PLAY VIEW: MODAL Pop Up that covers whole screen");
+    setPlayViewOpen(true);
+  };
+
   return (
     <Card
       className={classes.card}
@@ -46,7 +55,9 @@ export default function SongCard({ title, time, artist, artistImageUrl, isLiked,
         minHeight: '16vh',
         maxHeight: '16vh',
       }}
+      onClick={onClickOpenPlayView}
     >
+      {playViewOpen && <Play trackUrl={path_to_song} />}
       <CardContent className={classes.content}>
         <Typography variant="h5" component="h5">
           {title}

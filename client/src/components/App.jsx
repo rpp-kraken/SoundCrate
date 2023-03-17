@@ -49,15 +49,17 @@ export default function App() {
       case "create":
         return <Create />;
       case "favorites":
-        return <Favorites />;
+        return <Favorites changeView={changeView}/>;
       case "profile":
         return <Profile changeView={changeView} />;
       case "myReleasedMusic":
-        return <MyReleasedMusic />;
+        return <MyReleasedMusic changeView={changeView}/>;
       case "confirmLogOut":
         return <ConfirmLogOut />;
       case "confirmDeleteAccount":
         return <ConfirmDeleteAccount />;
+      case "play":
+        return <Play trackUrl={listOfTracks[0]} />;
       default:
         return <FourOhFour />;
     }
