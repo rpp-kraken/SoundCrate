@@ -1,4 +1,4 @@
-const db = require('../../db/index');
+let db = require('../../db/index');
 const { uuid } = require('uuidv4');
 
 module.exports = {
