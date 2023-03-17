@@ -12,9 +12,11 @@ const useStyles = makeStyles({
     display: 'flex',
   },
   media: {
-    width: 120,
+    // width: 120,
+    width: 156.16,
     height: 'fill',
     objectFit: 'fill',
+    // objectFit: 'cover',
     marginLeft: 'auto'
   },
   content: {
@@ -29,7 +31,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SongCard({ title, time, artist, path_to_song, artistImageUrl, isLiked, likedCount, playCount }) {
+export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, playCount }) {
   const theme = useTheme();
   const [liked, setLiked] = useState(isLiked);
   const [playViewOpen, setPlayViewOpen] = useState(false);

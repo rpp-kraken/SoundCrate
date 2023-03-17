@@ -17,8 +17,11 @@ import ConfirmDeleteAccount from './ConfirmDeleteAccount.jsx';
 // import Publish from './Publish.jsx';
 import FourOhFour from './404.jsx';
 import { songData } from '../../../DummyData/dummyData.js'
+import axios from 'axios';
 
 export default function App() {
+  const [ user, setUser ] = useState([]);
+  const [ profileData, setProfileData ] = useState([]);
   // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
   // View State changes on click
@@ -38,6 +41,30 @@ export default function App() {
     // };
   };
 
+  const handleSetUser = (data) => {
+    setUser(data);
+  }
+
+  useEffect(
+    () => {
+      if (user) {
+          axios
+            .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+                headers: {
+                  Authorization: `Bearer ${user.access_token}`,
+                  Accept: 'application/json'
+                }
+            })
+            .then((res) => {
+                setProfileData(res.data);
+                setView({name: 'profile'});
+            })
+            .catch((err) => console.log(err));
+        }
+    },
+    [ user ]
+  );
+
   const renderView = () => {
     switch (view.name) {
       case "home":
@@ -49,7 +76,7 @@ export default function App() {
       case "favorites":
         return <Favorites changeView={changeView}/>;
       case "profile":
-        return <Profile changeView={changeView} />;
+        return <Profile changeView={changeView} profileData={profileData}/>;
       case "myReleasedMusic":
         return <MyReleasedMusic changeView={changeView}/>;
       case "confirmLogOut":
@@ -64,7 +91,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {view.name !== 'profile' && <TopBar changeView={changeView} />}
+      {view.name !== 'profile' && <TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData}/>}
       <main>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </main>

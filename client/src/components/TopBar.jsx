@@ -7,7 +7,7 @@ import axios from 'axios';
 import Login from '../components/login/Login.jsx';
 
 // export default function TopBar({ imageUrl }) {
-export default function TopBar(props) {
+export default function TopBar({setUser, imageURL, changeView}) {
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -16,16 +16,16 @@ export default function TopBar(props) {
   };
 
   const onClickMyAccount = (event) => {
-    props.changeView('profile');
+    changeView('profile');
   };
   const onClickMyMusic = (event) => {
-    props.changeView('myReleasedMusic');
+    changeView('myReleasedMusic');
   };
   const onClickLogOut = (event) => {
-    props.changeView('confirmLogOut');
+    changeView('confirmLogOut');
   };
   const onClickDeleteAccount = (event) => {
-    props.changeView('confirmDeleteAccount');
+    changeView('confirmDeleteAccount');
   };
 
 
@@ -49,7 +49,7 @@ export default function TopBar(props) {
           <List>
             <ListItem button>
               <ListItemIcon><LoginIcon /></ListItemIcon>
-              <Login />
+              <Login setUser={setUser}/>
             </ListItem>
             <ListItem>
               <ListItemIcon><AccountCircle /></ListItemIcon>
