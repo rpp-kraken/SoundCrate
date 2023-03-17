@@ -20,7 +20,7 @@ const handleUpload = (req, res) => {
       imageUrl = imageFileUrl;
       models.addSong(data);
       models.addTags(tags, req.body.title);
-      res.json({ audioUrl, imageUrl });
+      res.json('successfully uploaded song');
     })
     .catch(error => {
       console.error(error);
