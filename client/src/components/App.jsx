@@ -5,7 +5,6 @@ import theme from '../themes/default.jsx';
 import ThemeExample from './ThemeExample.jsx';
 import TopBar from './TopBar.jsx';
 import Discover from './Discover.jsx'
-import SongCard from './SongCard.jsx';
 import NavBar from './NavBar.jsx';
 import Create from './Create.jsx';
 import Profile from './Profile.jsx';
@@ -19,7 +18,7 @@ export default function App() {
   // Play View: For Testing our S3 Bucket
   const [listOfTracks, setListOfTracks] = useState(['https://soundcrate.s3.us-east-2.amazonaws.com/9308db8f-dbd0-4ca7-b236-eda4f4b56b11.m4a']);
 
-  const [view, setView] = useState('create')
+  const [view, setView] = useState('discover')
 
   return (
     <ThemeProvider theme={theme}>
