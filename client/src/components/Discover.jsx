@@ -14,6 +14,8 @@ export default function Discover(props) {
             title={song.title}
             playCount={song.play_count}
             artistImageUrl={song.path_to_artwork}
+            artist={song.user_id}
+            likedCount={song.fav_count}
           />
         )
       })}

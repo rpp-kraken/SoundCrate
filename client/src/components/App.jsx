@@ -5,7 +5,6 @@ import theme from '../themes/default.jsx';
 import ThemeExample from './ThemeExample.jsx';
 import TopBar from './TopBar.jsx';
 import Discover from './Discover.jsx'
-import SongCard from './SongCard.jsx';
 import NavBar from './NavBar.jsx';
 import Create from './Create.jsx';
 import Profile from './Profile.jsx';
