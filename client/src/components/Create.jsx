@@ -11,6 +11,7 @@ export default function Create() {
 
   const [listOfTracks, setListOfTracks] = useState([]);
   const [listPlayers, setListPlayers] = useState({});
+  const [song, setSong] = useState(null);
   const [openPublish, setOpenPublish] = useState(false);
   // const [maxDuration, setMaxDuration] = useState(0);
 
@@ -69,7 +70,8 @@ export default function Create() {
     };
   }
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
+    await handleRender();
     setOpenPublish(true);
   }
 
@@ -128,6 +130,63 @@ export default function Create() {
       // Main Multiplayer (combined sound, what we hear)
       for (var key in listPlayers) {
         const playerEach = listPlayers[key];
+        // Play code block
+        playerEach.start(); // Deleting this stops all sound
+        playerEach.playbackRate = playerEach["transpose"];
+        const durationMilliseconds = Math.round(playerEach.buffer.duration * 1000 / playerEach["transpose"]);
+        if (durationMilliseconds > maxDuration) {
+          maxDuration = durationMilliseconds;
+          // console.log("set max duration: ", maxDuration);
+        }
+      }
+
+      setTimeout(async () => {
+        // the recorded audio is returned as a blob
+        const recording = await recorder.stop();
+
+        // //This is for disconnecting players:
+        // for (var key in listPlayers) {
+        //   const playerEach = listPlayers[key];
+        //   playerEach.disconnect();
+        // }
+
+        // convert the blob to a Buffer
+        const buffer = await recording.arrayBuffer();
+
+        // convert the blob to an AudioBuffer
+        const audioContext = new AudioContext();
+        const audioBuffer = await audioContext.decodeAudioData(buffer);
+
+        const wavData = audioBufferToWav(audioBuffer);
+        setSong(new DataView(wavData));
+        // Create an anchor tag and allows for download of wav right now
+        const anchor = document.createElement('a');
+        anchor.setAttribute('href', url);
+        anchor.setAttribute('download', 'renderedSong.wav');
+        anchor.click();
+      }, maxDuration);
+    });
+  };
+
+  const handleRender = () => {
+    // console.log('Render ALL tracks into Song');
+    var maxDuration = 0;
+
+    Tone.loaded().then(() => {
+      // Create a Gain node to use as the output destination
+      const output = new Tone.Gain().toDestination();
+      // Create a new recorder and connect it to the output node
+      const recorder = new Tone.Recorder();
+      Tone.Master.connect(recorder);
+      // Start recording
+      recorder.start();
+
+      Tone.start();
+      Tone.Transport.start();
+
+      // Main Multiplayer (combined sound, what we hear)
+      for (var key in listPlayers) {
+        const playerEach = listPlayers[key];
         playerEach.start(); // Deleting this stops all sound
         playerEach.playbackRate = playerEach["transpose"];
         const durationMilliseconds = Math.round(playerEach.buffer.duration * 1000 / playerEach["transpose"]);
@@ -162,15 +221,11 @@ export default function Create() {
         // Create a URL for the Blob
         const url = URL.createObjectURL(blob);
 
+        setSong(url);
         // Create an anchor tag and allows for download of wav right now
-        const anchor = document.createElement('a');
-        anchor.setAttribute('href', url);
-        anchor.setAttribute('download', 'renderedSong.wav');
-        anchor.click();
       }, maxDuration);
     });
   };
-
   return (
     <div>
       <h4>Create Tab - Project View</h4>
@@ -200,7 +255,7 @@ export default function Create() {
       </h4>
       {underMax && <MicrophoneRecorder setListOfTracks={setListOfTracks} setMax={setMax} maxTracks={maxTracks} setUnderMax={setUnderMax} underMax={underMax} />}
       <button onClick={handlePublish}> Publish </button>
-      {openPublish && <Publish />}
+      {openPublish && <Publish setOpenPublish={setOpenPublish} song={song}/>}
       <br/><br/>
       <br/><br/>
       <br/><br/>
