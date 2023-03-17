@@ -39,7 +39,6 @@ export default function SongCard({ title, time, artist, path_to_song, artistImag
   const classes = useStyles();
 
   const onClickOpenPlayView = (event) => {
-    console.log("🚀 ~ PLAY VIEW: MODAL Pop Up that covers whole screen");
     setPlayViewOpen(true);
   };
   const handleClose = (event) => {

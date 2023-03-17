@@ -74,15 +74,6 @@ const PlayViewWaveform = (props) => {
 			wavesurferObj.on('finish', () => {
 				setPlaying(false);
 			});
-
-			// if multiple regions are created, then remove all the previous regions so that only 1 is present at any given time
-			// 	wavesurferObj.on('region-updated', (region) => {
-			// 		const regions = region.wavesurfer.regions.list;
-			// 		const keys = Object.keys(regions);
-			// 		if (keys.length > 1) {
-			// 			regions[keys[0]].remove();
-			// 		}
-			// 	});
 		}
 	}, [wavesurferObj]);
 
@@ -90,20 +81,6 @@ const PlayViewWaveform = (props) => {
 	useEffect(() => {
 		if (wavesurferObj) wavesurferObj.setVolume(volume);
 	}, [volume, wavesurferObj]);
-
-
-
-	// when the duration of the audio is available, set the length of the region depending on it, so as to not exceed the total lenght of the audio
-	useEffect(() => {
-		if (duration && wavesurferObj) {
-			// add a region with default length
-			// wavesurferObj.addRegion({
-			// 	start: Math.floor(duration / 2) - Math.floor(duration) / 5, // time in seconds
-			// 	end: Math.floor(duration / 2), // time in seconds
-			// 	color: 'hsla(265, 100%, 86%, 0.4)', // color of the selected region, light hue of purple
-			// });
-		}
-	}, [duration, wavesurferObj]);
 
 	const handlePlayPause = (e) => {
 		wavesurferObj.playPause();
@@ -196,9 +173,17 @@ const PlayViewWaveform = (props) => {
 		}
 	};
 
+	const handleClosePlayView = (event) => {
+		event.stopPropagation();
+		wavesurferObj.stop();
+		props.handleClose();
+	}
+
 	return (
 		<section className='waveform-container'>
-			<h3>Play View</h3>
+			<h2>Play View</h2>
+			<button onClick={handleClosePlayView}>Back Arrow</button>
+
 			<div ref={wavesurferRef} id='waveform' />
 			<div ref={timelineRef} id='wave-timeline' />
 			<div className='all-controls'>
@@ -208,12 +193,7 @@ const PlayViewWaveform = (props) => {
 						title='play/pause'
 						className='controls'
 						onClick={handlePlayPause}>
-						{/* {initLoad === true ? (
-							<i className='material-icons'>play_arrow</i>
-						) : null
-						} */}
-
-						{playing ? (
+						{/* {playing ? (
 							initLoad === false ? (
 								<i className='material-icons'>pause</i>
 							) : (
@@ -221,13 +201,12 @@ const PlayViewWaveform = (props) => {
 							)
 						) : (
 							<i className='material-icons'>play_arrow</i>
-						)}
-
-						{/* {initLoad === false && playing ? (
+						)} */}
+						{playing ? (
 							<i className='material-icons'>pause</i>
 						) : (
 							<i className='material-icons'>play_arrow</i>
-						)} */}
+						)}
 					</button>
 					<button
 						title='reload'
