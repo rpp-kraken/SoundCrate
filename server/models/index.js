@@ -15,7 +15,7 @@ module.exports = {
     const songId = await db.query(`SELECT id FROM songs WHERE title = '${titleOfSong}'`);
     tagsArray.forEach(tag => {
       const tagId = uuid();
-      db.query(`INSERT INTO tags (id, name, song_id) VALUES ($1, $2, $3)`, [tagId, tag, songId.rows[0].id]);
+      db.query(`INSERT INTO song_tags (id, name, song_id) VALUES ($1, $2, $3)`, [tagId, tag, songId.rows[0].id]);
     });
   },
 
@@ -43,8 +43,7 @@ module.exports = {
       )
     ) FROM songs WHERE user_id = $1;`, [userId.rows[0].id])
       .then(result => {
-        console.log(result.rows[0].json_agg);
-        return result.rows[0].json_build_object;
+        return result.rows[0].json_agg;
       });
   }
 }
