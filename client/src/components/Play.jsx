@@ -3,6 +3,12 @@ import { createTheme } from '@mui/material/styles';
 import PlayViewWaveform from './PlayViewWaveform.jsx';
 
 export default function Play(props) {
+
+  const handleClosePlayView = (event) => {
+    event.stopPropagation();
+    props.handleClose();
+  }
+
   return (
     <div style={{
       position: 'fixed',
@@ -30,7 +36,14 @@ export default function Play(props) {
       }}>
       <div style={{ fontSize: '24px', color: 'black' }}>Play View</div>
         <PlayViewWaveform trackUrl={props.trackUrl} />
-        <button onClick={props.onClose}>Close</button>
+        <div style={{ fontSize: '24px', color: 'black' }}>
+        {props.title}
+        {props.artist}
+        {props.artistImageUrl}
+        {props.likedCount}
+        {props.playCount}
+        </div>
+        <button onClick={handleClosePlayView}>Close</button>
       </div>
     </div>
   );

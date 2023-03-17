@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardMedia, IconButton, Typography } from '@material-ui/core';
 import { FavoriteBorder, Favorite } from '@material-ui/icons';
 import { useTheme } from '@mui/material/styles';
@@ -23,8 +23,8 @@ const useStyles = makeStyles({
   },
   subcontent: {
     display: 'flex',
-    pl:1,
-    pb:1
+    pl: 1,
+    pb: 1
   }
 });
 
@@ -42,6 +42,9 @@ export default function SongCard({ title, time, artist, path_to_song, artistImag
     console.log("🚀 ~ PLAY VIEW: MODAL Pop Up that covers whole screen");
     setPlayViewOpen(true);
   };
+  const handleClose = (event) => {
+    setPlayViewOpen(false);
+  };
 
   return (
     <Card
@@ -57,7 +60,14 @@ export default function SongCard({ title, time, artist, path_to_song, artistImag
       }}
       onClick={onClickOpenPlayView}
     >
-      {playViewOpen && <Play trackUrl={path_to_song} />}
+      {playViewOpen && <Play
+        title={title}
+        artist={artist}
+        artistImageUrl={artistImageUrl}
+        likedCount={likedCount}
+        playCount={playCount}
+        trackUrl={path_to_song}
+        handleClose={handleClose}/>}
       <CardContent className={classes.content}>
         <Typography variant="h5" component="h5">
           {title}
@@ -65,16 +75,16 @@ export default function SongCard({ title, time, artist, path_to_song, artistImag
         <Typography variant="subtitle1">{artist}</Typography>
         {/* <div className={classes.subcontent}> */}
         <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-        <IconButton
-          onClick={handleLikeClick}
-        >
-          {liked ? <Favorite /> : <FavoriteBorder />}
-          {likedCount}
-        </IconButton>
-        <Typography>
-          {playCount} Plays
-          {/* 5 hours - Aaron Miller */}
-        </Typography>
+          <IconButton
+            onClick={handleLikeClick}
+          >
+            {liked ? <Favorite /> : <FavoriteBorder />}
+            {likedCount}
+          </IconButton>
+          <Typography>
+            {playCount} Plays
+            {/* 5 hours - Aaron Miller */}
+          </Typography>
         </Box>
         {/* </div> */}
       </CardContent>
