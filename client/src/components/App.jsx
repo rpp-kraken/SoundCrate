@@ -19,12 +19,12 @@ export default function App() {
   // Play View: For Testing our S3 Bucket
   const [listOfTracks, setListOfTracks] = useState(['https://soundcrate.s3.us-east-2.amazonaws.com/9308db8f-dbd0-4ca7-b236-eda4f4b56b11.m4a']);
 
-  const [view, setView] = useState('create')
+  const [view, setView] = useState('theme')
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {view !== 'profile' && <TopBar />}
+      {view !== 'profile' && view !== 'theme'  && <TopBar />}
       {view === 'profile' && <Profile />}
       {view === 'create' && <Create />}
       {view === 'discover' && <Discover songs={songData} />}
@@ -33,7 +33,7 @@ export default function App() {
       {view === 'publish' && <Publish />}
       {view === 'theme' && <ThemeExample />}
       {view === 'songcard' && <SongCard />}
-      {view !== 'profile' && <NavBar />}
+      {view !== 'profile' && view !== 'theme' && <NavBar />}
     </ThemeProvider>
   );
 }
