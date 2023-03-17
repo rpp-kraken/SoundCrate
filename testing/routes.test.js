@@ -8,6 +8,7 @@ const fs = require('fs');
 const { Client } = require('pg');
 // const client = require('../db/index');
 const app = require('../server/index');
+const path = require('path');
 process.env.NODE_ENV = 'test';
 
 describe('Reviews route', () => {
@@ -42,16 +43,18 @@ describe('Reviews route', () => {
     await global.client.end();
   });
 
-  describe('POST /upload', () => {
+  describe('POST /api/uploadSong', () => {
     it('Should create a new song', async () => {
+      const audioFilePath = path.join(__dirname, 'mocks', 'audio.m4a');
+      const imageFilePath = path.join(__dirname, 'mocks', 'aaron.m4a');
       const req = {
-        audioFile: fs.readFileSync('./mocks/audio.m4a'),
+        audioFile: fs.readFileSync(audioFilePath),
         title: 'yum',
         created_at: '2023-03-11T19:43:02+00:00',
         play_count: 0,
         fav_count: 1,
         user: 'calpal',
-        imageFile: fs.readFileSync('./mocks/aaron.jpeg'),
+        imageFile: fs.readFileSync(imageFilePath),
         tags: 'tag1,tag2,tag3'
       };
 
