@@ -33,7 +33,7 @@ describe('Reviews route', () => {
     await global.client.query('BEGIN');
     await global.client.query('CREATE TEMPORARY TABLE temp_users (LIKE users INCLUDING ALL) ON COMMIT PRESERVE ROWS');
     await global.client.query('CREATE TEMPORARY TABLE temp_songs (LIKE songs INCLUDING ALL) ON COMMIT PRESERVE ROWS');
-    await global.client.query('CREATE TEMPORARY TABLE temp_tags (LIKE tags INCLUDING ALL) ON COMMIT PRESERVE ROWS');
+    await global.client.query('CREATE TEMPORARY TABLE temp_tags (LIKE song_tags INCLUDING ALL) ON COMMIT PRESERVE ROWS');
     await global.client.query(`INSERT INTO temp_users (id, name, email, bio, path_to_pic, username)
       VALUES (1, 'calpal', 'cp@gmail.com', 'cool guy', 'path', 'cp')`)
   });
