@@ -11,12 +11,13 @@ module.exports = {
       data.fav_count, data.path_to_artwork, user_id.rows[0].id]);
   },
 
-  addTags: async (tags, titleOfSong) => {
+  addTags: async (tags, titleOfSong, songsTable = 'songs', tagsTable = 'song_tags') => {
+    db = process.env.NODE_ENV === 'test' ? global.client : db;
     const tagsArray = tags.split(',');
-    const songId = await db.query(`SELECT id FROM songs WHERE title = '${titleOfSong}'`);
+    const songId = await db.query(`SELECT id FROM ${songsTable} WHERE title = '${titleOfSong}'`);
     tagsArray.forEach(tag => {
       const tagId = uuid();
-      db.query(`INSERT INTO song_tags (id, name, song_id) VALUES ($1, $2, $3)`, [tagId, tag, songId.rows[0].id]);
+      db.query(`INSERT INTO ${tagsTable} (id, name, song_id) VALUES ($1, $2, $3)`, [tagId, tag, songId.rows[0].id]);
     });
   },
 
