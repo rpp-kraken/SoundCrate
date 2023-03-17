@@ -3,7 +3,7 @@ import { Card, CardContent, CardMedia, IconButton, Typography } from '@material-
 import { FavoriteBorder, Favorite } from '@material-ui/icons';
 import { useTheme} from '@mui/material/styles';
 
-export default function SongCard({ title, time, artist, artistImageUrl, isLiked }) {
+export default function SongCard({ title, time, artist, artistImageUrl, isLiked, playCount }) {
   const theme = useTheme();
   const [liked, setLiked] = React.useState(isLiked);
   const handleLikeClick = () => {
@@ -24,19 +24,24 @@ export default function SongCard({ title, time, artist, artistImageUrl, isLiked 
       <CardMedia
         component='img'
         image= {`${artistImageUrl}`}
-        style={{ objectFit: 'contain', color: theme.palette.text.primary }}
+        style={{ objectFit: 'fill', color: theme.palette.text.primary }}
       />
       <CardContent>
         <Typography variant='h5' component='h5'>
           {title}
         </Typography>
         <Typography>
-          5 hours - Aaron Miller
+          {artist}
+         {/* 5 hours - Aaron Miller */}
         </Typography>
       </CardContent>
-      <IconButton onClick={handleLikeClick}>
+      {/* <IconButton onClick={handleLikeClick}>
         {liked ? <Favorite /> : <FavoriteBorder />}
-      </IconButton>
+      </IconButton> */}
+      <Typography>
+          {playCount}Plays
+         {/* 5 hours - Aaron Miller */}
+        </Typography>
     </Card>
   );
 }
