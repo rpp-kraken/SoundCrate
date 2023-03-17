@@ -1,28 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import { createTheme } from '@mui/material/styles';
-// import Discover from './Discover.jsx'
-
-// export default function Home(props) {
-
-//   const [searchBarIsClicked, setSearchBarIsClicked] = useState(false);
-
-//   const onClickDiscover = (event) => {
-//     // setSearchBarIsClicked(true);
-//     props.changeView('discover');
-//   };
-
-//   return (
-//     <div>
-//       <div onClick={onClickDiscover}>
-//         search bar on top... click to open discover view
-//       </div>
-//       <h3>Home view - init is list of most popular songs on App - favorite count or playcount?</h3>
-//       {/* {console.log(props)} */}
-//       {/* {searchBarIsClicked && <Discover/> } */}
-//     </div>
-//   );
-// }
-
 import React, { useState, useEffect } from 'react';
 import { createTheme } from '@mui/material/styles';
 import SongCardList from './SongCardList.jsx';
@@ -36,7 +11,7 @@ const filterData = (query, data) => {
   });
 }
 
-export default function Home() {
+export default function Home(props) {
   const [searchQuery, setSearchQuery] = useState("");
   // query the database for the first ten songs
   // for now, just use dummy data
