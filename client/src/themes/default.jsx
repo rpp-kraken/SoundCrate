@@ -100,6 +100,21 @@ const theme = createTheme({
       lineHeight: 'calc(150%)',
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#864ff2',
+          color: '#FFFFFF',
+          '&:hover': {
+            backgroundColor: '#6520ee',
+          },
+          marginBottom: '4EM',
+          textTransform: 'none',
+        },
+      },
+    },
+  },
 });
 
 export default theme;

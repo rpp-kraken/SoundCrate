@@ -3,8 +3,8 @@ import { createTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useTheme } from '@mui/material/styles';
-import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
+import { Button } from '@mui/material';
 
 const style = {
   display: 'flex',
@@ -24,22 +24,29 @@ export const Publish = (props) => {
   const [image, setImage] = useState('');
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState([]);
-
+  const [underMax, setUnderMax] =useState(true);
+  const [tagNum, setTagNum] = useState(0)
     const audioRef = React.useRef(null);
 
 
-  const handleInput = (e) => {
+  const handleInput = async (e) => {
     const tag = e.target.value.trim();
     if (tag !== "" && !tag.includes(" ")) {
       if (tags.length < 3) {
         setTags([...tags, tag]);
         e.target.value = "";
+        await setTagNum( tagNum + 1 )
+        if (tagNum === 2) {
+          setUnderMax(false);
+        }
       }
     }
   };
 
   const handleDelete = (index) => {
     setTags([...tags.slice(0, index), ...tags.slice(index + 1)]);
+    setTagNum( tagNum - 1);
+    setUnderMax(true);
   };
 
   const handleKeyPress = (e) => {
@@ -78,7 +85,7 @@ export const Publish = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setAudio(new Audio(props.song));
+    // setAudio(new Audio(props.song));
 
   };
 
@@ -92,19 +99,20 @@ export const Publish = (props) => {
       >
         <div style={paperStyle}>
         <form onSubmit={handleSubmit}>
-        <label>
-          Song Image:
-          <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
-        </label>
-          {image && <img src={URL.createObjectURL(image)} alt="Selected song image" />}
-          <br />
           <label>
+            Song Image:
+            <Button variant="contained" component="label">
+              Upload Image
+              <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} style={{ display: 'none' }} />
+            </Button>
+          </label>
+           <label>
             Song Title:
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required/>
           </label>
           <br />
           <label htmlFor="tags">Tags (up to 3):</label>
-          <input type="text" name="tags" onKeyPress={handleKeyPress} placeholder="Press enter to create tag" />
+          {underMax && <input type="text" name="tags" onKeyPress={handleKeyPress} placeholder="Press enter to create tag" required/>}
             <ul>
             {tags.map((tag, index) => (
               <li key={index}>
@@ -127,9 +135,9 @@ export const Publish = (props) => {
             onPause={handlePause}
           />
         )}
-        <button onClick={handleClose}>cancel</button>
+        <Button variant="contained" onClick={handleClose}>Cancel</Button>
         </div>
-          <button type="submit">Submit</button>
+          <Button variant="contained" type="submit">Submit</Button>
         </form>
         </div>
       </Modal>

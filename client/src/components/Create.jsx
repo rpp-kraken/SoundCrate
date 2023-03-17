@@ -71,6 +71,10 @@ export default function Create() {
   }
 
   const handlePublish = async () => {
+    if (listOfTracks.length === 0) {
+    alert('There is no song to publish')
+    return;
+    }
     await handleRender();
     setOpenPublish(true);
   }
@@ -226,6 +230,7 @@ export default function Create() {
       }, maxDuration);
     });
   };
+
   return (
     <div>
       <h4>Create Tab - Project View</h4>
