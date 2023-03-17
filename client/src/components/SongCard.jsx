@@ -37,6 +37,7 @@ export default function SongCard({ title, time, artist, path_to_song, artistImag
 
   const classes = useStyles();
 
+  // Play View Event Handling
   const handleOpenPlayView = (event) => {
     event.stopPropagation();
     setPlayViewOpen(true);
@@ -45,12 +46,14 @@ export default function SongCard({ title, time, artist, path_to_song, artistImag
     setPlayViewOpen(false);
   };
 
+  // Favorite Song Event Handling
   const handleLikeClick = (event) => {
     event.stopPropagation();
     console.log("🚀 handleLikeClick: Handle Heart Click Event Here")
     setLiked(!liked);
   };
 
+  // Other Artist Profile View Event Handling
   const handleOtherArtistProfileOpen = (event) => {
     event.stopPropagation();
     setOtherArtistViewOpen(true);
@@ -80,17 +83,20 @@ export default function SongCard({ title, time, artist, path_to_song, artistImag
         likedCount={likedCount}
         playCount={playCount}
         trackUrl={path_to_song}
-        handleClose={handleClosePlayView}/>}
+        handleClose={handleClosePlayView} />}
 
       {otherArtistViewOpen && <ProfileOtherArtist
         artist={artist}
-        handleClose={handleOtherArtistProfileClose}/>}
+        handleClose={handleOtherArtistProfileClose} />}
 
       <CardContent className={classes.content}>
         <Typography variant="h5" component="h5">
           {title}
         </Typography>
-        <Typography variant="subtitle1" onClick={handleOtherArtistProfileOpen}>{artist}</Typography>
+        <Typography
+          variant="subtitle1"
+          onClick={handleOtherArtistProfileOpen}
+          style={{ cursor: 'pointer' }}>{artist}</Typography>
         {/* <div className={classes.subcontent}> */}
         <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
           <IconButton

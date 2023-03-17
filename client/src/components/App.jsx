@@ -13,17 +13,15 @@ import Profile from './Profile.jsx';
 import MyReleasedMusic from './MyReleasedMusic.jsx';
 import ConfirmLogOut from './ConfirmLogOut.jsx';
 import ConfirmDeleteAccount from './ConfirmDeleteAccount.jsx';
-import Play from './Play.jsx';
-import Publish from './Publish.jsx';
+// import Play from './Play.jsx';
+// import Publish from './Publish.jsx';
 import FourOhFour from './404.jsx';
 import { songData } from '../../../DummyData/dummyData.js'
 
 export default function App() {
-  const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
+  // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
-  // Play View: For Testing our S3 Bucket
-  const [listOfTracks, setListOfTracks] = useState(['https://soundcrate.s3.us-east-2.amazonaws.com/9308db8f-dbd0-4ca7-b236-eda4f4b56b11.m4a']);
-
+  // View State changes on click
   const [view, setView] = useState({ name: 'home' });
 
   useEffect(() => {
@@ -44,8 +42,8 @@ export default function App() {
     switch (view.name) {
       case "home":
         return <Home songs={songData} changeView={changeView} />;
-      case "discover":
-        return <Discover changeView={changeView} />;
+      // case "discover":
+      //   return <Discover changeView={changeView} />;
       case "create":
         return <Create />;
       case "favorites":
@@ -58,8 +56,6 @@ export default function App() {
         return <ConfirmLogOut />;
       case "confirmDeleteAccount":
         return <ConfirmDeleteAccount />;
-      case "play":
-        return <Play trackUrl={listOfTracks[0]} />;
       default:
         return <FourOhFour />;
     }
@@ -69,15 +65,6 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {view.name !== 'profile' && <TopBar changeView={changeView} />}
-      {/* {view === 'profile' && <Profile />}
-      {view === 'create' && <Create />}
-      {view === 'discover' && <Discover songs={songData} />}
-      {listOfTracks.map((trackUrl, i) => { return <Play trackUrl={trackUrl} index={i} key={i} /> })}
-      {view === 'play' && <Play />}
-      {view === 'publish' && <Publish />}
-      {view === 'theme' && <ThemeExample />}
-      {view === 'songcard' && <SongCard />}
-      {view !== 'profile' && <NavBar />} */}
       <main>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </main>
