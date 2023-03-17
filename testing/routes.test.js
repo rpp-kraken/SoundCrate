@@ -73,7 +73,7 @@ describe('Reviews route', () => {
 
   const postSong = async (req, status = 201) => {
     const { body } = await request(app)
-      .post('/upload')
+      .post('/api/uploadSong')
       .field('audioFile', req.audioFile, 'audio.m4a')
       .field('title', req.title)
       .field('created_at', req.created_at)
