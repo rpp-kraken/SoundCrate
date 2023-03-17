@@ -9,7 +9,7 @@
     "start-dev": "nodemon ./server/index.js",
     "build": "webpack",
     "start": "node ./server/index.js",
-    "test-routes": "PORT=6666 mocha ./__tests__/postSongsRoute.test.js --exit"
+    "test-routes": "PORT=6666 mocha ./testing/routes.test.js --exit"
   },
   "repository": {
     "type": "git",
