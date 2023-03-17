@@ -6,13 +6,29 @@ import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import Login from '../components/login/Login.jsx';
 
-export default function TopBar({ imageUrl }) {
+// export default function TopBar({ imageUrl }) {
+export default function TopBar(props) {
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const toggleDrawer = () => {
     setOpenDrawer(!openDrawer);
   };
+
+  const onClickMyAccount = (event) => {
+    props.changeView('profile');
+  };
+  const onClickMyMusic = (event) => {
+    props.changeView('myReleasedMusic');
+  };
+  const onClickLogOut = (event) => {
+    props.changeView('confirmLogOut');
+  };
+  const onClickDeleteAccount = (event) => {
+    props.changeView('confirmDeleteAccount');
+  };
+
+
 
   return (
     <>
@@ -41,19 +57,19 @@ export default function TopBar({ imageUrl }) {
             </ListItem>
             <ListItem button>
               <ListItemIcon><Edit /></ListItemIcon>
-              <ListItemText primary={<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Edit Profile</a>} />
+              <ListItemText primary="Edit Profile" onClick={onClickMyAccount} />
             </ListItem>
             <ListItem button>
               <ListItemIcon><MusicNote /></ListItemIcon>
-              <ListItemText primary="My Music" />
+              <ListItemText primary="My Music" onClick={onClickMyMusic}/>
             </ListItem>
             <ListItem button>
               <ListItemIcon><ExitToApp /></ListItemIcon>
-              <ListItemText primary="Log Out" />
+              <ListItemText primary="Log Out" onClick={onClickLogOut}/>
             </ListItem>
             <ListItem button>
               <ListItemIcon><Delete /></ListItemIcon>
-              <ListItemText primary="Delete Account" />
+              <ListItemText primary="Delete Account" onClick={onClickDeleteAccount} />
             </ListItem>
           </List>
         </div>
