@@ -5,6 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@mui/material/Box';
 import Play from './Play.jsx';
+import ProfileOtherArtist from './ProfileOtherArtist.jsx';
 
 const useStyles = makeStyles({
   card: {
@@ -32,17 +33,30 @@ export default function SongCard({ title, time, artist, path_to_song, artistImag
   const theme = useTheme();
   const [liked, setLiked] = useState(isLiked);
   const [playViewOpen, setPlayViewOpen] = useState(false);
+  const [otherArtistViewOpen, setOtherArtistViewOpen] = useState(false);
 
-  const handleLikeClick = () => {
-    setLiked(!liked);
-  };
   const classes = useStyles();
 
-  const onClickOpenPlayView = (event) => {
+  const handleOpenPlayView = (event) => {
+    event.stopPropagation();
     setPlayViewOpen(true);
   };
-  const handleClose = (event) => {
+  const handleClosePlayView = (event) => {
     setPlayViewOpen(false);
+  };
+
+  const handleLikeClick = (event) => {
+    event.stopPropagation();
+    console.log("🚀 handleLikeClick: Handle Heart Click Event Here")
+    setLiked(!liked);
+  };
+
+  const handleOtherArtistProfileOpen = (event) => {
+    event.stopPropagation();
+    setOtherArtistViewOpen(true);
+  };
+  const handleOtherArtistProfileClose = (event) => {
+    setOtherArtistViewOpen(false);
   };
 
   return (
@@ -57,7 +71,7 @@ export default function SongCard({ title, time, artist, path_to_song, artistImag
         minHeight: '16vh',
         maxHeight: '16vh',
       }}
-      onClick={onClickOpenPlayView}
+      onClick={handleOpenPlayView}
     >
       {playViewOpen && <Play
         title={title}
@@ -66,12 +80,17 @@ export default function SongCard({ title, time, artist, path_to_song, artistImag
         likedCount={likedCount}
         playCount={playCount}
         trackUrl={path_to_song}
-        handleClose={handleClose}/>}
+        handleClose={handleClosePlayView}/>}
+
+      {otherArtistViewOpen && <ProfileOtherArtist
+        artist={artist}
+        handleClose={handleOtherArtistProfileClose}/>}
+
       <CardContent className={classes.content}>
         <Typography variant="h5" component="h5">
           {title}
         </Typography>
-        <Typography variant="subtitle1">{artist}</Typography>
+        <Typography variant="subtitle1" onClick={handleOtherArtistProfileOpen}>{artist}</Typography>
         {/* <div className={classes.subcontent}> */}
         <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
           <IconButton
