@@ -1,12 +1,13 @@
 require('dotenv').config();
 const AWS = require('aws-sdk');
 const { uuid } = require('uuidv4');
+const config = require('../config');
 
 // Connection to S3 bucket
 const s3 = new AWS.S3({
-    accessKeyId: process.env.ACCESSKEYID,
-    secretAccessKey: process.env.SECRETACCESSKEY,
-    region: process.env.REGION
+    accessKeyId: config.accessKeyId,
+    secretAccessKey: config.secretAccessKey,
+    region: config.region
 });
 
 //Handles iPhone/Android recording files -- url returned is now publicly available
