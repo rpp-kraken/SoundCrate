@@ -45,13 +45,13 @@ describe('Reviews route', () => {
   describe('POST /upload', () => {
     it('Should create a new song', async () => {
       const req = {
-        audioFile: fs.readFileSync('/Users/seanmcdaniel/hack-reactor-rpp2207/audio-test/audio-test/__tests__/mocks/audio.m4a'),
+        audioFile: fs.readFileSync('./mocks/audio.m4a'),
         title: 'yum',
         created_at: '2023-03-11T19:43:02+00:00',
         play_count: 0,
         fav_count: 1,
         user: 'calpal',
-        imageFile: fs.readFileSync('/Users/seanmcdaniel/hack-reactor-rpp2207/audio-test/audio-test/__tests__/mocks/aaron.jpeg'),
+        imageFile: fs.readFileSync('./mocks/aaron.jpeg'),
         tags: 'tag1,tag2,tag3'
       };
 
