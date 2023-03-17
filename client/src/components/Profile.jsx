@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 
 
-export default function Profile() {
+export default function Profile({profileData}) {
   const theme = useTheme();
   const gridItemStyle={
     display: 'flex',
@@ -18,7 +18,7 @@ export default function Profile() {
       <Grid container direction='column' spacing={0} p={4} sx={{ backgroundColor: '#000000', height: '45vh', paddingTop: '70px' }}>
 
         <Grid item xs={12} style={ gridItemStyle }>
-          <Avatar alt="Profile Picture"  style={{ height: '100px', width: '100px' }}/>
+          <Avatar alt="Profile Picture" src={profileData.picture} style={{ height: '100px', width: '100px' }}/>
         </Grid>
 
         <Grid item xs={12} style={ gridItemStyle }>
