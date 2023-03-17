@@ -46,7 +46,7 @@ describe('Reviews route', () => {
   describe('POST /api/uploadSong', () => {
     it('Should create a new song', async () => {
       const audioFilePath = path.join(__dirname, 'mocks', 'audio.m4a');
-      const imageFilePath = path.join(__dirname, 'mocks', 'aaron.m4a');
+      const imageFilePath = path.join(__dirname, 'mocks', 'aaron.jpeg');
       const req = {
         audioFile: fs.readFileSync(audioFilePath),
         title: 'yum',
