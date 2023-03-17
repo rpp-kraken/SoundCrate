@@ -19,11 +19,8 @@ const handleUpload = async (req, res) => {
       .then(imageFileUrl => {
         data.path_to_artwork = imageFileUrl;
       });
-      console.log('files uploaded');
       await models.addSong(data, songsTable, usersTable);
-      console.log('song added');
       await models.addTags(tags, req.body.title, songsTable, tagsTable);
-      console.log('tags added')
       res.status(201).json('successfully uploaded song');
   } catch (error) {
       console.error(error);
