@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createTheme } from '@mui/material/styles';
 import SongCardList from './SongCardList.jsx';
 import Search from './Search.jsx';
+import { songData } from '../../../DummyData/dummyData.js';
 
 export default function Discover() {
   // query the database for the first ten songs
@@ -9,7 +10,7 @@ export default function Discover() {
   return (
     <div className="discover">
       <Search />
-      <SongCardList />
+      <SongCardList songs={songData} />
     </div>
   )
 }
