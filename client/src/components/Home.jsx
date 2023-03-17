@@ -20,6 +20,7 @@ export default function Home(props) {
     <div className="discover">
       <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <SongCardList songs={songs} />
+      <br/><br/><br/>
     </div>
   )
 }
