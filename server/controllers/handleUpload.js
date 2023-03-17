@@ -7,17 +7,13 @@ const handleUpload = (req, res) => {
   const { tags } = req.body;
   const audioFileData = req.files['audioFile'][0].buffer;
   const imageFileData = req.files['imageFile'][0].buffer;
-  let audioUrl;
-  let imageUrl;
   uploadAudioFile(audioFileData)
     .then(audioFileUrl => {
       data.path_to_song = audioFileUrl;
-      audioUrl = audioFileUrl;
       return uploadImageFile(imageFileData);
     })
     .then(imageFileUrl => {
       data.path_to_artwork = imageFileUrl;
-      imageUrl = imageFileUrl;
       models.addSong(data);
       models.addTags(tags, req.body.title);
       res.json('successfully uploaded song');
