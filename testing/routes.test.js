@@ -6,7 +6,6 @@ const { expect } = require('chai');
 const request = require('supertest');
 const fs = require('fs');
 const { Client } = require('pg');
-// const client = require('../db/index');
 const app = require('../server/index');
 const path = require('path');
 process.env.NODE_ENV = 'test';
