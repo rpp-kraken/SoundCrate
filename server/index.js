@@ -12,7 +12,7 @@ app.use(express.json());
 
 //ROUTES
 app.get('/api/songs', getSongs);
-app.post('api/uploadSong', upload.fields([
+app.post('/api/uploadSong', upload.fields([
   {name: 'audioFile', maxCount: 1},
   {name: 'imageFile', maxCount: 1}
 ]), handleUpload);
