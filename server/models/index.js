@@ -18,4 +18,33 @@ module.exports = {
       db.query(`INSERT INTO tags (id, name, song_id) VALUES ($1, $2, $3)`, [tagId, tag, songId.rows[0].id]);
     });
   },
+
+  getAllSongs: async (user) => {
+    const userId = await db.query(`SELECT id FROM users WHERE name = '${user}'`);
+    return db.query(`SELECT json_agg(
+      json_build_object(
+        'id', id,
+        'title', title,
+        'created_at', created_at,
+        'path_to_song', path_to_song,
+        'play_count', play_count,
+        'fav_count', fav_count,
+        'path_to_artwork', path_to_artwork,
+        'user_id', user_id,
+        'tags', (
+          SELECT coalesce (json_agg(
+            json_build_object(
+              'id', id,
+              'name', name,
+              'song_id', song_id
+            )
+          ), '[]'::json) FROM song_tags WHERE song_tags.song_id = songs.id
+        )
+      )
+    ) FROM songs WHERE user_id = $1;`, [userId.rows[0].id])
+      .then(result => {
+        console.log(result.rows[0].json_agg);
+        return result.rows[0].json_build_object;
+      });
+  }
 }
