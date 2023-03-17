@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { createTheme } from '@mui/material/styles';
-import SongCard from './SongCard.jsx'
+import SongCardList from './SongCardList.jsx';
+import Search from './Search.jsx';
 
-export default function Discover(props) {
+export default function Discover() {
+  // query the database for the first ten songs
+  // for now, just use dummy data
   return (
-    <div>
-      <h3>Discover view</h3>
-      {console.log(props)}
-      {props.songs.map((song, i) => {
-        return (
-          <SongCard
-            key={i}
-            title={song.title}
-            playCount={song.play_count}
-            artistImageUrl={song.path_to_artwork}
-          />
-        )
-      })}
+    <div className="discover">
+      <Search />
+      <SongCardList />
     </div>
-  );
+  )
 }
