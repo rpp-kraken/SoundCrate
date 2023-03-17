@@ -1,7 +1,6 @@
 require('dotenv').config();
 const AWS = require('aws-sdk');
 const { uuid } = require('uuidv4');
-const config = require('../config');
 
 // Connection to S3 bucket
 const s3 = new AWS.S3({
