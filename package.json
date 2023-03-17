@@ -4,7 +4,7 @@
   "description": "A Sound Mixing Application",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
     "build-dev": "webpack --watch",
     "start-dev": "nodemon ./server/index.js",
     "build": "webpack",
@@ -21,7 +21,10 @@
   },
   "homepage": "https://github.com/rpp-kraken/SoundCrate#readme",
   "jest": {
-    "verbose": true
+    "verbose": true,
+    "testEnvironment": "jsdom",
+    "coverageReporters": [ "text" ],
+    "coveragePathIgnorePatterns": [ "/node_modules/" ]
   },
   "dependencies": {
     "@babel/cli": "^7.21.0",
@@ -38,6 +41,7 @@
     "@testing-library/dom": "^9.0.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/user-event": "^14.4.3",
+    "audiobuffer-to-wav": "^1.0.0",
     "aws-sdk": "^2.1334.0",
     "axios": "^1.3.4",
     "babel-loader": "^9.1.2",
@@ -45,6 +49,7 @@
     "css-loader": "^6.7.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "get-blob-duration": "^1.2.0",
     "jest-environment-jsdom": "^29.5.0",
     "multer": "^1.4.5-lts.1",
     "pg": "^8.10.0",
@@ -54,7 +59,9 @@
     "react-test-renderer": "^18.2.0",
     "style-loader": "^3.3.1",
     "supertest": "^6.3.3",
+    "tone": "^14.7.77",
     "uuidv4": "^6.2.13",
+    "wavesurfer.js": "^6.6.0",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1"
   },
