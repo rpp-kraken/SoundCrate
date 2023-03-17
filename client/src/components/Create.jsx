@@ -5,11 +5,13 @@ import audioBufferToWav from 'audiobuffer-to-wav';
 import CreateFxPanel from './CreateFxPanel.jsx';
 import CreateAudioWaveform from './CreateAudioWaveform.jsx'
 import { MicrophoneRecorder } from './CreateMicRecord.jsx';
+import { Publish } from './Publish.jsx';
 
 export default function Create() {
 
   const [listOfTracks, setListOfTracks] = useState([]);
   const [listPlayers, setListPlayers] = useState({});
+  const [openPublish, setOpenPublish] = useState(false);
   // const [maxDuration, setMaxDuration] = useState(0);
 
   const [maxTracks, setMax] = useState(0);
@@ -65,6 +67,10 @@ export default function Create() {
       }
       // Handle the valid audio file here
     };
+  }
+
+  const handlePublish = () => {
+    setOpenPublish(true);
   }
 
   const handleAddPlayer = (player, tempoValue) => {
@@ -193,6 +199,8 @@ export default function Create() {
         Record Audio
       </h4>
       {underMax && <MicrophoneRecorder setListOfTracks={setListOfTracks} setMax={setMax} maxTracks={maxTracks} setUnderMax={setUnderMax} underMax={underMax} />}
+      <button onClick={handlePublish}> Publish </button>
+      {openPublish && <Publish />}
       <br/><br/>
       <br/><br/>
       <br/><br/>
