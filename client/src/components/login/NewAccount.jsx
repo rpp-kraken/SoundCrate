@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
 
 
-export default function NewAccount({ profileData }) {
-  const [path_to_pic, setPath] = useState('');
+export default function NewAccount({ changeView, profileData }) {
   const [name, setName] = useState('');
-  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [bio, setBio] = useState('');
+  const [path_to_pic, setPath] = useState('');
+  const [username, setUsername] = useState('');
+
+  // combined data
   const [userData, setUserData] = useState({})
 
   useEffect(() => {
@@ -19,44 +21,59 @@ export default function NewAccount({ profileData }) {
     }
   }, [path_to_pic, name, username, bio]);
 
+  const handleChange = (e) => {
+    e.preventDefault();
+    const target = e.target;
+    const value = target.value;
+
+    if (target.name === "name") {
+      setName(value);
+    } else if (target.name === "bio") {
+      setBio(value);
+    } else if (target.name === "username") {
+      setUsername(value);
+    }
+  }
+
   const onSubmit = () => {
     let data = { name, email, bio, path_to_pic, username }
     setUserData(data)
-    console.log(userData)
+    // changeView('home')
   }
 
 
   return (
     <div>
-      Create your new account
+      Let's set up your new account
       <br /><br />
-      <form action="/newUser" method="post">
+      <form>
         <div>
-          <label>
+          <label htmlFor="path">
             Profile Picture:
-            <br />
+            <br /><img src={path_to_pic} /><br />
             <Button variant="contained" component="label">
               Change
-              <input type="file" accept="image/*" onChange={(e) => console.log(e.target.files[0])} style={{ display: 'none' }} />
+              <input type="file" name="path" accept="image/*" onChange={(e) => console.log(e.target.files[0])} style={{ display: 'none' }} />
             </Button>
           </label>
         </div>
         <div>
           <label htmlFor="name">
             Name:
-            <input type="text" name="name" id="name" value={profileData.name} required />
+            <input type="text" name="name" onChange={(e) => handleChange(e)} required />
           </label>
         </div>
         <div>
           <label htmlFor="username">
             Username:
-            <input type="text" name="username" id="username" value={profileData.given_name} required />
+            <input type="text" name="username" onChange={(e) => handleChange(e)} required />
           </label>
         </div>
         <div>
           <label htmlFor="bio">
             Bio:
-            <input type="text" name="bio" id="bio" />
+            <textarea rows="3" cols="20" name="bio" placeholder="Tell us about you..." onChange={(e) => handleChange(e)} ></textarea>
+            <br></br>
           </label>
         </div>
       </form>
