@@ -104,7 +104,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData}/>}
-      <Container id='main-app-container' maxWidth={'sm'} sx={{ height: '100vh' }}>
+      <Container id='main-app-container' maxWidth={'sm'}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>
       {<NavBar changeView={changeView} />}
