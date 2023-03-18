@@ -3,7 +3,7 @@ services:
   db:
     image: postgres:alpine
     restart: always
-    container_name: boc-sc_c
+    container_name: boc-sc-test_c
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 'password'
