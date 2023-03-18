@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { CssBaseline } from '@mui/material/';
+import { CssBaseline, Box, Container } from '@mui/material/';
 import theme from '../themes/default.jsx';
 import ThemeExample from './ThemeExample.jsx';
 import TopBar from './TopBar.jsx';
@@ -10,11 +10,11 @@ import Favorites from './Favorites.jsx';
 import Discover from './Discover.jsx'
 import NavBar from './NavBar.jsx';
 import NewAccount from '../components/login/NewAccount.jsx';
-import Profile from './Profile.jsx';
+import ArtistProfile from './ArtistProfile.jsx';
 import MyReleasedMusic from './MyReleasedMusic.jsx';
 import ConfirmLogOut from './ConfirmLogOut.jsx';
 import ConfirmDeleteAccount from './ConfirmDeleteAccount.jsx';
-// import Play from './Play.jsx';
+import Play from './Play.jsx';
 // import Publish from './Publish.jsx';
 import FourOhFour from './404.jsx';
 import { songData } from '../../../DummyData/dummyData.js'
@@ -23,6 +23,8 @@ import axios from 'axios';
 export default function App() {
   const [ user, setUser ] = useState([]);
   const [ profileData, setProfileData ] = useState([]);
+  const [ artistData, setArtistData] = useState();
+  const [ songData, setSongData ] = useState();
   // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
   // View State changes on click
@@ -42,6 +44,12 @@ export default function App() {
     // };
   };
 
+  const handleSetArtistSongData = (artistData, songData) => {
+    console.log(artistData, songData);
+    setArtistData(artistData);
+    setSongData(songData);
+  }
+
   const handleSetUser = (data) => {
     setUser(data);
   }
@@ -49,18 +57,18 @@ export default function App() {
   useEffect(
     () => {
       if (user) {
-          axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-                headers: {
-                  Authorization: `Bearer ${user.access_token}`,
-                  Accept: 'application/json'
-                }
-            })
-            .then((res) => {
-                setProfileData(res.data);
-                setView({name: 'newAccount'});
-            })
-            .catch((err) => console.log(err));
-        }
+        axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+          headers: {
+            Authorization: `Bearer ${user.access_token}`,
+            Accept: 'application/json'
+          }
+        })
+        .then((res) => {
+          setProfileData(res.data);
+          setView({name: 'newAccount'});
+        })
+        .catch((err) => console.log(err));
+      }
     },
     [ user ]
   );
@@ -68,7 +76,7 @@ export default function App() {
   const renderView = () => {
     switch (view.name) {
       case "home":
-        return <Home songs={songData} changeView={changeView} />;
+        return <Home songs={songData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />;
       // case "discover":
       //   return <Discover changeView={changeView} />;
       case "create":
@@ -78,7 +86,9 @@ export default function App() {
       case "newAccount":
         return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData}/>;
       case "profile":
-        return <Profile changeView={changeView} profileData={profileData}/>;
+        return <ArtistProfile changeView={changeView} artistData={artistData}/>;
+      case "play":
+        return <Play changeView={changeView} songData={songData}/>;
       case "myReleasedMusic":
         return <MyReleasedMusic changeView={changeView}/>;
       case "confirmLogOut":
@@ -93,11 +103,11 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {view.name !== 'profile' && <TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData}/>}
-      <main>
+      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData}/>}
+      <Container id='main-app-container' maxWidth={'sm'} sx={{ height: '100vh' }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
-      </main>
-      {view.name !== 'profile' && <NavBar changeView={changeView} />}
+      </Container>
+      {<NavBar changeView={changeView} />}
     </ThemeProvider>
   );
 }

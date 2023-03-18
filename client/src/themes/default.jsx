@@ -109,7 +109,6 @@ const theme = createTheme({
           '&:hover': {
             backgroundColor: '#6520ee',
           },
-          marginBottom: '4EM',
           textTransform: 'none',
         },
       },

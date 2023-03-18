@@ -10,24 +10,11 @@ export default function Play(props) {
   // }
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      // width: '100%',
-      // height: '100%',
-      width: '100vw',
-      height: '100vh',
-      background: 'rgba(0,0,0,0.5)',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 9999
-    }}>
+    <div>
       <div style={{
         background: '#fff',
         borderRadius: '5px',
-        backgroundImage: `url(${props.artistImageUrl})`,
+        backgroundImage: `url(${props.songData.artistImageUrl})`,
         padding: '20px',
         width: '100%',
         height: '100%',
@@ -36,11 +23,11 @@ export default function Play(props) {
         overflow: 'auto'
       }}>
         {/* <div style={{ fontSize: '24px', color: 'black' }}>Play View</div> */}
-        <PlayViewWaveform trackUrl={props.trackUrl} handleClose={props.handleClose} />
-        <div>{props.title}</div>
-        <div>{props.artist}</div>
-        <div>{"Favorited: " + props.likedCount}</div>
-        <div>{"PlayCount: " + props.playCount}</div>
+        <PlayViewWaveform trackUrl={props.songData.path_to_song} />
+        <div>{props.songData.title}</div>
+        <div>{props.songData.artist}</div>
+        <div>{"Favorited: " + props.songData.likedCount}</div>
+        <div>{"PlayCount: " + props.songData.play_count}</div>
         {/* <button onClick={handleClosePlayView}>Back Arrow</button> */}
       </div>
     </div>
