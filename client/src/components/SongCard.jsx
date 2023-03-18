@@ -1,42 +1,124 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardMedia, IconButton, Typography } from '@material-ui/core';
 import { FavoriteBorder, Favorite } from '@material-ui/icons';
-import { useTheme} from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
+import { makeStyles } from '@material-ui/core/styles';
+import Box from '@mui/material/Box';
+import Play from './Play.jsx';
+import ProfileOtherArtist from './ProfileOtherArtist.jsx';
 
-export default function SongCard({ title, time, artist, artistImageUrl, isLiked }) {
+const useStyles = makeStyles({
+  card: {
+    display: 'flex',
+  },
+  media: {
+    // width: 120,
+    width: 156.16,
+    height: 'fill',
+    objectFit: 'fill',
+    // objectFit: 'cover',
+    marginLeft: 'auto'
+  },
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  subcontent: {
+    display: 'flex',
+    pl: 1,
+    pb: 1
+  }
+});
+
+export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, playCount }) {
   const theme = useTheme();
-  const [liked, setLiked] = React.useState(isLiked);
-  const handleLikeClick = () => {
+  const [liked, setLiked] = useState(isLiked);
+  const [playViewOpen, setPlayViewOpen] = useState(false);
+  const [otherArtistViewOpen, setOtherArtistViewOpen] = useState(false);
+
+  const classes = useStyles();
+
+  // Play View Event Handling
+  const handleOpenPlayView = (event) => {
+    event.stopPropagation();
+    setPlayViewOpen(true);
+  };
+  const handleClosePlayView = (event) => {
+    setPlayViewOpen(false);
+  };
+
+  // Favorite Song Event Handling
+  const handleLikeClick = (event) => {
+    event.stopPropagation();
+    console.log("🚀 handleLikeClick: Handle Heart Click Event Here")
     setLiked(!liked);
   };
+
+  // Other Artist Profile View Event Handling
+  const handleOtherArtistProfileOpen = (event) => {
+    event.stopPropagation();
+    setOtherArtistViewOpen(true);
+  };
+  const handleOtherArtistProfileClose = (event) => {
+    setOtherArtistViewOpen(false);
+  };
+
   return (
     <Card
-      id="songCard"
+      className={classes.card}
       raised
       style={{
         margin: '15px',
         backgroundColor: theme.palette.primary.main,
         color: theme.palette.text.primary,
         borderRadius: 0,
-        minHeight: '16vh'
+        minHeight: '16vh',
+        maxHeight: '16vh',
       }}
+      onClick={handleOpenPlayView}
     >
-      <CardMedia
-        component='img'
-        image= {`${artistImageUrl}`}
-        style={{ objectFit: 'contain', color: theme.palette.text.primary }}
-      />
-      <CardContent>
-        <Typography variant='h5' component='h5'>
+      {playViewOpen && <Play
+        title={title}
+        artist={artist}
+        artistImageUrl={artistImageUrl}
+        likedCount={likedCount}
+        playCount={playCount}
+        trackUrl={path_to_song}
+        handleClose={handleClosePlayView} />}
+
+      {otherArtistViewOpen && <ProfileOtherArtist
+        artist={artist}
+        handleClose={handleOtherArtistProfileClose} />}
+
+      <CardContent className={classes.content}>
+        <Typography variant="h5" component="h5">
           {title}
         </Typography>
-        <Typography>
-          5 hours - Aaron Miller
-        </Typography>
+        <Typography
+          variant="subtitle1"
+          onClick={handleOtherArtistProfileOpen}
+          style={{ cursor: 'pointer' }}>{artist}</Typography>
+        {/* <div className={classes.subcontent}> */}
+        <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
+          <IconButton
+            onClick={handleLikeClick}
+          >
+            {liked ? <Favorite /> : <FavoriteBorder />}
+            {likedCount}
+          </IconButton>
+          <Typography>
+            {playCount} Plays
+            {/* 5 hours - Aaron Miller */}
+          </Typography>
+        </Box>
+        {/* </div> */}
       </CardContent>
-      <IconButton onClick={handleLikeClick}>
-        {liked ? <Favorite /> : <FavoriteBorder />}
-      </IconButton>
+      <CardMedia
+        className={classes.media}
+        component="img"
+        image={`${artistImageUrl}`}
+      />
     </Card>
   );
 }
