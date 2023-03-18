@@ -55,7 +55,6 @@ export default function Profile({ profileData, changeView }) {
         <Grid item xs={12} style={gridItemStyle}>
           <Button>Edit Profile</Button>
         </Grid>
-        <Button onClick={onClickBackToHome}>back to home</Button>
       </Grid>
     </Box>
   );

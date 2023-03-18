@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@mui/material/Box';
 import Play from './Play.jsx';
 import ProfileOtherArtist from './ProfileOtherArtist.jsx';
+import Stack from '@mui/material/Stack';
 
 const useStyles = makeStyles({
   card: {
@@ -66,59 +67,69 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
 
   return (
     <Card
-      className={classes.card}
-      raised
-      style={{
-        margin: '15px',
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.text.primary,
-        borderRadius: 0,
-        minHeight: '16vh',
-        maxHeight: '16vh',
-      }}
-      onClick={handleOpenPlayView}
+  className={classes.card}
+  raised
+  style={{
+    margin: '15px',
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.text.primary,
+    borderRadius: 0,
+    minHeight: '16vh',
+    maxHeight: '16vh',
+    cursor: 'pointer',
+    transition: 'transform 0.2s ease-in-out',
+    '&:hover': {
+      transform: 'scale(1.02)',
+    },
+  }}
+  onClick={handleOpenPlayView}
+>
+  {playViewOpen && (
+    <Play
+      title={title}
+      artist={artist}
+      artistImageUrl={artistImageUrl}
+      likedCount={likedCount}
+      playCount={playCount}
+      trackUrl={path_to_song}
+      handleClose={handleClosePlayView}
+    />
+  )}
+
+  {otherArtistViewOpen && (
+    <ProfileOtherArtist artist={artist} handleClose={handleOtherArtistProfileClose} />
+  )}
+
+  <CardContent className={classes.content}>
+    <Typography variant="h5" component="h5" style={{ fontSize: '1.25rem' }}>
+      {title}
+    </Typography>
+    <Typography
+      variant="subtitle1"
+      onClick={handleOtherArtistProfileOpen}
+      style={{ cursor: 'pointer', marginTop: '8px' }}
     >
-      {playViewOpen && <Play
-        title={title}
-        artist={artist}
-        artistImageUrl={artistImageUrl}
-        likedCount={likedCount}
-        playCount={playCount}
-        trackUrl={path_to_song}
-        handleClose={handleClosePlayView} />}
+      {artist}
+    </Typography>
+    <Stack direction="row" alignItems="center" spacing={2} mt={1}>
+      <IconButton onClick={handleLikeClick}>
+        {liked ? <Favorite /> : <FavoriteBorder />}
+      </IconButton>
+      <Typography variant="body2" color="textSecondary" component="span">
+        {likedCount}
+      </Typography>
+      <Typography variant="body2" color="textSecondary" component="span">
+      🎵 {playCount} Plays
+      </Typography>
+    </Stack>
+  </CardContent>
+  <CardMedia className={classes.media} component="img" image={`${artistImageUrl}`} />
+</Card>
 
-      {otherArtistViewOpen && <ProfileOtherArtist
-        artist={artist}
-        handleClose={handleOtherArtistProfileClose} />}
 
-      <CardContent className={classes.content}>
-        <Typography variant="h5" component="h5">
-          {title}
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          onClick={handleOtherArtistProfileOpen}
-          style={{ cursor: 'pointer' }}>{artist}</Typography>
-        {/* <div className={classes.subcontent}> */}
-        <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-          <IconButton
-            onClick={handleLikeClick}
-          >
-            {liked ? <Favorite /> : <FavoriteBorder />}
-            {likedCount}
-          </IconButton>
-          <Typography>
-            {playCount} Plays
-            {/* 5 hours - Aaron Miller */}
-          </Typography>
-        </Box>
-        {/* </div> */}
-      </CardContent>
-      <CardMedia
-        className={classes.media}
-        component="img"
-        image={`${artistImageUrl}`}
-      />
-    </Card>
+
+
+
+
   );
 }
