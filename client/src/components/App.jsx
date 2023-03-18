@@ -10,7 +10,7 @@ import Favorites from './Favorites.jsx';
 import Discover from './Discover.jsx'
 import NavBar from './NavBar.jsx';
 import NewAccount from '../components/login/NewAccount.jsx';
-import Profile from './Profile.jsx';
+import ArtistProfile from './ArtistProfile.jsx';
 import MyReleasedMusic from './MyReleasedMusic.jsx';
 import ConfirmLogOut from './ConfirmLogOut.jsx';
 import ConfirmDeleteAccount from './ConfirmDeleteAccount.jsx';
