@@ -34,6 +34,9 @@ jobs:
             "DB_PASSWORD=${{ secrets.DB_PASSWORD }}"
             "DB_NAME=${{ secrets.DB_NAME }}"
             "PORT=${{ secrets.SERVER_PORT }}"
+            "ACCESS_KEY_ID=${{ secrets.ACCESS_KEY_ID }}"
+            "SECRET_ACCESS_KEY=${{ secrets.SECRET_ACCESS_KEY }}"
+            "REGION=${{ secrets.REGION }}"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/sound-crate:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/sound-crate:latest

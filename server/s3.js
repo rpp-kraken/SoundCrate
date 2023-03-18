@@ -9,8 +9,8 @@ const s3 = new AWS.S3({
     // accessKeyId: process.env.ACCESSKEYID,
     // secretAccessKey: process.env.SECRETACCESSKEY,
     // region: process.env.REGION
-    accessKeyId: secrets.ACCESSKEYID || process.env.ACCESSKEYID,
-    secretAccessKey: secrets.SECRETACCESSKEY || process.env.SECRETACCESSKEY,
+    accessKeyId: secrets.ACCESS_KEY_ID || process.env.ACCESSKEYID,
+    secretAccessKey: secrets.SECRET_ACCESS_KEY || process.env.SECRETACCESSKEY,
     region: secrets.REGION || process.env.REGION
 });
 
