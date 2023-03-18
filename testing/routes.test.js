@@ -1,28 +1,26 @@
 /**
  * @jest-environment node
  */
-const { secrets } = require('docker-secret');
-require('dotenv').config();
-const { expect } = require('chai');
+const { Client } = require('pg');
 const request = require('supertest');
 const fs = require('fs');
-const { Client } = require('pg');
-const app = require('../server/index');
 const path = require('path');
-process.env.NODE_ENV = 'test';
+const app = require('../server/index');
+const { secrets } = require('docker-secret');
+require('dotenv').config();
 
-describe('Reviews route', function () {
-  this.timeout(10000);
+describe('Reviews route', () => {
+  jest.setTimeout(10000);
   //Mocking db connection and loading app
-  before(async function () {
+  beforeAll(async () => {
     const client = new Client({
-    host: secrets.DB_HOST || process.env.DB_HOST,
-    port: 5432,
-    database: 'soundcrate',
-    user: secrets.DB_USER || process.env.DB_USER,
-    password: secrets.DB_PASSWORD || process.env.DB_PASSWORD,
-    max: 20,
-    idleTimeoutMillis: 1000
+      host: secrets.DB_HOST || process.env.DB_HOST,
+      port: 5432,
+      database: 'soundcrate',
+      user: secrets.DB_USER || process.env.DB_USER,
+      password: secrets.DB_PASSWORD || process.env.DB_PASSWORD,
+      max: 20,
+      idleTimeoutMillis: 1000
     });
 
     await client.connect();
@@ -30,7 +28,7 @@ describe('Reviews route', function () {
   }, 10000);
 
   //Creating temp tables and insert fake data to test routes
-  beforeEach(async function () {
+  beforeEach(async () => {
     await global.client.query('BEGIN');
     await global.client.query('CREATE TEMPORARY TABLE temp_users (LIKE users INCLUDING ALL) ON COMMIT PRESERVE ROWS');
     await global.client.query('CREATE TEMPORARY TABLE temp_songs (LIKE songs INCLUDING ALL) ON COMMIT PRESERVE ROWS');
@@ -39,12 +37,12 @@ describe('Reviews route', function () {
       VALUES (1, 'calpal', 'cp@gmail.com', 'cool guy', 'path', 'cp')`)
   }, 10000);
 
-  after(async function () {
+  afterAll(async () => {
     await global.client.end();
   });
 
-  describe('POST /api/uploadSong', function () {
-    it('Should create a new song', async function () {
+  describe('POST /api/uploadSong', () => {
+    it('Should create a new song', async () => {
       const audioFilePath = path.join(__dirname, 'mocks', 'audio.m4a');
       const imageFilePath = path.join(__dirname, 'mocks', 'aaron.jpeg');
       const req = {
@@ -69,8 +67,8 @@ describe('Reviews route', function () {
       const { rows } = await global.client.query(`SELECT title, play_count, fav_count
         FROM temp_songs WHERE title = $1`, [req.title]);
 
-      expect(rows).lengthOf(1);
-      expect(rows[0]).to.deep.equal(response);
+      expect(rows).toHaveLength(1);
+      expect(rows[0]).toStrictEqual(response);
     }, 10000);
   });
 
