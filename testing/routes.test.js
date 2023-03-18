@@ -39,6 +39,7 @@ describe('Reviews route', () => {
 
   afterAll(async () => {
     await global.client.end();
+    await client.end();
   });
 
   describe('POST /api/uploadSong', () => {

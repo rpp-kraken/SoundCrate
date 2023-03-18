@@ -6,8 +6,8 @@ const { uuid } = require('uuidv4');
 
 // Connection to S3 bucket
 const s3 = new AWS.S3({
-    accessKeyId: secrets.ACCESS_KEY_ID || process.env.ACCESSKEYID,
-    secretAccessKey: secrets.SECRET_ACCESS_KEY || process.env.SECRETACCESSKEY,
+    accessKeyId: secrets.ACCESS_KEY_ID || process.env.ACCESS_KEY_ID,
+    secretAccessKey: secrets.SECRET_ACCESS_KEY || process.env.SECRET_ACCESS_KEY,
     region: secrets.REGION || process.env.REGION
 });
 
