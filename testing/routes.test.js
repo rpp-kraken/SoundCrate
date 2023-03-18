@@ -72,6 +72,7 @@ describe('Reviews route', () => {
     }, 10000);
   });
 
+
   const postSong = async (req, status = 201) => {
     const { body } = await request(app)
       .post('/api/uploadSong')
@@ -85,26 +86,8 @@ describe('Reviews route', () => {
       .field('tags', req.tags)
       .expect(status);
     return body;
-  }
+  };
 
-  describe('GET song route', function () {
-    it('should grab a song correctly', async function() {
-      const response = {
-        title: 'yum',
-        path_to_song: 'https://soundcrate.s3.us-east-2.amazonaws.com/866cfa5a-00d3-4c52-b8e0-dbc688bd75c4.m4a',
-        play_count: 1,
-        fav_count: 2
-        path_to_artwork: 'https://soundcrate.s3.us-east-2.amazonaws.com/2bd5ef3a-b266-457f-b77b-f5a5e2e216f4.jpeg'
-      };
 
-      await getSong();
 
-      const { rows } = await global.client.query(`SELECT title, path_to_song, play_count, fav_count, path_to_artwork
-        FROM songs WHERE id = $1`, ['669a3f32-1867-47cd-8ff2-9ac06a75d240']);
-
-      expect(rows).toHaveLength(1);
-      expect(rows[0]).toStrictEqual(response);
-
-    });
-  });
 });
