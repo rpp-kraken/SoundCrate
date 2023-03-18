@@ -31,37 +31,22 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, playCount }) {
+export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView }) {
   const theme = useTheme();
   const [liked, setLiked] = useState(isLiked);
   const [playViewOpen, setPlayViewOpen] = useState(false);
   const [otherArtistViewOpen, setOtherArtistViewOpen] = useState(false);
 
+
   const classes = useStyles();
 
-  // Play View Event Handling
-  const handleOpenPlayView = (event) => {
-    event.stopPropagation();
-    setPlayViewOpen(true);
-  };
-  const handleClosePlayView = (event) => {
-    setPlayViewOpen(false);
-  };
+
 
   // Favorite Song Event Handling
   const handleLikeClick = (event) => {
     event.stopPropagation();
     console.log("🚀 handleLikeClick: Handle Heart Click Event Here")
     setLiked(!liked);
-  };
-
-  // Other Artist Profile View Event Handling
-  const handleOtherArtistProfileOpen = (event) => {
-    event.stopPropagation();
-    setOtherArtistViewOpen(true);
-  };
-  const handleOtherArtistProfileClose = (event) => {
-    setOtherArtistViewOpen(false);
   };
 
   return (
@@ -76,9 +61,22 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
         minHeight: '16vh',
         maxHeight: '16vh',
       }}
-      onClick={handleOpenPlayView}
+      onClick={() => {
+        handleSetArtistSongData(null,
+          {
+            title,
+            artist,
+            artistImageUrl,
+            likedCount,
+            play_count,
+            path_to_song
+          }
+        );
+        changeView('play');
+      }
+      }
     >
-      {playViewOpen && <Play
+      {/* {playViewOpen && <Play
         title={title}
         artist={artist}
         artistImageUrl={artistImageUrl}
@@ -89,7 +87,7 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
 
       {otherArtistViewOpen && <ProfileOtherArtist
         artist={artist}
-        handleClose={handleOtherArtistProfileClose} />}
+        handleClose={handleOtherArtistProfileClose} />} */}
 
       <CardContent className={classes.content}>
         <Typography variant="h5" component="h5">
@@ -97,7 +95,16 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
         </Typography>
         <Typography
           variant="subtitle1"
-          onClick={handleOtherArtistProfileOpen}
+          onClick={(event) => {
+            event.stopPropagation();
+            handleSetArtistSongData(
+              {
+                artist
+              }, null
+            );
+            changeView('profile');
+          }
+          }
           style={{ cursor: 'pointer' }}>{artist}</Typography>
         {/* <div className={classes.subcontent}> */}
         <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
@@ -108,7 +115,7 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
             {likedCount}
           </IconButton>
           <Typography>
-            {playCount} Plays
+            {play_count} Plays
             {/* 5 hours - Aaron Miller */}
           </Typography>
         </Box>

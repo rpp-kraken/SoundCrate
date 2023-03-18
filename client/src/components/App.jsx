@@ -14,7 +14,7 @@ import ArtistProfile from './ArtistProfile.jsx';
 import MyReleasedMusic from './MyReleasedMusic.jsx';
 import ConfirmLogOut from './ConfirmLogOut.jsx';
 import ConfirmDeleteAccount from './ConfirmDeleteAccount.jsx';
-// import Play from './Play.jsx';
+import Play from './Play.jsx';
 // import Publish from './Publish.jsx';
 import FourOhFour from './404.jsx';
 import { songData } from '../../../DummyData/dummyData.js'
@@ -44,6 +44,12 @@ export default function App() {
     // };
   };
 
+  const handleSetArtistSongData = (artistData, songData) => {
+    console.log(artistData, songData);
+    setArtistData(artistData);
+    setSongData(songData);
+  }
+
   const handleSetUser = (data) => {
     setUser(data);
   }
@@ -70,7 +76,7 @@ export default function App() {
   const renderView = () => {
     switch (view.name) {
       case "home":
-        return <Home songs={songData} changeView={changeView} />;
+        return <Home songs={songData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />;
       // case "discover":
       //   return <Discover changeView={changeView} />;
       case "create":
@@ -80,7 +86,9 @@ export default function App() {
       case "newAccount":
         return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData}/>;
       case "profile":
-        return <Profile changeView={changeView} artistData={artistData}/>;
+        return <ArtistProfile changeView={changeView} artistData={artistData}/>;
+      case "play":
+        return <Play changeView={changeView} songData={songData}/>;
       case "myReleasedMusic":
         return <MyReleasedMusic changeView={changeView}/>;
       case "confirmLogOut":
@@ -95,11 +103,11 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {view.name !== 'profile' && <TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData}/>}
-      <Container id='main-app-container' maxWidth={'sm'}>
+      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData}/>}
+      <Container id='main-app-container' maxWidth={'sm'} sx={{ height: '100vh' }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>
-      {view.name !== 'profile' && <NavBar changeView={changeView} />}
+      {<NavBar changeView={changeView} />}
     </ThemeProvider>
   );
 }
