@@ -28,7 +28,7 @@ export default function NavBar(props) {
         }
       }}
       showLabels
-      style={{ backgroundColor: '#0A0F12', position: 'sticky', bottom: 0, width: '100%', height: '10vh' }}
+      style={{ backgroundColor: '#0A0F12', position: 'fixed', bottom: 0, width: '100%', height: '10vh' }}
     >
       <BottomNavigationAction label="" icon={<Home />} />
       <BottomNavigationAction label="" icon={<KeyboardVoiceIcon />} />
