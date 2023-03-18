@@ -53,7 +53,7 @@ export default function NewAccount({ changeView, profileData }) {
         <div>
           <label htmlFor="username">
             Username:
-            <input type="text" name="username" onChange={(e) => handleChange(e)} required />
+            <input type="text" name="username" data-testid="username" onChange={(e) => handleChange(e)} required />
           </label>
         </div>
         <div>
