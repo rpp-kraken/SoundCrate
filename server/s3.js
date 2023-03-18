@@ -6,15 +6,21 @@ const { uuid } = require('uuidv4');
 
 // Connection to S3 bucket
 const s3 = new AWS.S3({
+<<<<<<< HEAD
     accessKeyId: secrets.ACCESS_KEY_ID || process.env.ACCESSKEYID,
     secretAccessKey: secrets.SECRET_ACCESS_KEY || process.env.SECRETACCESSKEY,
     region: secrets.REGION || process.env.REGION
+=======
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
+>>>>>>> dev
 });
 
 //Handles iPhone/Android recording files -- url returned is now publicly available
 const uploadAudioFile = (audioFileData) => {
   const params = {
-      Bucket: config.bucketName,
+      Bucket: 'soundcrate',
       Key: `${uuid()}.m4a`,
       Body: audioFileData,
       ContentType: 'audio/mp4',
@@ -34,7 +40,7 @@ const uploadAudioFile = (audioFileData) => {
 //Handles jpeg images
 const uploadImageFile = (imageFileData) => {
     const params = {
-        Bucket: config.bucketName,
+        Bucket: 'soundcrate',
         Key: `${uuid()}.jpeg`,
         Body: imageFileData,
         ContentType: 'image/jpeg',
