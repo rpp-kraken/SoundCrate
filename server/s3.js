@@ -6,15 +6,9 @@ const { uuid } = require('uuidv4');
 
 // Connection to S3 bucket
 const s3 = new AWS.S3({
-<<<<<<< HEAD
     accessKeyId: secrets.ACCESS_KEY_ID || process.env.ACCESSKEYID,
     secretAccessKey: secrets.SECRET_ACCESS_KEY || process.env.SECRETACCESSKEY,
     region: secrets.REGION || process.env.REGION
-=======
-    accessKeyId: process.env.ACCESS_KEY_ID,
-    secretAccessKey: process.env.SECRET_ACCESS_KEY,
-    region: process.env.REGION
->>>>>>> dev
 });
 
 //Handles iPhone/Android recording files -- url returned is now publicly available
