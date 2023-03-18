@@ -9,6 +9,7 @@ import Create from './Create.jsx';
 import Favorites from './Favorites.jsx';
 import Discover from './Discover.jsx'
 import NavBar from './NavBar.jsx';
+import NewAccount from '../components/login/NewAccount.jsx';
 import Profile from './Profile.jsx';
 import MyReleasedMusic from './MyReleasedMusic.jsx';
 import ConfirmLogOut from './ConfirmLogOut.jsx';
@@ -48,8 +49,7 @@ export default function App() {
   useEffect(
     () => {
       if (user) {
-          axios
-            .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+          axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
                 headers: {
                   Authorization: `Bearer ${user.access_token}`,
                   Accept: 'application/json'
@@ -57,7 +57,7 @@ export default function App() {
             })
             .then((res) => {
                 setProfileData(res.data);
-                setView({name: 'profile'});
+                setView({name: 'newAccount'});
             })
             .catch((err) => console.log(err));
         }
@@ -75,6 +75,8 @@ export default function App() {
         return <Create />;
       case "favorites":
         return <Favorites changeView={changeView}/>;
+      case "newAccount":
+        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData}/>;
       case "profile":
         return <Profile changeView={changeView} profileData={profileData}/>;
       case "myReleasedMusic":
