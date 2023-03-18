@@ -5,7 +5,6 @@ import { useTheme } from '@mui/material/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@mui/material/Box';
 import Play from './Play.jsx';
-import ProfileOtherArtist from './ProfileOtherArtist.jsx';
 
 const useStyles = makeStyles({
   card: {
