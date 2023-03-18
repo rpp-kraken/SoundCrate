@@ -11,9 +11,10 @@ require('dotenv').config();
 
 describe('Reviews route', () => {
   jest.setTimeout(10000);
+  let client;
   //Mocking db connection and loading app
   beforeAll(async () => {
-    const client = new Client({
+    client = new Client({
       host: secrets.DB_HOST || process.env.DB_HOST,
       port: 5432,
       database: 'soundcrate',
@@ -38,7 +39,7 @@ describe('Reviews route', () => {
   }, 10000);
 
   afterAll(async () => {
-    await global.client.end();
+    await client.end();
   });
 
   describe('POST /api/uploadSong', () => {
@@ -72,7 +73,6 @@ describe('Reviews route', () => {
     }, 10000);
   });
 
-
   const postSong = async (req, status = 201) => {
     const { body } = await request(app)
       .post('/api/uploadSong')
@@ -86,8 +86,5 @@ describe('Reviews route', () => {
       .field('tags', req.tags)
       .expect(status);
     return body;
-  };
-
-
-
+  }
 });
