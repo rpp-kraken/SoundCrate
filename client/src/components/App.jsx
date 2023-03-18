@@ -77,7 +77,7 @@ export default function App() {
       case "favorites":
         return <Favorites changeView={changeView}/>;
       case "newAccount":
-        return <NewAccount changeView={changeView} profileData={profileData}/>;
+        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData}/>;
       case "profile":
         return <Profile changeView={changeView} profileData={profileData}/>;
       case "myReleasedMusic":
