@@ -22,8 +22,8 @@ app.post('/api/uploadSong', upload.fields([
 // const port = process.env.PORT || 3000;
 const port = secrets.PORT || process.env.PORT || 3000;
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`listening on port ${port}...`);
 });
 
-module.exports = app;
+module.exports = { app, server };

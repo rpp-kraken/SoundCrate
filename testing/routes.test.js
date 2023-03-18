@@ -5,7 +5,7 @@ const { Client } = require('pg');
 const request = require('supertest');
 const fs = require('fs');
 const path = require('path');
-const app = require('../server/index');
+const { app, server } = require('../server/index');
 const { secrets } = require('docker-secret');
 require('dotenv').config();
 
@@ -31,15 +31,25 @@ describe('Reviews route', () => {
   //Creating temp tables and insert fake data to test routes
   beforeEach(async () => {
     await global.client.query('BEGIN');
-    await global.client.query('CREATE TEMPORARY TABLE temp_users (LIKE users INCLUDING ALL) ON COMMIT PRESERVE ROWS');
-    await global.client.query('CREATE TEMPORARY TABLE temp_songs (LIKE songs INCLUDING ALL) ON COMMIT PRESERVE ROWS');
-    await global.client.query('CREATE TEMPORARY TABLE temp_tags (LIKE song_tags INCLUDING ALL) ON COMMIT PRESERVE ROWS');
+    await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_users (LIKE users INCLUDING ALL) ON COMMIT PRESERVE ROWS');
+    await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_songs (LIKE songs INCLUDING ALL) ON COMMIT PRESERVE ROWS');
+    await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_tags (LIKE song_tags INCLUDING ALL) ON COMMIT PRESERVE ROWS');
     await global.client.query(`INSERT INTO temp_users (id, name, email, bio, path_to_pic, username)
-      VALUES (1, 'calpal', 'cp@gmail.com', 'cool guy', 'path', 'cp')`)
+      VALUES (1, 'calpal', 'cp@gmail.com', 'cool guy', 'path', 'cp')`);
+    await global.client.query(`INSERT INTO temp_songs (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
+      VALUES (1, 'yum', '2023-03-11T19:43:02+00:00', 'https://google.com', 1, 1, 'https://google.com', 1)`);
   }, 10000);
 
   afterAll(async () => {
     await client.end();
+    await server.close();
+  });
+
+  afterEach(async () => {
+    await global.client.query('ROLLBACK');
+    await global.client.query('DROP TABLE IF EXISTS temp_users');
+    await global.client.query('DROP TABLE IF EXISTS temp_songs');
+    await global.client.query('DROP TABLE IF EXISTS temp_tags');
   });
 
   describe('POST /api/uploadSong', () => {
@@ -68,9 +78,29 @@ describe('Reviews route', () => {
       const { rows } = await global.client.query(`SELECT title, play_count, fav_count
         FROM temp_songs WHERE title = $1`, [req.title]);
 
+      await expect(rows).toHaveLength(2);
+      await expect(rows[1]).toStrictEqual(response);
+    }, 10000);
+  });
+
+  describe('GET song route', function () {
+    it('should grab a song correctly', async function() {
+      const response = {
+        title: 'yum',
+        path_to_song: 'https://google.com',
+        play_count: 1,
+        fav_count: 1,
+        path_to_artwork: 'https://google.com'
+      };
+
+      await getSong();
+
+      const { rows } = await global.client.query(`SELECT title, path_to_song, play_count, fav_count, path_to_artwork
+        FROM temp_songs WHERE user_id = $1`, [1]);
+
       expect(rows).toHaveLength(1);
       expect(rows[0]).toStrictEqual(response);
-    }, 10000);
+    });
   });
 
   const postSong = async (req, status = 201) => {
@@ -86,5 +116,13 @@ describe('Reviews route', () => {
       .field('tags', req.tags)
       .expect(status);
     return body;
-  }
+  };
+
+  const getSong = async (req, status = 200) => {
+    const { body } = await request(app)
+      .get('/api/songs?user=calpal')
+      .expect(status);
+    return body;
+  };
+
 });
