@@ -23,6 +23,8 @@ import axios from 'axios';
 export default function App() {
   const [ user, setUser ] = useState([]);
   const [ profileData, setProfileData ] = useState([]);
+  const [ artistData, setArtistData] = useState();
+  const [ songData, setSongData ] = useState();
   // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
   // View State changes on click
@@ -49,18 +51,18 @@ export default function App() {
   useEffect(
     () => {
       if (user) {
-          axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-                headers: {
-                  Authorization: `Bearer ${user.access_token}`,
-                  Accept: 'application/json'
-                }
-            })
-            .then((res) => {
-                setProfileData(res.data);
-                setView({name: 'newAccount'});
-            })
-            .catch((err) => console.log(err));
-        }
+        axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+          headers: {
+            Authorization: `Bearer ${user.access_token}`,
+            Accept: 'application/json'
+          }
+        })
+        .then((res) => {
+          setProfileData(res.data);
+          setView({name: 'newAccount'});
+        })
+        .catch((err) => console.log(err));
+      }
     },
     [ user ]
   );
@@ -78,7 +80,7 @@ export default function App() {
       case "newAccount":
         return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData}/>;
       case "profile":
-        return <Profile changeView={changeView} profileData={profileData}/>;
+        return <Profile changeView={changeView} artistData={artistData}/>;
       case "myReleasedMusic":
         return <MyReleasedMusic changeView={changeView}/>;
       case "confirmLogOut":
