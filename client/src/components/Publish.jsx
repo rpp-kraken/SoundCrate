@@ -117,7 +117,7 @@ export const Publish = (props) => {
             {tags.map((tag, index) => (
               <li key={index}>
                 {tag}
-                <button type="button" onClick={() => handleDelete(index)}>
+                <button type="button" onClick={() => handleDelete(index)} sx={{ marginBottom: '4em' }}>
                   X
                 </button>
               </li>
