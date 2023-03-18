@@ -7,6 +7,8 @@ export default function NewAccount({ changeView, profileData }) {
   const [path_to_pic, setPath] = useState('');
   const [username, setUsername] = useState('');
 
+  console.log(profileData)
+
   useEffect(() => {
     if (!path_to_pic && profileData.picture) {
       setPath(profileData.picture);
@@ -28,6 +30,7 @@ export default function NewAccount({ changeView, profileData }) {
 
   const onSubmit = () => {
     let data = {
+      id: profileData.id,
       name: profileData.name,
       email: profileData.email,
       bio, path_to_pic, username };
