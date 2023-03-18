@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { CssBaseline } from '@mui/material/';
+import { CssBaseline, Box, Container } from '@mui/material/';
 import theme from '../themes/default.jsx';
 import ThemeExample from './ThemeExample.jsx';
 import TopBar from './TopBar.jsx';
@@ -94,9 +94,9 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {view.name !== 'profile' && <TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData}/>}
-      <main>
+      <Container id='main-app-container' maxWidth={'sm'}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
-      </main>
+      </Container>
       {view.name !== 'profile' && <NavBar changeView={changeView} />}
     </ThemeProvider>
   );
