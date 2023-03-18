@@ -41,6 +41,7 @@ describe('Reviews route', () => {
   }, 10000);
 
   afterAll(async () => {
+    await global.client.end();
     await client.end();
     await server.close();
   });
