@@ -103,11 +103,11 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {view.name !== 'profile' && <TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData}/>}
+      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData}/>}
       <Container id='main-app-container' maxWidth={'sm'}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>
-      {view.name !== 'profile' && <NavBar changeView={changeView} />}
+      {<NavBar changeView={changeView} />}
     </ThemeProvider>
   );
 }
