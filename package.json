@@ -23,8 +23,12 @@
   "jest": {
     "verbose": true,
     "testEnvironment": "jsdom",
-    "coverageReporters": [ "text" ],
-    "coveragePathIgnorePatterns": [ "/node_modules/" ]
+    "coverageReporters": [
+      "text"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   },
   "dependencies": {
     "@babel/cli": "^7.21.0",
@@ -47,6 +51,7 @@
     "babel-loader": "^9.1.2",
     "chai": "^4.3.7",
     "css-loader": "^6.7.3",
+    "docker-secret": "^2.0.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "get-blob-duration": "^1.2.0",
