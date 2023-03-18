@@ -14,7 +14,7 @@ app.use(express.json());
 
 //ROUTES
 app.get('/api/songs', getSongs);
-app.post('/upload', upload.fields([
+app.post('/api/uploadSong', upload.fields([
   {name: 'audioFile', maxCount: 1},
   {name: 'imageFile', maxCount: 1}
 ]), handleUpload);
@@ -25,3 +25,5 @@ const port = secrets.PORT || process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`listening on port ${port}...`);
 });
+
+module.exports = app;
