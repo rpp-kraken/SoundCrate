@@ -1,12 +1,17 @@
+// use docker secrets instead of .env for production environment variables
 require('dotenv').config();
+const { secrets } = require('docker-secret');
 const AWS = require('aws-sdk');
 const { uuid } = require('uuidv4');
 
 // Connection to S3 bucket
 const s3 = new AWS.S3({
-    accessKeyId: process.env.ACCESSKEYID,
-    secretAccessKey: process.env.SECRETACCESSKEY,
-    region: process.env.REGION
+    // accessKeyId: process.env.ACCESSKEYID,
+    // secretAccessKey: process.env.SECRETACCESSKEY,
+    // region: process.env.REGION
+    accessKeyId: secrets.ACCESSKEYID || process.env.ACCESSKEYID,
+    secretAccessKey: secrets.SECRETACCESSKEY || process.env.SECRETACCESSKEY,
+    region: secrets.REGION || process.env.REGION
 });
 
 //Handles iPhone/Android recording files -- url returned is now publicly available
