@@ -1,4 +1,6 @@
-require('dotenv').config()
+// use docker-secret instead of .env for env variables in production
+// require('dotenv').config()
+const { secrets } = require('docker-secret');
 const express = require('express');
 const app = express();
 const multer = require('multer');
@@ -15,7 +17,8 @@ app.post('/upload', upload.fields([
   {name: 'imageFile', maxCount: 1}
 ]), handleUpload);
 
-const port = process.env.PORT || 3000;
+// const port = process.env.PORT || 3000;
+const port = secrets.PORT || 3000;
 
 app.listen(port, () => {
   console.log(`listening on port ${port}...`);
