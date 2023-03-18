@@ -11,7 +11,7 @@ const filterData = (query, data) => {
   });
 }
 
-export default function Discover() {
+export default function Home(props) {
   const [searchQuery, setSearchQuery] = useState("");
   // query the database for the first ten songs
   // for now, just use dummy data
@@ -20,6 +20,7 @@ export default function Discover() {
     <div className="discover">
       <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <SongCardList songs={songs} />
+      <br/><br/><br/>
     </div>
   )
 }

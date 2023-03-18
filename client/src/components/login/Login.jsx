@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
 
 
-export default function Login(props) {
+export default function Login({setUser}) {
+
   const login = useGoogleLogin({
-    onSuccess: codeResponse => console.log(codeResponse),
+    onSuccess: codeResponse => {
+      setUser(codeResponse);
+      console.log(codeResponse)
+    },
     onError: err => console.log('Login failed', error),
-    flow: 'auth-code',
+    flow: 'implicit',
   });
 
   return (

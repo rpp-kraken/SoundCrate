@@ -1,18 +1,20 @@
+// use docker secrets instead of .env for production environment variables
 require('dotenv').config();
+const { secrets } = require('docker-secret');
 const AWS = require('aws-sdk');
 const { uuid } = require('uuidv4');
 
 // Connection to S3 bucket
 const s3 = new AWS.S3({
-    accessKeyId: process.env.ACCESSKEYID,
-    secretAccessKey: process.env.SECRETACCESSKEY,
-    region: process.env.REGION
+    accessKeyId: secrets.ACCESS_KEY_ID || process.env.ACCESS_KEY_ID,
+    secretAccessKey: secrets.SECRET_ACCESS_KEY || process.env.SECRET_ACCESS_KEY,
+    region: secrets.REGION || process.env.REGION
 });
 
 //Handles iPhone/Android recording files -- url returned is now publicly available
 const uploadAudioFile = (audioFileData) => {
   const params = {
-      Bucket: config.bucketName,
+      Bucket: 'soundcrate',
       Key: `${uuid()}.m4a`,
       Body: audioFileData,
       ContentType: 'audio/mp4',
@@ -32,7 +34,7 @@ const uploadAudioFile = (audioFileData) => {
 //Handles jpeg images
 const uploadImageFile = (imageFileData) => {
     const params = {
-        Bucket: config.bucketName,
+        Bucket: 'soundcrate',
         Key: `${uuid()}.jpeg`,
         Body: imageFileData,
         ContentType: 'image/jpeg',
