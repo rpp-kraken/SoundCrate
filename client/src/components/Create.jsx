@@ -13,7 +13,6 @@ export default function Create() {
   const [listPlayers, setListPlayers] = useState({});
   const [song, setSong] = useState(null);
   const [openPublish, setOpenPublish] = useState(false);
-  // const [maxDuration, setMaxDuration] = useState(0);
 
   const [maxTracks, setMax] = useState(0);
   const [underMax, setUnderMax] = useState(true);
@@ -177,9 +176,7 @@ export default function Create() {
     var maxDuration = 0;
 
     Tone.loaded().then(() => {
-      // Create a Gain node to use as the output destination
-      const output = new Tone.Gain().toDestination();
-      // Create a new recorder and connect it to the output node
+
       const recorder = new Tone.Recorder();
       Tone.Master.connect(recorder);
       // Start recording
