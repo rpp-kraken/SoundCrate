@@ -8,6 +8,7 @@ const path = require('path');
 const { app, server } = require('../server/index');
 const { secrets } = require('docker-secret');
 require('dotenv').config();
+process.env.NODE_ENV = 'test';
 
 describe('Reviews route', () => {
   jest.setTimeout(10000);
