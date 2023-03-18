@@ -1,6 +1,7 @@
 /**
  * @jest-environment node
  */
+const { secrets } = require('docker-secret');
 require('dotenv').config();
 const { expect } = require('chai');
 const request = require('supertest');
@@ -15,11 +16,11 @@ describe('Reviews route', function () {
   //Mocking db connection and loading app
   before(async function () {
     const client = new Client({
-    host: process.env.DB_HOST,
+    host: secrets.DB_HOST || process.env.DB_HOST,
     port: 5432,
     database: 'soundcrate',
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
+    user: secrets.DB_USER || process.env.DB_USER,
+    password: secrets.DB_PASSWORD || process.env.DB_PASSWORD,
     max: 20,
     idleTimeoutMillis: 1000
     });
