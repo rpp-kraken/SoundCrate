@@ -81,6 +81,21 @@ describe('Reviews route', () => {
       await expect(rows).toHaveLength(2);
       await expect(rows[1]).toStrictEqual(response);
     }, 10000);
+
+    it('Should return a 500 code if song file is not sent', async function () {
+      const imageFilePath = path.join(__dirname, 'mocks', 'aaron.jpeg');
+      const req = {
+        title: 'yum',
+        created_at: '2023-03-11T19:43:02+00:00',
+        play_count: 0,
+        fav_count: 1,
+        user: 'calpal',
+        imageFile: fs.readFileSync(imageFilePath),
+        tags: 'tag1,tag2,tag3'
+      };
+
+      await postSongFail(req);
+    });
   });
 
   describe('GET song route', function () {
@@ -132,6 +147,20 @@ describe('Reviews route', () => {
       .expect(status);
     return body;
   };
+
+  const postSongFail = async (req, status = 500) => {
+    const { body } = await request(app)
+      .post('/api/uploadSong')
+      .field('title', req.title)
+      .field('created_at', req.created_at)
+      .field('play_count', req.play_count)
+      .field('fav_count', req.fav_count)
+      .field('user', req.user)
+      .field('imageFile', req.imageFile, 'aaron.jpeg')
+      .field('tags', req.tags)
+      .expect(status);
+    return body;
+  }
 
   const getSong = async (req, status = 200) => {
     const { body } = await request(app)
