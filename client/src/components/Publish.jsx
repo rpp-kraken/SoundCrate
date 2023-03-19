@@ -83,11 +83,13 @@ export const Publish = (props) => {
 
 
   const handleSubmit = (event) => {
+    var tagsString = tags.join(',');
 
+// formData type
     const formInfo = {
       title: title,
-      // tags: tagsString,
-
+      tags: tagsString,
+      user: 'brian'
     };
     const formData = new FormData();
     formData.append('audioFile', props.song);
@@ -99,13 +101,14 @@ export const Publish = (props) => {
 
 
 
-    // axios.post('/api/uploadSong', formData)
-    // .then((data)=>{
-    //   console.log(data.data)
-    //   alert('Question posted!')
-      // switch view
-    //   props.changeView('myReleasedMusic');
-    // })
+    axios.post('/api/uploadSong', formData)
+    .then((data)=>{
+      console.log(data.data)
+      alert('Question posted!')
+      // switch view {
+      // props.changeView('myReleasedMusic');
+      // }
+    })
   };
 
   return (

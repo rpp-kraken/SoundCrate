@@ -260,7 +260,7 @@ export default function Create(props) {
       </h4>
       {underMax && <MicrophoneRecorder setListOfTracks={setListOfTracks} setMax={setMax} maxTracks={maxTracks} setUnderMax={setUnderMax} underMax={underMax} />}
       <button onClick={handlePublish}> Publish </button>
-      {openPublish && <Publish setOpenPublish={setOpenPublish} song={song} changeView={props.changeView}/>}
+      {openPublish && <Publish setOpenPublish={setOpenPublish} song={song} changeView={props.changeView} changeView={props.changeView}/>}
       <br/><br/>
       <br/><br/>
       <br/><br/>
