@@ -47,5 +47,10 @@ module.exports = {
       .then(result => {
         return result.rows[0].json_agg;
       });
+  },
+
+  deleteSong: async (songId) => {
+    db.query(`DELETE FROM song_tags WHERE song_id = $1`, [songId]);
+    return db.query(`DELETE FROM songs WHERE id = $1`, [songId]);
   }
 }
