@@ -49,6 +49,10 @@ module.exports = {
       });
   },
 
+  getSong: async (songId, songsTable) => {
+    return db.query(`SELECT * FROM ${songsTable} WHERE id = $1`, [songId]);
+  },
+
   deleteSong: async (songId, songsTable, tagsTable) => {
     await db.query(`DELETE FROM ${tagsTable} WHERE song_id = $1`, [songId]);
     return db.query(`DELETE FROM ${songsTable} WHERE id = $1`, [songId]);

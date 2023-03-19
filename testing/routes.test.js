@@ -99,7 +99,7 @@ describe('Reviews route', () => {
   });
 
   describe('GET songs route', function () {
-    it('should grab a song correctly', async function() {
+    it('should grab a song correctly', async function () {
       const response = {
         title: 'yum',
         path_to_song: 'https://google.com',
@@ -117,14 +117,14 @@ describe('Reviews route', () => {
       expect(rows[0]).toStrictEqual(response);
     });
 
-    it('should return 500 if user has not uploaded any songs', async function() {
-      await(getSongsFail());
+    it('should return 500 if user has not uploaded any songs', async function () {
+      await getSongsFail();
     });
 
   });
 
   describe('DELETE song route', function () {
-    it('should delete a song correctly', async function() {
+    it('should delete a song correctly', async function () {
       const initialGet = await global.client.query(`SELECT id, title, path_to_song, play_count, fav_count, path_to_artwork
         FROM temp_songs WHERE user_id = $1`, [1]);
 
@@ -135,6 +135,10 @@ describe('Reviews route', () => {
 
       await expect(initialGet.rows).toHaveLength(1);
       await expect(rows).toHaveLength(0);
+    });
+
+    it('should return a 500 if songId is not in database', async function () {
+      await deleteSongFail();
     });
   });
 
@@ -186,6 +190,13 @@ describe('Reviews route', () => {
       .delete('/api/deleteSong?songId=1')
       .expect(status);
     return body;
-  }
+  };
+
+  const deleteSongFail = async (status = 404) => {
+    const { body } = await request(app)
+      .delete('/api/deleteSong?songId=5')
+      .expect(status);
+    return body;
+  };
 
 });
