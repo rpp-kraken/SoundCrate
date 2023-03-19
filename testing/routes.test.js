@@ -32,7 +32,7 @@ describe('Reviews route', () => {
   beforeEach(async () => {
     await global.client.query('BEGIN');
     await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_users (LIKE users INCLUDING ALL) ON COMMIT PRESERVE ROWS');
-    await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_songs (LIKE songs INCLUDING ALL) ON COMMIT PRESERVE ROWS');
+    await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_songs (LIKE songs INCLUDING ALL)');
     await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_tags (LIKE song_tags INCLUDING ALL) ON COMMIT PRESERVE ROWS');
     await global.client.query(`INSERT INTO temp_users (id, name, email, bio, path_to_pic, username)
       VALUES (1, 'calpal', 'cp@gmail.com', 'cool guy', 'path', 'cp')`);
@@ -103,6 +103,21 @@ describe('Reviews route', () => {
     });
   });
 
+  describe('DELETE song route', function () {
+    it('should delete a song correctly', async function() {
+      const initialGet = await global.client.query(`SELECT id, title, path_to_song, play_count, fav_count, path_to_artwork
+        FROM temp_songs WHERE user_id = $1`, [1]);
+
+      await deleteSong();
+
+      const { rows } = await global.client.query(`SELECT id, title, path_to_song, play_count, fav_count, path_to_artwork
+      FROM temp_songs WHERE user_id = $1`, [1]);
+
+      await expect(initialGet.rows).toHaveLength(1);
+      await expect(rows).toHaveLength(0);
+    });
+  });
+
   const postSong = async (req, status = 201) => {
     const { body } = await request(app)
       .post('/api/uploadSong')
@@ -124,5 +139,12 @@ describe('Reviews route', () => {
       .expect(status);
     return body;
   };
+
+  const deleteSong = async (req, status = 204) => {
+    const { body } = await request(app)
+      .delete('/api/deleteSong?songId=1')
+      .expect(status);
+    return body;
+  }
 
 });

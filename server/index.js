@@ -19,7 +19,7 @@ app.post('/api/uploadSong', upload.fields([
   {name: 'audioFile', maxCount: 1},
   {name: 'imageFile', maxCount: 1}
 ]), handleUpload);
-app.delete('api/deleteSong', handleDelete);
+app.delete('/api/deleteSong', handleDelete);
 
 // const port = process.env.PORT || 3000;
 const port = secrets.PORT || process.env.PORT || 3000;

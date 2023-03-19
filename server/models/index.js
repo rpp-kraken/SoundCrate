@@ -49,8 +49,8 @@ module.exports = {
       });
   },
 
-  deleteSong: async (songId) => {
-    db.query(`DELETE FROM song_tags WHERE song_id = $1`, [songId]);
-    return db.query(`DELETE FROM songs WHERE id = $1`, [songId]);
+  deleteSong: async (songId, songsTable, tagsTable) => {
+    await db.query(`DELETE FROM ${tagsTable} WHERE song_id = $1`, [songId]);
+    return db.query(`DELETE FROM ${songsTable} WHERE id = $1`, [songId]);
   }
 }
