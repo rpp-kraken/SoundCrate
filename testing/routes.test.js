@@ -116,6 +116,11 @@ describe('Reviews route', () => {
       expect(rows).toHaveLength(1);
       expect(rows[0]).toStrictEqual(response);
     });
+
+    it('should return 500 if user has not uploaded any songs', async function() {
+      await(getSongFail());
+    });
+
   });
 
   describe('DELETE song route', function () {
@@ -167,6 +172,13 @@ describe('Reviews route', () => {
       .get('/api/songs?user=calpal')
       .expect(status);
     return body;
+  };
+
+  const getSongFail = async (status = 500) => {
+    const { body } = await request(app)
+      .get('/api/songs?user=aaron')
+      .expect(status);
+      return body;
   };
 
   const deleteSong = async (req, status = 204) => {
