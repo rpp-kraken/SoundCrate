@@ -7,7 +7,7 @@ import CreateAudioWaveform from './CreateAudioWaveform.jsx'
 import { MicrophoneRecorder } from './CreateMicRecord.jsx';
 import { Publish } from './Publish.jsx';
 
-export default function Create() {
+export default function Create(props) {
 
   const [listOfTracks, setListOfTracks] = useState([]);
   const [listPlayers, setListPlayers] = useState({});
@@ -260,7 +260,7 @@ export default function Create() {
       </h4>
       {underMax && <MicrophoneRecorder setListOfTracks={setListOfTracks} setMax={setMax} maxTracks={maxTracks} setUnderMax={setUnderMax} underMax={underMax} />}
       <button onClick={handlePublish}> Publish </button>
-      {openPublish && <Publish setOpenPublish={setOpenPublish} song={song}/>}
+      {openPublish && <Publish setOpenPublish={setOpenPublish} song={song} changeView={props.changeView}/>}
       <br/><br/>
       <br/><br/>
       <br/><br/>

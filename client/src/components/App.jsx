@@ -72,7 +72,7 @@ export default function App() {
       // case "discover":
       //   return <Discover changeView={changeView} />;
       case "create":
-        return <Create />;
+        return <Create changeView={changeView}/>;
       case "favorites":
         return <Favorites changeView={changeView}/>;
       case "newAccount":

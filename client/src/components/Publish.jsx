@@ -5,6 +5,7 @@ import Modal from '@mui/material/Modal';
 import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import { Button } from '@mui/material';
+import axios from "axios";
 
 const style = {
   display: 'flex',
@@ -58,8 +59,6 @@ export const Publish = (props) => {
     }
   };
 
-
-
   const paperStyle = {
     backgroundColor: useTheme().palette.primary.dark,
     boxShadow: 'none',
@@ -84,9 +83,29 @@ export const Publish = (props) => {
 
 
   const handleSubmit = (event) => {
-    event.preventDefault();
-    // setAudio(new Audio(props.song));
 
+    const formInfo = {
+      title: title,
+      // tags: tagsString,
+
+    };
+    const formData = new FormData();
+    formData.append('audioFile', props.song);
+    formData.append('imageFile', image);
+    formData.append('formInfo', JSON.stringify(formInfo));
+
+    console.log(formData);
+    props.changeView('myReleasedMusic');
+
+
+
+    // axios.post('/api/uploadSong', formData)
+    // .then((data)=>{
+    //   console.log(data.data)
+    //   alert('Question posted!')
+      // switch view
+    //   props.changeView('myReleasedMusic');
+    // })
   };
 
   return (
