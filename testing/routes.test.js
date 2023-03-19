@@ -98,7 +98,7 @@ describe('Reviews route', () => {
     });
   });
 
-  describe('GET song route', function () {
+  describe('GET songs route', function () {
     it('should grab a song correctly', async function() {
       const response = {
         title: 'yum',
@@ -108,7 +108,7 @@ describe('Reviews route', () => {
         path_to_artwork: 'https://google.com'
       };
 
-      await getSong();
+      await getSongs();
 
       const { rows } = await global.client.query(`SELECT title, path_to_song, play_count, fav_count, path_to_artwork
         FROM temp_songs WHERE user_id = $1`, [1]);
@@ -118,7 +118,7 @@ describe('Reviews route', () => {
     });
 
     it('should return 500 if user has not uploaded any songs', async function() {
-      await(getSongFail());
+      await(getSongsFail());
     });
 
   });
@@ -167,14 +167,14 @@ describe('Reviews route', () => {
     return body;
   }
 
-  const getSong = async (req, status = 200) => {
+  const getSongs = async (req, status = 200) => {
     const { body } = await request(app)
       .get('/api/songs?user=calpal')
       .expect(status);
     return body;
   };
 
-  const getSongFail = async (status = 500) => {
+  const getSongsFail = async (status = 500) => {
     const { body } = await request(app)
       .get('/api/songs?user=aaron')
       .expect(status);
