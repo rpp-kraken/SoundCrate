@@ -30,7 +30,11 @@ export default function NewAccount({ changeView, profileData }) {
     let data = {
       name: profileData.name,
       email: profileData.email,
-      bio, path_to_pic, username };
+      bio, path_to_pic, username,
+      tier1: false,
+      tier2: false,
+      tier3: false
+    };
     changeView('home');
   }
 
