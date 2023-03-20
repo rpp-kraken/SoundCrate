@@ -8,6 +8,8 @@ const { handleUpload } = require('./controllers/handleUpload');
 const { getSongs } = require('./controllers/getSongs');
 const upload = multer();
 
+const models = require('./models/index');
+
 app.use(express.static('./client/dist'));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
@@ -21,7 +23,7 @@ app.post('/api/uploadSong', upload.fields([
 
 app.post('/api/user', async (req, res) => {
   const data = req.body;
-  const imageFileData = req.files['imageFile'][0].buffer;
+  // const imageFileData = req.files['imageFile'][0].buffer;
   const usersTable = process.env.NODE_ENV === 'test' ? 'temp_users' : 'users';
 
   try {
@@ -32,10 +34,10 @@ app.post('/api/user', async (req, res) => {
     //   });
 
     console.log(data)
-    console.log(imageFileData)
-    console.log(usersTable)
+    let test = await models.addUser(data, usersTable);
+    console.log(test)
 
-      res.status(201).json('successfully added new user');
+    res.status(201).json('successfully added new user');
   } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Failed to add new user' });

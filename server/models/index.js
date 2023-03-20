@@ -47,5 +47,13 @@ module.exports = {
       .then(result => {
         return result.rows[0].json_agg;
       });
+  },
+
+  addUser: async (data, usersTable = 'users') => {
+    db = process.env.NODE_ENV === 'test' ? global.client : db;
+    const userId = uuid();
+    return db.query(`INSERT INTO ${usersTable} (id, name, email, bio, path_to_pic, username, tier1, tier2, tier3)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`, [userId, data.name, data.email, data.bio, data.path_to_pic,
+      data.username, data.tier1, data.tier2, data.tier3]);
   }
 }

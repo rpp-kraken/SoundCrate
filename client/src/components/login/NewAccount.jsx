@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
+import axios from 'axios';
 
 
 export default function NewAccount({ changeView, profileData }) {
@@ -28,6 +29,7 @@ export default function NewAccount({ changeView, profileData }) {
 
   const onSubmit = () => {
     let data = {
+      id: profileData.id,
       name: profileData.name,
       email: profileData.email,
       bio, path_to_pic, username,
@@ -35,6 +37,11 @@ export default function NewAccount({ changeView, profileData }) {
       tier2: false,
       tier3: false
     };
+
+    console.log(data)
+
+    axios.post('/api/user', { data })
+
     changeView('home');
   }
 
@@ -50,7 +57,10 @@ export default function NewAccount({ changeView, profileData }) {
             <br /><img src={path_to_pic} /><br />
             <Button variant="contained" component="label">
               Change
-              <input type="file" name="path" accept="image/*" onChange={(e) => console.log(e.target.files[0])} style={{ display: 'none' }} />
+              <input type="file" name="path" accept="image/*" onChange={(e) => {
+                console.log(e.target.files[0])
+                setPath(e.target.files[0])
+              }} style={{ display: 'none' }} />
             </Button>
           </label>
         </div>
