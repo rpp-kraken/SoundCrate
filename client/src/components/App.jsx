@@ -45,10 +45,8 @@ export default function App() {
       setSongAllHomeData(res.data);
     })
     .catch((err) => console.log(err));
-
     // axios.get(`/api/songSingle`, { params: { songId: 'c7d21bf4-d913-49e4-9254-8e1b04a89043' } })
     //   .then((res) => {
-    //     console.log("🚀 🚀 ~ file: App.jsx:44 ~ .then ~ res:", res.data.rows[0].path_to_song);
     //     setCollaborateSongPath(res.data.rows[0].path_to_song);
     //     setView({ name: 'create' });
     //   })
@@ -109,7 +107,7 @@ export default function App() {
       case "profile":
         return <ArtistProfile changeView={changeView} artistData={artistData} />;
       case "play":
-        return <Play changeView={changeView} songData={songData} />;
+        return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} />;
       case "myReleasedMusic":
         return <MyReleasedMusic changeView={changeView} />;
       case "confirmLogOut":
