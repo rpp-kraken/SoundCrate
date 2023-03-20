@@ -5,9 +5,9 @@ require('dotenv').config();
 
 describe('models functions', () => {
 
-  const songsTable = 'temp_songs';
-  const tagsTable = 'temp_tags';
-  const usersTable = 'temp_users';
+  // const songsTable = 'temp_songs';
+  // const tagsTable = 'temp_tags';
+  // const usersTable = 'temp_users';
 
   // TODO: Change this after refactoring to pass a db instance directly into models
   process.env.NODE_ENV = 'test';
@@ -58,7 +58,7 @@ describe('models functions', () => {
   describe('getAllSongs', () => {
     it('should get all songs from a specific user', async () => {
       const user = 'calpal'
-      const result = await getAllSongs(user, usersTable, songsTable, tagsTable);
+      const result = await getAllSongs(user);
       const expected = [{
         id: 1,
         title: 'yum',
