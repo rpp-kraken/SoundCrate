@@ -22,6 +22,7 @@ module.exports = {
   },
 
   getAllSongs: async (user) => {
+    db = process.env.NODE_ENV === 'test' ? global.client : db;
     const userId = await db.query(`SELECT id FROM users WHERE name = '${user}'`);
     // return db.query(`SELECT json_agg(
     const result = await db.query(`SELECT json_agg(
