@@ -8,7 +8,9 @@ const tagsTable = process.env.NODE_ENV === 'test' ? 'temp_tags' : 'tags';
 
 module.exports = {
   addUser: async (username) => {
-
+    db = process.env.NODE_ENV === 'test' ? global.client : db;
+    const userId = uuid();
+    return await db.query(`INSERT INTO ${usersTable} (id, name) VALUES (${userId}, ${username})`);
   }
 
   addSong: async (data) => {
@@ -18,7 +20,7 @@ module.exports = {
     if (!user_id.rows.length) await addUser(data.user);
     user_id = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${data.user}'`);
 
-    return db.query(`INSERT INTO ${songsTable} (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
+    return await db.query(`INSERT INTO ${songsTable} (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`, [songId, data.title, data.created_at, data.path_to_song, data.play_count,
       data.fav_count, data.path_to_artwork, user_id.rows[0].id]);
   },
