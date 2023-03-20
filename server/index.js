@@ -7,6 +7,7 @@ const multer = require('multer');
 const { handleUpload } = require('./controllers/handleUpload');
 const { getSongs } = require('./controllers/getSongs');
 const { getOneSong } = require('./controllers/getOneSong');
+const { getAllSongsHome } = require('./controllers/getAllSongsHome');
 const { handleDelete } = require('./controllers/deleteSong');
 const upload = multer();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 //ROUTES
 app.get('/api/songs', getSongs);
 app.get('/api/songSingle', getOneSong);
+app.get('/api/getAllSongsHome', getAllSongsHome);
 app.post('/api/uploadSong', upload.fields([
   {name: 'audioFile', maxCount: 1},
   {name: 'imageFile', maxCount: 1}

@@ -17,7 +17,7 @@ import ConfirmDeleteAccount from './ConfirmDeleteAccount.jsx';
 import Play from './Play.jsx';
 // import Publish from './Publish.jsx';
 import FourOhFour from './404.jsx';
-import { songData } from '../../../DummyData/dummyData.js'
+// import { songData } from '../../../DummyData/dummyData.js'
 import axios from 'axios';
 
 export default function App() {
@@ -25,6 +25,8 @@ export default function App() {
   const [profileData, setProfileData] = useState([]);
   const [artistData, setArtistData] = useState();
   const [songData, setSongData] = useState();
+  const [songAllHomeData, setSongAllHomeData] = useState([]);
+
   const [collaborateSongPath, setCollaborateSongPath] = useState(null);
   // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
@@ -36,13 +38,21 @@ export default function App() {
   }, [view])
 
   useEffect(() => {
-    axios.get(`/api/songSingle`, { params: { songId: 'c7d21bf4-d913-49e4-9254-8e1b04a89043' } })
-      .then((res) => {
-        console.log("🚀 🚀 ~ file: App.jsx:44 ~ .then ~ res:", res.data.rows[0].path_to_song);
-        setCollaborateSongPath(res.data.rows[0].path_to_song);
-        setView({ name: 'create' });
-      })
-      .catch((err) => console.log(err));
+
+    axios.get(`/api/getAllSongsHome`)
+    .then((res) => {
+      console.log("🚀 🚀 ~ file: App.jsx:44 ~ .then ~ res:", res.data);
+      setSongAllHomeData(res.data);
+    })
+    .catch((err) => console.log(err));
+
+    // axios.get(`/api/songSingle`, { params: { songId: 'c7d21bf4-d913-49e4-9254-8e1b04a89043' } })
+    //   .then((res) => {
+    //     console.log("🚀 🚀 ~ file: App.jsx:44 ~ .then ~ res:", res.data.rows[0].path_to_song);
+    //     setCollaborateSongPath(res.data.rows[0].path_to_song);
+    //     setView({ name: 'create' });
+    //   })
+    //   .catch((err) => console.log(err));
   }, [])
 
   // Keeping commented out code for potential props handling in the future
@@ -87,7 +97,7 @@ export default function App() {
   const renderView = () => {
     switch (view.name) {
       case "home":
-        return <Home songs={songData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />;
+        return <Home songs={songAllHomeData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />;
       // case "discover":
       //   return <Discover changeView={changeView} />;
       case "create":

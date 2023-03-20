@@ -26,6 +26,12 @@ module.exports = {
     });
   },
 
+  getAllSongsHome: async () => {
+    db = process.env.NODE_ENV === 'test' ? global.client : db;
+    const result = await db.query(`SELECT * FROM ${songsTable}`);
+    return result.rows;
+  },
+
   getAllSongs: async (user) => {
     db = process.env.NODE_ENV === 'test' ? global.client : db;
     const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${user}'`);
