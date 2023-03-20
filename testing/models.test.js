@@ -81,12 +81,24 @@ describe('models functions', () => {
     });
   });
 
-//   describe.skip('addSong', () => {
-//     it.todo('should add a song to the database');
-//   });
+  describe.skip('addSong', () => {
+    it.todo('should add a song to the database');
+    it.todo('should throw an error if song is not added');
+  });
 
-//   describe.skip('addTags', () => {
-//     it.todo('should add tags to a song');
-//   });
+  describe.skip('addTags', () => {
+    it.todo('should add tags to a song');
+    it.todo('should do nothing, and log an error if a song does not exist');
+  });
+
+  describe.skip('getSong', () => {
+    it.todo('should get a song for a given songId');
+    it.todo('should return null for an invalid songId');
+  });
+
+  describe.skip('deleteSong', () => {
+    it.todo('should delete a song for a given userId');
+    it.todo('should handle error properly for nonexistent userId');
+  })
 });
 
