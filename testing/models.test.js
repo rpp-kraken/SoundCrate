@@ -58,12 +58,20 @@ describe('models functions', () => {
   describe('getAllSongs', () => {
     it('should get all songs from a specific user', async () => {
       const user = 'calpal'
-      const result = await getAllSongs(user);
-      // const { rows: expected } = await global.client.query(`SELECT id FROM temp_songs WHERE user_id = $1`, [1]);
+      const result = await getAllSongs(user, usersTable, songsTable, tagsTable);
+      const expected = [{
+        id: 1,
+        title: 'yum',
+        created_at: '2023-03-11T19:43:02+00:00',
+        path_to_song: 'https://google.com',
+        play_count: 1,
+        fav_count: 1,
+        path_to_artwork: 'https://google.com',
+        user_id: 1
+      }]
       console.log(JSON.stringify(result));
-      // console.log(JSON.stringify(expected));
       await expect(result.length).not.toBe(0);
-      // await expect(result.length).toBe(expected.length);
+      await expect(result.length).toBe(expected.length);
     });
   });
 

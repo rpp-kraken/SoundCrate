@@ -21,9 +21,9 @@ module.exports = {
     });
   },
 
-  getAllSongs: async (user) => {
+  getAllSongs: async (user, usersTable = 'users', songsTable = 'songs', tagsTable = 'song_tags') => {
     db = process.env.NODE_ENV === 'test' ? global.client : db;
-    const userId = await db.query(`SELECT id FROM users WHERE name = '${user}'`);
+    const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${user}'`);
     // return db.query(`SELECT json_agg(
     const result = await db.query(`SELECT json_agg(
       json_build_object(
@@ -42,10 +42,10 @@ module.exports = {
               'name', name,
               'song_id', song_id
             )
-          ), '[]'::json) FROM song_tags WHERE song_tags.song_id = songs.id
+          ), '[]'::json) FROM ${tagsTable} WHERE ${tagsTable}.song_id = ${songsTable}.id
         )
       )
-    ) FROM songs WHERE user_id = $1;`, [userId.rows[0].id])
+    ) FROM ${songsTable} WHERE user_id = $1;`, [userId.rows[0].id])
       // .then(result => {
       //   return result.rows[0].json_agg;
       // });
