@@ -1,4 +1,7 @@
 const { addSong, addTags, getAllSongs } = require('../server/models/index.js');
+const { Client } = require('pg');
+const { secrets } = require('docker-secret');
+require('dotenv').config();
 
 describe('models functions', () => {
 
@@ -7,7 +10,7 @@ describe('models functions', () => {
   const usersTable = 'temp_users';
 
   // TODO: Change this after refactoring to pass a db instance directly into models
-  process.env.NODE_ENV = 'test';
+  // process.env.NODE_ENV = 'test';
 
   jest.setTimeout(10000);
   let client;
@@ -49,21 +52,27 @@ describe('models functions', () => {
 
   afterAll(async () => {
     await client.end();
+    await global.client.end();
   });
 
   describe('getAllSongs', () => {
     it('should get all songs from a specific user', async () => {
-      const songs = await getAllSongs('calpal');
-      expect(songs.length).not.toBe(null);
+      const user = 'calpal'
+      const result = await getAllSongs(user);
+      const { rows: expected } = await global.client.query(`SELECT id FROM temp_songs WHERE user_id = $1`, [1]);
+      console.log(JSON.stringify(result));
+      console.log(JSON.stringify(expected));
+      await expect(result.length).not.toBe(0);
+      await expect(result.length).toBe(expected.length);
     });
   });
 
-  describe.skip('addSong', () => {
-    it('should add a song to the database');
-  });
+//   describe.skip('addSong', () => {
+//     it.todo('should add a song to the database');
+//   });
 
-  describe.skip('addTags', () => {
-    it('should add tags to a song');
-  });
+//   describe.skip('addTags', () => {
+//     it.todo('should add tags to a song');
+//   });
 });
 

@@ -1,5 +1,5 @@
 let db = require('../../db/index');
-const { uuid } = require('uuidv4');
+const { v4: uuid } = require('uuid');
 
 module.exports = {
   addSong: async (data, songsTable = 'songs', usersTable = 'users') => {
@@ -23,7 +23,8 @@ module.exports = {
 
   getAllSongs: async (user) => {
     const userId = await db.query(`SELECT id FROM users WHERE name = '${user}'`);
-    return db.query(`SELECT json_agg(
+    // return db.query(`SELECT json_agg(
+    const result = await db.query(`SELECT json_agg(
       json_build_object(
         'id', id,
         'title', title,
@@ -44,8 +45,9 @@ module.exports = {
         )
       )
     ) FROM songs WHERE user_id = $1;`, [userId.rows[0].id])
-      .then(result => {
-        return result.rows[0].json_agg;
-      });
+      // .then(result => {
+      //   return result.rows[0].json_agg;
+      // });
+    return result.rows[0].json_agg;
   }
 }
