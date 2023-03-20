@@ -74,7 +74,6 @@ export default function ProfileOtherArtist(props) {
               <Grid item xs={3} style={gridItemStyle}>
                 <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center' }}>Favorites</Typography>
               </Grid>
-
             </Grid>
             <Grid item xs={12} style={ gridItemStyle }>
 
