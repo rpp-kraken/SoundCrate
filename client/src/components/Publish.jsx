@@ -87,12 +87,12 @@ export const Publish = (props) => {
   const handleSubmit = (event) => {
     var tagsString = tags.join(',');
 
-// formData type
+    // formData type
     const formInfo = {
       title: title,
       tags: tagsString,
       user: 'brian'
-    };
+    }
     const formData = new FormData();
     formData.append('audioFile', props.song);
     formData.append('imageFile', image);
