@@ -19,10 +19,8 @@ app.post('/api/uploadSong', upload.fields([
   {name: 'audioFile', maxCount: 1},
   {name: 'imageFile', maxCount: 1}
 ]), handleUpload);
-
 app.post('/api/user', newUser)
 
-// const port = process.env.PORT || 3000;
 const port = secrets.PORT || process.env.PORT || 3000;
 
 const server = app.listen(port, () => {

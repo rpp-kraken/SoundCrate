@@ -36,6 +36,8 @@ describe('Reviews route', () => {
     await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_tags (LIKE song_tags INCLUDING ALL) ON COMMIT PRESERVE ROWS');
     await global.client.query(`INSERT INTO temp_users (id, name, email, bio, path_to_pic, username)
       VALUES (1, 'calpal', 'cp@gmail.com', 'cool guy', 'path', 'cp')`);
+    await global.client.query(`INSERT INTO temp_users (id, name, email, bio, path_to_pic, username)
+      VALUES (2, 'Mindi Test 123', 'test@123test.com', 'my bio', 'path', 'mintest123')`);
     await global.client.query(`INSERT INTO temp_songs (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
       VALUES (1, 'yum', '2023-03-11T19:43:02+00:00', 'https://google.com', 1, 1, 'https://google.com', 1)`);
   }, 10000);
@@ -84,7 +86,7 @@ describe('Reviews route', () => {
   });
 
   describe('GET song route', function () {
-    it('should grab a song correctly', async function() {
+    it('should grab a song correctly', async function () {
       const response = {
         title: 'yum',
         path_to_song: 'https://google.com',
@@ -101,6 +103,34 @@ describe('Reviews route', () => {
       expect(rows).toHaveLength(1);
       expect(rows[0]).toStrictEqual(response);
     });
+  });
+
+  describe('POST new ser route', () => {
+    it('a new user should post to the database', async () => {
+      const req = {
+        name: "Mindi Test 123",
+        email: "test@123test.com",
+        bio: "my bio",
+        path_to_pic: "path",
+        username: "mintest123"
+      };
+
+      const response = {
+        name: "Mindi Test 123",
+        email: "test@123test.com",
+        bio: "my bio"
+      };
+
+      await postUser(req);
+
+      const { rows } = await global.client.query(`SELECT name, email, bio
+          FROM temp_users WHERE name = $1`, [req.name]);
+
+      console.log('rows', rows)
+
+      await expect(rows).toHaveLength(2);
+      await expect(rows[1]).toStrictEqual(response);
+    }, 10000);
   });
 
   const postSong = async (req, status = 201) => {
@@ -121,6 +151,21 @@ describe('Reviews route', () => {
   const getSong = async (req, status = 200) => {
     const { body } = await request(app)
       .get('/api/songs?user=calpal')
+      .expect(status);
+    return body;
+  };
+
+  const postUser = async (req, status = 201) => {
+    const { body } = await request(app)
+      .post('/api/user')
+      .field('name', req.name)
+      .field('email', req.email)
+      .field('bio', req.bio)
+      .field('path_to_pic', req.path_to_pic)
+      .field('username', req.username)
+      .field('tier1', req.tier1)
+      .field('tier2', req.tier2)
+      .field('tier3', req.tier3)
       .expect(status);
     return body;
   };
