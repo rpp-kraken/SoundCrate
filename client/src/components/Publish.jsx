@@ -26,8 +26,10 @@ export const Publish = (props) => {
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState([]);
   const [underMax, setUnderMax] =useState(true);
-  const [tagNum, setTagNum] = useState(0)
-    const audioRef = React.useRef(null);
+  const [tagNum, setTagNum] = useState(0);
+  const [doneRendering, setDoneRendering] = useState(false);
+
+  const audioRef = React.useRef(null);
 
 
   const handleInput = async (e) => {
@@ -147,8 +149,8 @@ export const Publish = (props) => {
             </ul>
             <div>
             <br />
-          Preview:
-        {props.song && (
+          Preview: <br />
+          {props.song ? null : "Recording and rendering your song..."}
           <audio
             ref={audioRef}
             src={props.song}
@@ -156,7 +158,15 @@ export const Publish = (props) => {
             onPlay={handlePlay}
             onPause={handlePause}
           />
-        )}
+        {/* {props.song && (
+          <audio
+            ref={audioRef}
+            src={props.song}
+            controls
+            onPlay={handlePlay}
+            onPause={handlePause}
+          />
+        )} */}
         <Button variant="contained" onClick={handleClose} sx={{ marginBottom: '4em' }}>Cancel</Button>
         </div>
           <Button variant="contained" type="submit">Submit</Button>
