@@ -18,8 +18,8 @@ module.exports = {
     const tier2 = user.tier2 || false;
     const tier3 = user.tier3 || false;
     return await db.query(`INSERT INTO ${usersTable} (id, name, email, bio, path_to_pic, username, tier1, tier2, tier3)
-      VALUES (${userId}, ${user.name}, ${email}, ${bio}, ${path_to_pic}, ${username}, ${tier1}, ${tier2}, ${tier3})`);
-  }
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`, [userId, user.name, email, bio, path_to_pic, username, tier1, tier2, tier3]);
+  },
 
   addSong: async (data) => {
     db = process.env.NODE_ENV === 'test' ? global.client : db;

@@ -1,4 +1,4 @@
-const { addSong, addTags, getAllSongs } = require('../server/models/index.js');
+const models = require('../server/models/index.js');
 const { Client } = require('pg');
 const { secrets } = require('docker-secret');
 const path = require('path');
@@ -7,9 +7,9 @@ require('dotenv').config();
 
 describe('models functions', () => {
 
-  // const songsTable = 'temp_songs';
-  // const tagsTable = 'temp_tags';
-  // const usersTable = 'temp_users';
+  const songsTable = 'temp_songs';
+  const tagsTable = 'temp_tags';
+  const usersTable = 'temp_users';
 
   // TODO: Change this after refactoring to pass a db instance directly into models
   process.env.NODE_ENV = 'test';
@@ -60,7 +60,7 @@ describe('models functions', () => {
   describe('getAllSongs', () => {
     it('should get all songs from a specific user', async () => {
       const user = 'calpal'
-      const result = await getAllSongs(user);
+      const result = await models.getAllSongs(user);
       const expected = [{
         id: 1,
         title: 'yum',
@@ -71,21 +71,55 @@ describe('models functions', () => {
         path_to_artwork: 'https://google.com',
         user_id: 1
       }]
-      console.log(JSON.stringify(result));
+      // console.log(JSON.stringify(result));
       await expect(result.length).not.toBe(0);
       await expect(result.length).toBe(expected.length);
     });
 
     it('should return an empty array if a userId is not in the database', async () => {
       const user = 'fakeUser';
-      const result = await getAllSongs(user);
+      const result = await models.getAllSongs(user);
       await expect(result).toEqual([]);
     });
   });
 
-  describe('addSong', () => {
+  describe.skip('addUser', () => {
+    it.todo('should add a user to the database with full info filled out');
+    it.todo('should add a user to the database with just the name');
+    it.todo('should not be able to add a user if user already exists');
+  });
 
-    it('should add a song to the database', () => {
+  describe('addSong', () => {
+    const song = {
+      title: "New Song",
+      created_at: (new Date).toISOString(),
+      path_to_song: "",
+      play_count: 0,
+      fav_count: 0,
+      path_to_artwork: '',
+      user: 'someguy'
+    }
+
+    it('should add a song to the database for an existing user', async () => {
+      const user = { name: 'someguy' };
+      await models.addUser(user);
+      const userIds = await global.client.query(`SELECT id FROM ${usersTable} WHERE name = '${user.name}'`);
+
+      // check that user was inserted into the database
+      expect(userIds.rows.length).not.toBe(0);
+
+      // check that initial songCount for this user is 0
+      const initialSongs = await global.client.query(`SELECT id FROM ${songsTable} WHERE user_id = $1`, [userIds.rows[0].id]);
+      expect(initialSongs.rows.length).toBe(0);
+
+      await models.addSong(song);
+      const results = await global.client.query(`SELECT id, title FROM ${songsTable} WHERE title = '${song.title}'`);
+      expect(results.rows).toHaveLength(1);
+      expect(results.rows[0].title).toBe(song.title);
+
+    });
+
+    it('should add a song to the database for a first time user', () => {
 
     });
 
@@ -94,10 +128,6 @@ describe('models functions', () => {
     });
   });
 
-  describe.skip('addUser', () => {
-    it.todo('should add a user to the database');
-    it.todo('should not be able to add a user if user already exists');
-  });
 
   describe.skip('addTags', () => {
     it.todo('should add tags to a song');
