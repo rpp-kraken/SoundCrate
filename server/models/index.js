@@ -29,6 +29,7 @@ module.exports = {
   getAllSongs: async (user) => {
     db = process.env.NODE_ENV === 'test' ? global.client : db;
     const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${user}'`);
+    if (!userId.rows.length) return [];
     const result = await db.query(`SELECT json_agg(
       json_build_object(
         'id', id,
@@ -49,7 +50,8 @@ module.exports = {
           ), '[]'::json) FROM ${tagsTable} WHERE ${tagsTable}.song_id = ${songsTable}.id
         )
       )
-    ) FROM ${songsTable} WHERE user_id = $1;`, [userId.rows[0].id]);
+    ) FROM ${songsTable} WHERE user_id = $1;`, [userId.rows[0].id])
+    .catch(err => console.log(`error retrieving songs for user with id ${userId.rows[0].id}`, err));
     return result.rows[0].json_agg;
   },
 

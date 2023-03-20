@@ -73,6 +73,12 @@ describe('models functions', () => {
       await expect(result.length).not.toBe(0);
       await expect(result.length).toBe(expected.length);
     });
+
+    it('should return an empty array if a userId is not in the database', async () => {
+      const user = 'fakeUser';
+      const result = await getAllSongs(user);
+      await expect(result).toEqual([]);
+    });
   });
 
 //   describe.skip('addSong', () => {
