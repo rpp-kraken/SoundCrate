@@ -21,10 +21,11 @@ import { songData } from '../../../DummyData/dummyData.js'
 import axios from 'axios';
 
 export default function App() {
-  const [ user, setUser ] = useState([]);
-  const [ profileData, setProfileData ] = useState([]);
-  const [ artistData, setArtistData] = useState();
-  const [ songData, setSongData ] = useState();
+  const [user, setUser] = useState([]);
+  const [profileData, setProfileData] = useState([]);
+  const [artistData, setArtistData] = useState();
+  const [songData, setSongData] = useState();
+  const [collaborateSongPath, setCollaborateSongPath] = useState(null);
   // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
   // View State changes on click
@@ -33,6 +34,16 @@ export default function App() {
   useEffect(() => {
     console.log("Changing view to: " + view.name);
   }, [view])
+
+  useEffect(() => {
+    axios.get(`/api/songSingle`, { params: { songId: 'c7d21bf4-d913-49e4-9254-8e1b04a89043' } })
+      .then((res) => {
+        console.log("🚀 🚀 ~ file: App.jsx:44 ~ .then ~ res:", res.data.rows[0].path_to_song);
+        setCollaborateSongPath(res.data.rows[0].path_to_song);
+        setView({ name: 'create' });
+      })
+      .catch((err) => console.log(err));
+  }, [])
 
   // Keeping commented out code for potential props handling in the future
   // const changeView = (name, someProps = {}) => {
@@ -63,14 +74,14 @@ export default function App() {
             Accept: 'application/json'
           }
         })
-        .then((res) => {
-          setProfileData(res.data);
-          setView({name: 'newAccount'});
-        })
-        .catch((err) => console.log(err));
+          .then((res) => {
+            setProfileData(res.data);
+            setView({ name: 'newAccount' });
+          })
+          .catch((err) => console.log(err));
       }
     },
-    [ user ]
+    [user]
   );
 
   const renderView = () => {
@@ -80,17 +91,17 @@ export default function App() {
       // case "discover":
       //   return <Discover changeView={changeView} />;
       case "create":
-        return <Create />;
+        return <Create collaborateSongPath={collaborateSongPath}/>;
       case "favorites":
-        return <Favorites changeView={changeView}/>;
+        return <Favorites changeView={changeView} />;
       case "newAccount":
-        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData}/>;
+        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} />;
       case "profile":
-        return <ArtistProfile changeView={changeView} artistData={artistData}/>;
+        return <ArtistProfile changeView={changeView} artistData={artistData} />;
       case "play":
-        return <Play changeView={changeView} songData={songData}/>;
+        return <Play changeView={changeView} songData={songData} />;
       case "myReleasedMusic":
-        return <MyReleasedMusic changeView={changeView}/>;
+        return <MyReleasedMusic changeView={changeView} />;
       case "confirmLogOut":
         return <ConfirmLogOut />;
       case "confirmDeleteAccount":
@@ -103,7 +114,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData}/>}
+      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} />}
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>
