@@ -26,6 +26,7 @@ export default function App() {
   const [artistData, setArtistData] = useState();
   const [songData, setSongData] = useState();
   const [songAllHomeData, setSongAllHomeData] = useState([]);
+  // const [changeNavBar, setChangeNavBar] = useState(0);
 
   const [collaborateSongPath, setCollaborateSongPath] = useState(null);
   // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
@@ -35,22 +36,19 @@ export default function App() {
 
   useEffect(() => {
     console.log("Changing view to: " + view.name);
+    // if (view.name === "create") {
+    //   setChangeNavBar(1);
+    // }
   }, [view])
 
   useEffect(() => {
 
     axios.get(`/api/getAllSongsHome`)
     .then((res) => {
-      console.log("🚀 🚀 ~ file: App.jsx:44 ~ .then ~ res:", res.data);
+      console.log("Data from deployed DB: ", res.data);
       setSongAllHomeData(res.data);
     })
     .catch((err) => console.log(err));
-    // axios.get(`/api/songSingle`, { params: { songId: 'c7d21bf4-d913-49e4-9254-8e1b04a89043' } })
-    //   .then((res) => {
-    //     setCollaborateSongPath(res.data.rows[0].path_to_song);
-    //     setView({ name: 'create' });
-    //   })
-    //   .catch((err) => console.log(err));
   }, [])
 
   // Keeping commented out code for potential props handling in the future

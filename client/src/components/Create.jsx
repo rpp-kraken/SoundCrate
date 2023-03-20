@@ -21,11 +21,7 @@ export default function Create(props) {
   // const [activeSoundCard, setActiveSoundCard] = useState(1);
 
   useEffect(() => {
-    console.log('first render!',);
-    // TODO: COLLABORATE (put track URL into this array)
     if (props.collaborateSongPath) {
-
-    console.log("🚀 ~ file: Create.jsx:27 ~ useEffect ~ props.collaborateSongPath:", props.collaborateSongPath)
     let trackUrlSources = [
       props.collaborateSongPath
       // 'https://s3-us-west-1.amazonaws.com/leesamples/samples/Rhythmics/60+bpm/Ping+Pong+Ping.mp3',
@@ -38,7 +34,6 @@ export default function Create(props) {
     ];
     setMax(trackUrlSources.length);
     setListOfTracks(trackUrlSources);
-
     }
   }, []);
 
