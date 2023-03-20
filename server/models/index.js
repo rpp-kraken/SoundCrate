@@ -51,5 +51,14 @@ module.exports = {
       )
     ) FROM ${songsTable} WHERE user_id = $1;`, [userId.rows[0].id]);
     return result.rows[0].json_agg;
+  },
+
+  getSong: async (songId) => {
+    return db.query(`SELECT * FROM ${songsTable} WHERE id = $1`, [songId]);
+  },
+
+  deleteSong: async (songId) => {
+    await db.query(`DELETE FROM ${tagsTable} WHERE song_id = $1`, [songId]);
+    return db.query(`DELETE FROM ${songsTable} WHERE id = $1`, [songId]);
   }
 }
