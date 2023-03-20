@@ -19,6 +19,29 @@ app.post('/api/uploadSong', upload.fields([
   {name: 'imageFile', maxCount: 1}
 ]), handleUpload);
 
+app.post('/api/user', async (req, res) => {
+  const data = req.body;
+  const imageFileData = req.files['imageFile'][0].buffer;
+  const usersTable = process.env.NODE_ENV === 'test' ? 'temp_users' : 'users';
+
+  try {
+
+    // await uploadImageFile(imageFileData)
+    //   .then(imageFileUrl => {
+    //     data.path_to_artwork = imageFileUrl;
+    //   });
+
+    console.log(data)
+    console.log(imageFileData)
+    console.log(usersTable)
+
+      res.status(201).json('successfully added new user');
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Failed to add new user' });
+  }
+})
+
 // const port = process.env.PORT || 3000;
 const port = secrets.PORT || process.env.PORT || 3000;
 
