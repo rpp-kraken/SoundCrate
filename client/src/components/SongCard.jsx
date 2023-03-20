@@ -5,7 +5,6 @@ import { useTheme } from '@mui/material/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@mui/material/Box';
 import Play from './Play.jsx';
-import ProfileOtherArtist from './ProfileOtherArtist.jsx';
 import Stack from '@mui/material/Stack';
 
 const useStyles = makeStyles({
@@ -32,37 +31,22 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, playCount }) {
+export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView }) {
   const theme = useTheme();
   const [liked, setLiked] = useState(isLiked);
   const [playViewOpen, setPlayViewOpen] = useState(false);
   const [otherArtistViewOpen, setOtherArtistViewOpen] = useState(false);
 
+
   const classes = useStyles();
 
-  // Play View Event Handling
-  const handleOpenPlayView = (event) => {
-    event.stopPropagation();
-    setPlayViewOpen(true);
-  };
-  const handleClosePlayView = (event) => {
-    setPlayViewOpen(false);
-  };
+
 
   // Favorite Song Event Handling
   const handleLikeClick = (event) => {
     event.stopPropagation();
     console.log("🚀 handleLikeClick: Handle Heart Click Event Here")
     setLiked(!liked);
-  };
-
-  // Other Artist Profile View Event Handling
-  const handleOtherArtistProfileOpen = (event) => {
-    event.stopPropagation();
-    setOtherArtistViewOpen(true);
-  };
-  const handleOtherArtistProfileClose = (event) => {
-    setOtherArtistViewOpen(false);
   };
 
   return (
@@ -82,9 +66,22 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
       transform: 'scale(1.02)',
     },
   }}
-  onClick={handleOpenPlayView}
+  onClick={() => {
+        handleSetArtistSongData(null,
+          {
+            title,
+            artist,
+            artistImageUrl,
+            likedCount,
+            play_count,
+            path_to_song
+          }
+        );
+        changeView('play');
+      }
+      }
 >
-  {playViewOpen && (
+  {/* {playViewOpen && (
     <Play
       title={title}
       artist={artist}
@@ -96,9 +93,9 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
     />
   )}
 
-  {otherArtistViewOpen && (
-    <ProfileOtherArtist artist={artist} handleClose={handleOtherArtistProfileClose} />
-  )}
+      {otherArtistViewOpen && <ProfileOtherArtist
+        artist={artist}
+        handleClose={handleOtherArtistProfileClose} />} */}
 
   <CardContent className={classes.content}>
     <Typography variant="h5" component="h5" style={{ fontSize: '1.25rem' }}>
@@ -106,7 +103,16 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
     </Typography>
     <Typography
       variant="subtitle1"
-      onClick={handleOtherArtistProfileOpen}
+      onClick={(event) => {
+            event.stopPropagation();
+            handleSetArtistSongData(
+              {
+                artist
+              }, null
+            );
+            changeView('profile');
+          }
+          }
       style={{ cursor: 'pointer', marginTop: '8px' }}
     >
       {artist}
@@ -119,7 +125,7 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
         {likedCount}
       </Typography>
       <Typography variant="body2" color="textSecondary" component="span">
-      🎵 {playCount} Plays
+      🎵 {play_count} Plays
       </Typography>
     </Stack>
   </CardContent>
