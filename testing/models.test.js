@@ -1,6 +1,8 @@
 const { addSong, addTags, getAllSongs } = require('../server/models/index.js');
 const { Client } = require('pg');
 const { secrets } = require('docker-secret');
+const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
 describe('models functions', () => {
@@ -81,9 +83,33 @@ describe('models functions', () => {
     });
   });
 
-  describe.skip('addSong', () => {
-    it.todo('should add a song to the database');
-    it.todo('should throw an error if song is not added');
+  describe('addSong', () => {
+    const audioFilePath = path.join(__dirname, 'mocks', 'audio.m4a');
+    const imageFilePath = path.join(__dirname, 'mocks', 'aaron.jpeg');
+    const req = {
+      audioFile: fs.readFileSync(audioFilePath),
+      title: 'New Song',
+      created_at: new Date.now(),
+      play_count: 0,
+      fav_count: 1,
+      user: 'calpal',
+      imageFile: fs.readFileSync(imageFilePath),
+      tags: 'tag1,tag2,tag3'
+    };
+
+    const response = {
+      title: 'yum',
+      play_count: 0,
+      fav_count: 1,
+    };
+
+    it('should add a song to the database', () => {
+
+    });
+
+    it('should throw an error if song is not added', () => {
+
+    });
   });
 
   describe.skip('addTags', () => {
