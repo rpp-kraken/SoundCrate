@@ -7,10 +7,18 @@ const usersTable = process.env.NODE_ENV === 'test' ? 'temp_users' : 'users';
 const tagsTable = process.env.NODE_ENV === 'test' ? 'temp_tags' : 'tags';
 
 module.exports = {
-  addUser: async (username) => {
+  addUser: async (user) => {
     db = process.env.NODE_ENV === 'test' ? global.client : db;
     const userId = uuid();
-    return await db.query(`INSERT INTO ${usersTable} (id, name) VALUES (${userId}, ${username})`);
+    const email = user.email || '';
+    const bio = user.bio || '';
+    const path_to_pic = user.path_to_pic || '';
+    const username = user.username || '';
+    const tier1 = user.tier1 || false;
+    const tier2 = user.tier2 || false;
+    const tier3 = user.tier3 || false;
+    return await db.query(`INSERT INTO ${usersTable} (id, name, email, bio, path_to_pic, username, tier1, tier2, tier3)
+      VALUES (${userId}, ${user.name}, ${email}, ${bio}, ${path_to_pic}, ${username}, ${tier1}, ${tier2}, ${tier3})`);
   }
 
   addSong: async (data) => {

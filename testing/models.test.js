@@ -84,24 +84,6 @@ describe('models functions', () => {
   });
 
   describe('addSong', () => {
-    const audioFilePath = path.join(__dirname, 'mocks', 'audio.m4a');
-    const imageFilePath = path.join(__dirname, 'mocks', 'aaron.jpeg');
-    const req = {
-      audioFile: fs.readFileSync(audioFilePath),
-      title: 'New Song',
-      created_at: new Date.now(),
-      play_count: 0,
-      fav_count: 1,
-      user: 'calpal',
-      imageFile: fs.readFileSync(imageFilePath),
-      tags: 'tag1,tag2,tag3'
-    };
-
-    const response = {
-      title: 'yum',
-      play_count: 0,
-      fav_count: 1,
-    };
 
     it('should add a song to the database', () => {
 
@@ -110,6 +92,11 @@ describe('models functions', () => {
     it('should throw an error if song is not added', () => {
 
     });
+  });
+
+  describe.skip('addUser', () => {
+    it.todo('should add a user to the database');
+    it.todo('should not be able to add a user if user already exists');
   });
 
   describe.skip('addTags', () => {
