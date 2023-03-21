@@ -156,13 +156,18 @@ describe('models functions', () => {
       await models.addTags(tagsToAdd, addedSong.title);
 
       const result = await global.client.query(`SELECT * FROM ${tagsTable} WHERE song_id = $1`, [songId]);
-      console.log(result.rows);
       expect(result.rows.length).toBe(tagsToAdd.split(',').length);
       expect(result.rows.map(row => row.name)).toEqual(tagsToAdd.split(','));
     });
 
-    it('should do nothing, and log an error if a song does not exist', async () => {
+    it('should do nothing if a song does not exist', async () => {
+      const nonExistent = "not a real song";
 
+      const tagsToAdd = "coolsong, awesome, emo";
+      await models.addTags(tagsToAdd, nonExistent);
+
+      const result = await global.client.query(`SELECT * FROM ${tagsTable} WHERE name = $1`, [tagsToAdd.split(',')[0]]);
+      expect(result.rows.length).toBe(0);
     });
   });
 

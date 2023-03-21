@@ -37,6 +37,7 @@ const addTags = async (tags, titleOfSong) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   const tagsArray = tags.split(',');
   const songId = await db.query(`SELECT id FROM ${songsTable} WHERE title = '${titleOfSong}'`);
+  if (!songId.rows.length) return console.log(`error adding tags to nonexistent song ${titleOfSong}`);
   tagsArray.forEach(tag => {
     const tagId = uuid();
     db.query(`INSERT INTO ${tagsTable} (id, name, song_id) VALUES ($1, $2, $3)`, [tagId, tag, songId.rows[0].id]);
