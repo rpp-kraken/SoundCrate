@@ -182,9 +182,29 @@ describe('models functions', () => {
     });
   });
 
-  describe.skip('deleteSong', () => {
-    it.todo('should delete a song for a given userId');
-    it.todo('should handle error properly for nonexistent userId');
+  describe('deleteSong', () => {
+    const song = {
+      title: "New Song",
+      created_at: (new Date).toISOString(),
+      path_to_song: "",
+      play_count: 0,
+      fav_count: 0,
+      path_to_artwork: '',
+      user: 'someguy'
+    };
+
+    it('should delete a song for a given userId', async () => {
+      await models.addSong(song);
+      const songId = await global.client.query(`SELECT id FROM ${songsTable} WHERE title = $1`, [song.title]);
+      expect(songId.rows.length).not.toBe(0);
+
+      await models.deleteSong(songId.rows[0].id);
+      const deletedSong = await global.client.query(`SELECT * FROM ${songsTable} WHERE id = $1`, [songId]);
+      expect(deletedSong.rows.length).toBe(0);
+    });
+    it('should handle error properly for nonexistent songId', () => {
+
+    });
   })
 });
 
