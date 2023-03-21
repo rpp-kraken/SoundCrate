@@ -1,8 +1,13 @@
 let db = require('../../db/index');
-const { uuid } = require('uuidv4');
+const { v4: uuid } = require('uuid');
+
+// different db and table names for testing
+const songsTable = process.env.NODE_ENV === 'test' ? 'temp_songs' : 'songs';
+const usersTable = process.env.NODE_ENV === 'test' ? 'temp_users' : 'users';
+const tagsTable = process.env.NODE_ENV === 'test' ? 'temp_tags' : 'tags';
 
 module.exports = {
-  addSong: async (data, songsTable = 'songs', usersTable = 'users') => {
+  addSong: async (data) => {
     db = process.env.NODE_ENV === 'test' ? global.client : db;
     const songId = uuid();
     var user_id =  await db.query(`SELECT id FROM ${usersTable} WHERE name = '${data.user}'`);
@@ -11,7 +16,7 @@ module.exports = {
       data.fav_count, data.path_to_artwork, user_id.rows[0].id]);
   },
 
-  addTags: async (tags, titleOfSong, songsTable = 'songs', tagsTable = 'song_tags') => {
+  addTags: async (tags, titleOfSong) => {
     db = process.env.NODE_ENV === 'test' ? global.client : db;
     const tagsArray = tags.split(',');
     const songId = await db.query(`SELECT id FROM ${songsTable} WHERE title = '${titleOfSong}'`);
@@ -22,8 +27,9 @@ module.exports = {
   },
 
   getAllSongs: async (user) => {
-    const userId = await db.query(`SELECT id FROM users WHERE name = '${user}'`);
-    return db.query(`SELECT json_agg(
+    db = process.env.NODE_ENV === 'test' ? global.client : db;
+    const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${user}'`);
+    const result = await db.query(`SELECT json_agg(
       json_build_object(
         'id', id,
         'title', title,
@@ -40,13 +46,20 @@ module.exports = {
               'name', name,
               'song_id', song_id
             )
-          ), '[]'::json) FROM song_tags WHERE song_tags.song_id = songs.id
+          ), '[]'::json) FROM ${tagsTable} WHERE ${tagsTable}.song_id = ${songsTable}.id
         )
       )
-    ) FROM songs WHERE user_id = $1;`, [userId.rows[0].id])
-      .then(result => {
-        return result.rows[0].json_agg;
-      });
+    ) FROM ${songsTable} WHERE user_id = $1;`, [userId.rows[0].id]);
+    return result.rows[0].json_agg;
+  },
+
+  getSong: async (songId) => {
+    return db.query(`SELECT * FROM ${songsTable} WHERE id = $1`, [songId]);
+  },
+
+  deleteSong: async (songId) => {
+    await db.query(`DELETE FROM ${tagsTable} WHERE song_id = $1`, [songId]);
+    return db.query(`DELETE FROM ${songsTable} WHERE id = $1`, [songId]);
   },
 
   addUser: async (data, usersTable = 'users') => {

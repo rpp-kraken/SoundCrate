@@ -32,7 +32,7 @@ describe('Reviews route', () => {
   beforeEach(async () => {
     await global.client.query('BEGIN');
     await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_users (LIKE users INCLUDING ALL) ON COMMIT PRESERVE ROWS');
-    await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_songs (LIKE songs INCLUDING ALL) ON COMMIT PRESERVE ROWS');
+    await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_songs (LIKE songs INCLUDING ALL)');
     await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_tags (LIKE song_tags INCLUDING ALL) ON COMMIT PRESERVE ROWS');
     await global.client.query(`INSERT INTO temp_users (id, name, email, bio, path_to_pic, username)
       VALUES (1, 'calpal', 'cp@gmail.com', 'cool guy', 'path', 'cp')`);
@@ -83,9 +83,24 @@ describe('Reviews route', () => {
       await expect(rows).toHaveLength(2);
       await expect(rows[1]).toStrictEqual(response);
     }, 10000);
+
+    it('Should return a 500 code if song file is not sent', async function () {
+      const imageFilePath = path.join(__dirname, 'mocks', 'aaron.jpeg');
+      const req = {
+        title: 'yum',
+        created_at: '2023-03-11T19:43:02+00:00',
+        play_count: 0,
+        fav_count: 1,
+        user: 'calpal',
+        imageFile: fs.readFileSync(imageFilePath),
+        tags: 'tag1,tag2,tag3'
+      };
+
+      await postSongFail(req);
+    });
   });
 
-  describe('GET song route', function () {
+  describe('GET songs route', function () {
     it('should grab a song correctly', async function () {
       const response = {
         title: 'yum',
@@ -95,7 +110,7 @@ describe('Reviews route', () => {
         path_to_artwork: 'https://google.com'
       };
 
-      await getSong();
+      await getSongs();
 
       const { rows } = await global.client.query(`SELECT title, path_to_song, play_count, fav_count, path_to_artwork
         FROM temp_songs WHERE user_id = $1`, [1]);
@@ -103,37 +118,33 @@ describe('Reviews route', () => {
       expect(rows).toHaveLength(1);
       expect(rows[0]).toStrictEqual(response);
     });
+
+    it('should return 500 if user has not uploaded any songs', async function () {
+      await getSongsFail();
+    });
+
   });
 
-  describe('POST new ser route', () => {
-    it('a new user should post to the database', async () => {
-      const req = {
-        name: "Mindi Test 123",
-        email: "test@123test.com",
-        bio: "my bio",
-        path_to_pic: "path",
-        username: "mintest123"
-      };
+  describe('DELETE song route', function () {
+    it('should delete a song correctly', async function () {
+      const initialGet = await global.client.query(`SELECT id, title, path_to_song, play_count, fav_count, path_to_artwork
+        FROM temp_songs WHERE user_id = $1`, [1]);
 
-      const response = {
-        name: "Mindi Test 123",
-        email: "test@123test.com",
-        bio: "my bio"
-      };
+      await deleteSong();
 
-      await postUser(req);
+      const { rows } = await global.client.query(`SELECT id, title, path_to_song, play_count, fav_count, path_to_artwork
+      FROM temp_songs WHERE user_id = $1`, [1]);
 
-      const { rows } = await global.client.query(`SELECT name, email, bio
-          FROM temp_users WHERE name = $1`, [req.name]);
+      await expect(initialGet.rows).toHaveLength(1);
+      await expect(rows).toHaveLength(0);
+    });
 
-      console.log('rows', rows)
-
-      await expect(rows).toHaveLength(2);
-      await expect(rows[1]).toStrictEqual(response);
-    }, 10000);
+    it('should return a 500 if songId is not in database', async function () {
+      await deleteSongFail();
+    });
   });
 
-  const postSong = async (req, status = 201) => {
+    const postSong = async (req, status = 201) => {
     const { body } = await request(app)
       .post('/api/uploadSong')
       .field('audioFile', req.audioFile, 'audio.m4a')
@@ -148,24 +159,44 @@ describe('Reviews route', () => {
     return body;
   };
 
-  const getSong = async (req, status = 200) => {
+  const postSongFail = async (req, status = 500) => {
+    const { body } = await request(app)
+      .post('/api/uploadSong')
+      .field('title', req.title)
+      .field('created_at', req.created_at)
+      .field('play_count', req.play_count)
+      .field('fav_count', req.fav_count)
+      .field('user', req.user)
+      .field('imageFile', req.imageFile, 'aaron.jpeg')
+      .field('tags', req.tags)
+      .expect(status);
+    return body;
+  }
+
+  const getSongs = async (req, status = 200) => {
     const { body } = await request(app)
       .get('/api/songs?user=calpal')
       .expect(status);
     return body;
   };
 
-  const postUser = async (req, status = 201) => {
+  const getSongsFail = async (status = 500) => {
     const { body } = await request(app)
-      .post('/api/user')
-      .field('name', req.name)
-      .field('email', req.email)
-      .field('bio', req.bio)
-      .field('path_to_pic', req.path_to_pic)
-      .field('username', req.username)
-      .field('tier1', req.tier1)
-      .field('tier2', req.tier2)
-      .field('tier3', req.tier3)
+      .get('/api/songs?user=aaron')
+      .expect(status);
+      return body;
+  };
+
+  const deleteSong = async (req, status = 204) => {
+    const { body } = await request(app)
+      .delete('/api/deleteSong?songId=1')
+      .expect(status);
+    return body;
+  };
+
+  const deleteSongFail = async (status = 404) => {
+    const { body } = await request(app)
+      .delete('/api/deleteSong?songId=5')
       .expect(status);
     return body;
   };
