@@ -58,7 +58,7 @@ module.exports = {
   },
 
   editTitle: async (songId, newTitle) => {
-    return db.query(`UPDATE songs SET title = $1 WHERE id = $2`, [newTitle, songId]);
+    return db.query(`UPDATE ${songsTable} SET title = $1 WHERE id = $2`, [newTitle, songId]);
   },
 
   deleteSong: async (songId) => {
