@@ -7,7 +7,7 @@ const multer = require('multer');
 const { handleUpload } = require('./controllers/handleUpload');
 const { getSongs } = require('./controllers/getSongs');
 const { handleDelete } = require('./controllers/deleteSong');
-const { editTitle } = require('./controllers/editSong');
+const { editTitle } = require('./controllers/editTitle');
 const upload = multer();
 
 app.use(express.static('./client/dist'));

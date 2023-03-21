@@ -1,6 +1,6 @@
 const models = require('../models/index');
 
-const editTitle = (req, res) => {
+const editTitle = async (req, res) => {
   const songId = req.query.songId;
   const { title } = req.body;
   try {

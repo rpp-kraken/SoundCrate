@@ -142,6 +142,13 @@ describe('Reviews route', () => {
     });
   });
 
+  describe('PUT song routes', function() {
+    it('should update the title of a song', async function () {
+      const initialGet = await global.client.query(`SELECT id, title, path_to_song, play_count, fav_count, path_to_artwork
+      FROM temp_songs WHERE user_id = $1`, [1]);
+    });
+  });
+
   const postSong = async (req, status = 201) => {
     const { body } = await request(app)
       .post('/api/uploadSong')
