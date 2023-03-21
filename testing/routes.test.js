@@ -199,4 +199,11 @@ describe('Reviews route', () => {
     return body;
   };
 
+  const updateTitle = async (status = 204) => {
+    const { body } = await request(app)
+      .put('/api/editTitle?songId=1')
+      .expect(status);
+    return body;
+  };
+
 });
