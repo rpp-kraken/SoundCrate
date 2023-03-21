@@ -32,6 +32,7 @@ const addSong = async (data) => {
     data.fav_count, data.path_to_artwork, user_id.rows[0].id]);
 };
 
+// TODO: tags currently expects a string of comma-separated tags, it should be an array of strings
 const addTags = async (tags, titleOfSong) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   const tagsArray = tags.split(',');

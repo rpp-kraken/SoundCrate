@@ -130,7 +130,7 @@ describe('models functions', () => {
     });
   });
 
-  describe.skip('addTags', () => {
+  describe('addTags', () => {
     const song = {
       title: "New Song",
       created_at: (new Date).toISOString(),
@@ -139,19 +139,26 @@ describe('models functions', () => {
       fav_count: 0,
       path_to_artwork: '',
       user: 'someguy'
-    }
+    };
 
     it('should add tags to a song', async () => {
       await models.addSong(song);
-      const addedSong = await models.getSong(song.id);
-      expect(addedSong.tags.length).toBe(0);
+      const songIdQuery = await global.client.query(`SELECT id FROM ${songsTable} WHERE title = $1`, [song.title]);
+      const songId = songIdQuery.rows.length ? songIdQuery.rows[0].id : undefined;
 
-      const tags = ['coolsong', 'awesome', 'emo'];
-      await models.addTags(tags, addedSong.title);
+      const addedSong = await models.getSong(songId);
+      expect(addedSong.id).toBe(songId);
 
-      const result = await models.getSong(song.id);
-      expect(result.tags.length).toBe(tags.length);
-      expect(result.tags).toEqual(tags);
+      const emptyTags = await global.client.query(`SELECT * FROM ${tagsTable} WHERE song_id = $1`, [songId]);
+      expect(emptyTags.rows.length).toBe(0);
+
+      const tagsToAdd = "coolsong, awesome, emo";
+      await models.addTags(tagsToAdd, addedSong.title);
+
+      const result = await global.client.query(`SELECT * FROM ${tagsTable} WHERE song_id = $1`, [songId]);
+      console.log(result.rows);
+      expect(result.rows.length).toBe(tagsToAdd.split(',').length);
+      expect(result.rows.map(row => row.name)).toEqual(tagsToAdd.split(','));
     });
 
     it('should do nothing, and log an error if a song does not exist', async () => {
