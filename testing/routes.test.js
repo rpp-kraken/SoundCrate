@@ -183,7 +183,7 @@ describe('Reviews route', () => {
     return body;
   };
 
-  const getSongsFail = async (status = 200) => {
+  const getSongsFail = async (status = 500) => {
     const { body } = await request(app)
       .get('/api/songs?user=aaron')
       .expect(status);
