@@ -130,15 +130,44 @@ describe('models functions', () => {
     });
   });
 
-
   describe.skip('addTags', () => {
-    it.todo('should add tags to a song');
-    it.todo('should do nothing, and log an error if a song does not exist');
+    const song = {
+      title: "New Song",
+      created_at: (new Date).toISOString(),
+      path_to_song: "",
+      play_count: 0,
+      fav_count: 0,
+      path_to_artwork: '',
+      user: 'someguy'
+    }
+
+    it('should add tags to a song', async () => {
+      await models.addSong(song);
+      const addedSong = await models.getSong(song.id);
+      expect(addedSong.tags.length).toBe(0);
+
+      const tags = ['coolsong', 'awesome', 'emo'];
+      await models.addTags(tags, addedSong.title);
+
+      const result = await models.getSong(song.id);
+      expect(result.tags.length).toBe(tags.length);
+      expect(result.tags).toEqual(tags);
+    });
+
+    it('should do nothing, and log an error if a song does not exist', async () => {
+
+    });
   });
 
-  describe.skip('getSong', () => {
-    it.todo('should get a song for a given songId');
-    it.todo('should return null for an invalid songId');
+  describe('getSong', () => {
+    it('should get a song for a given songId', async () => {
+      const song = await models.getSong(1);
+      expect(song.title).toBe('yum');
+    });
+    it('should return an empty object for an invalid songId', async () => {
+      const song = await models.getSong(1000);
+      expect(song).toEqual({});
+    });
   });
 
   describe.skip('deleteSong', () => {

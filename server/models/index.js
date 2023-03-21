@@ -72,7 +72,9 @@ const getAllSongs = async (user) => {
 };
 
 const getSong = async (songId) => {
-  return db.query(`SELECT * FROM ${songsTable} WHERE id = $1`, [songId]);
+  const song = await db.query(`SELECT * FROM ${songsTable} WHERE id = $1`, [songId]);
+  if (!song.rows.length) return {};
+  return song.rows[0];
 };
 
 const deleteSong = async (songId) => {
