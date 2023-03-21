@@ -70,7 +70,7 @@ const deleteSong = async (songId) => {
   return db.query(`DELETE FROM ${songsTable} WHERE id = $1`, [songId]);
 };
 
- const addUser = async (data, usersTable = 'users') => {
+ const addUser = async (data) => {
     db = process.env.NODE_ENV === 'test' ? global.client : db;
     const userId = uuid();
     return db.query(`INSERT INTO ${usersTable} (id, name, email, bio, path_to_pic, username, tier1, tier2, tier3)
