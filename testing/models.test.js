@@ -202,9 +202,11 @@ describe('models functions', () => {
       const deletedSong = await global.client.query(`SELECT * FROM ${songsTable} WHERE id = $1`, [songId]);
       expect(deletedSong.rows.length).toBe(0);
     });
-    it('should handle error properly for nonexistent songId', () => {
-
+    it('should handle error properly for nonexistent songId', async () => {
+      const deletedSong = await models.deleteSong(1000);
+      expect(deletedSong).not.toBe(null);
     });
+    it.todo('should delete all entries for that song in the song_tags table');
   })
 });
 
