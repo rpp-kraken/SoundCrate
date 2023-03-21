@@ -83,9 +83,30 @@ describe('models functions', () => {
     });
   });
 
-  describe.skip('addUser', () => {
-    it.todo('should add a user to the database with full info filled out');
-    it.todo('should add a user to the database with just the name');
+  describe('addUser', () => {
+    it('should add a user to the database with full info filled out', async () => {
+      const user = {
+        name: 'Nate',
+        email: 'nate@nate.com',
+        bio: 'Hi, my name is Nate',
+        path_to_pic: 'www.google.com',
+        username: 'we should delete this field',
+        tier1: true,
+        tier2: false,
+        tier3: false
+      }
+      await models.addUser(user);
+      const userInDB = await global.client.query(`SELECT * FROM ${usersTable} WHERE name = $1`, [user.name]);
+      expect(userInDB.rows.length).not.toBe(0);
+      expect(userInDB.rows[0].name).toEqual(user.name);
+    });
+    it('should add a user to the database with just the name', async () => {
+      const user = { name: 'Sean' };
+      await models.addUser(user);
+      const userInDB = await global.client.query(`SELECT * FROM ${usersTable} WHERE name = $1`, [user.name]);
+      expect(userInDB.rows.length).not.toBe(0);
+      expect(userInDB.rows[0].name).toEqual(user.name);
+    });
     it.todo('should not be able to add a user if user already exists');
   });
 
