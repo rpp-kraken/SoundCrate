@@ -18,8 +18,8 @@ export default function ArtistProfile({ artistData, changeView }) {
   };
 
   return (
-    <Box id='profile-header' sx={{ width: '100%' }}>
-    <Grid container direction='column' spacing={0} p={4} sx={{ backgroundColor: '#000000', height: '45vh', paddingTop: '70px' }}>
+    <Box id='profile-header' sx={{ width: '100%' }} p={0}>
+    <Grid container direction='column' spacing={0} p={4} sx={{ backgroundColor: '#000000', height: '30vh' }}>
 
       <Grid item xs={12} style={gridItemStyle}>
         <Avatar alt="Profile Picture" style={{ height: '100px', width: '100px' }} />
@@ -43,11 +43,11 @@ export default function ArtistProfile({ artistData, changeView }) {
 
       <Grid container direction='row' style={{ ...gridItemStyle, fontSize: '12px' }}>
 
-        <Grid item xs={3} style={gridItemStyle}>
+        <Grid item xs={6} style={gridItemStyle}>
           <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center' }}>Song</Typography>
         </Grid>
 
-        <Grid item xs={3} style={gridItemStyle}>
+        <Grid item xs={6} style={gridItemStyle}>
           <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center' }}>Favorites</Typography>
         </Grid>
 
