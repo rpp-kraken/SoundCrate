@@ -128,10 +128,6 @@ describe('models functions', () => {
       expect(results.rows).toHaveLength(1);
       expect(results.rows[0].title).toBe(song.title);
     });
-
-    it('should throw an error if song is not added', () => {
-
-    });
   });
 
 
