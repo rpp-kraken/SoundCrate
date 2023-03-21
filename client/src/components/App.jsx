@@ -102,7 +102,6 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <ThemeExample />
       <CssBaseline />
       {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData}/>}
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
