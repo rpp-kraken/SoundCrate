@@ -32,7 +32,7 @@ export default function App() {
   // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
   // View State changes on click
-  const [view, setView] = useState({ name: 'home' });
+  const [view, setView] = useState({ name: 'create' });
 
   useEffect(() => {
     console.log("Changing view to: " + view.name);
@@ -123,6 +123,8 @@ export default function App() {
         return <ConfirmLogOut />;
       case "confirmDeleteAccount":
         return <ConfirmDeleteAccount />;
+      case "theme":
+        return <ThemeExample />;
       default:
         return <FourOhFour />;
     }
