@@ -9,7 +9,7 @@ module.exports = {
       })
       .catch(err => {
         console.error(err);
-        res.status(500).json({ error: 'Failed to get songs '});
-      })
+        res.status(500).json({ error: 'Failed to get songs'});
+      });
   }
 };
