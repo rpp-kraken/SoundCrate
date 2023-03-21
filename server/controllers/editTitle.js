@@ -8,8 +8,7 @@ const editTitle = (req, res) => {
     if (rowCount === 0) {
       return res.status(404).json({ message: 'Song not found '});
     }
-
-    await models.editSong(songId, title);
+    await models.editTitle(songId, title);
     res.sendStatus(204);
   } catch (err) {
     console.error(err);
