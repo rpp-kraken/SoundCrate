@@ -4,16 +4,20 @@ const models = require('../models/index');
 
 const newUser = async (req, res) => {
   const data = req.body;
-  // const imageFileData = req.files['imageFile'][0].buffer;
+  console.log(data)
   const usersTable = process.env.NODE_ENV === 'test' ? 'temp_users' : 'users';
 
   try {
-    // await uploadImageFile(imageFileData)
-    //   .then(imageFileUrl => {
-    //     data.path_to_artwork = imageFileUrl;
-    //   });
+    if (req.body.imageFile !== '') {
+      const imageFileData = req.files['imageFile'][0].buffer || '';
+      await uploadImageFile(imageFileData)
+        .then(imageFileUrl => {
+          console.log('image file url', imageFileUrl)
+          data.path_to_pic = imageFileUrl;
+        });
+    }
 
-    console.log(data)
+    console.log('data', data)
     await models.addUser(data, usersTable);
     res.status(201).json('successfully added new user');
   } catch (error) {

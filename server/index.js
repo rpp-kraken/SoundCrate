@@ -20,8 +20,10 @@ app.post('/api/uploadSong', upload.fields([
   {name: 'audioFile', maxCount: 1},
   {name: 'imageFile', maxCount: 1}
 ]), handleUpload);
-app.post('/api/user', newUser)
 app.delete('/api/deleteSong', handleDelete);
+app.post('/api/user', upload.fields([
+  {name: 'imageFile', maxCount: 1}
+]), newUser)
 
 const port = secrets.PORT || process.env.PORT || 3000;
 
