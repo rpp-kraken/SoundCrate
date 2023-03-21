@@ -206,7 +206,19 @@ describe('models functions', () => {
       const deletedSong = await models.deleteSong(1000);
       expect(deletedSong).not.toBe(null);
     });
-    it.todo('should delete all entries for that song in the song_tags table');
+    it('should delete all entries for that song in the song_tags table', async () => {
+      await models.addSong(song);
+      const songId = await global.client.query(`SELECT id FROM ${songsTable} WHERE title = $1`, [song.title]);
+      expect(songId.rows.length).not.toBe(0);
+
+      await models.addTags('tag1, tag2, tag3', song.title);
+      const tagsQuery = await global.client.query(`SELECT * FROM ${tagsTable} WHERE song_id = $1`, [songId.rows[0].id]);
+      expect(tagsQuery.rows.length).toBe(3);
+
+      await models.deleteSong(songId.rows[0].id);
+      const emptyTags = await global.client.query(`SELECT * FROM ${tagsTable} WHERE song_id = $1`, [songId.rows[0].id]);
+      expect(emptyTags.rows.length).toBe(0);
+    });
   })
 });
 
