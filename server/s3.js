@@ -2,7 +2,7 @@
 require('dotenv').config();
 const { secrets } = require('docker-secret');
 const AWS = require('aws-sdk');
-const { uuid } = require('uuidv4');
+const { v4: uuid } = require('uuid'); //uuidv4 is deprecated
 
 // Connection to S3 bucket
 const s3 = new AWS.S3({
