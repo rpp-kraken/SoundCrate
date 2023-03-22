@@ -1,9 +1,8 @@
 const models = require('../models/index');
 
 module.exports = {
-  getSongs: (req, res) => {
-    const user = req.query.user;
-    models.getAllSongs(user)
+  getAllSongsHome: (req, res) => {
+    models.getAllSongsHome()
       .then(songs => {
         res.json(songs);
       })

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
+import axios from 'axios';
 
 
-export default function NewAccount({ changeView, profileData }) {
+export default function NewAccount({ changeView, profileData, setProfileData }) {
   const [bio, setBio] = useState('');
   const [path_to_pic, setPath] = useState('');
+  const [file, setFile] = useState('');
   const [username, setUsername] = useState('');
 
   useEffect(() => {
@@ -26,13 +28,44 @@ export default function NewAccount({ changeView, profileData }) {
     }
   }
 
-  const onSubmit = () => {
-    let data = {
-      name: profileData.name,
-      email: profileData.email,
-      bio, path_to_pic, username };
-    changeView('home');
+  const handleFile = async (e) => {
+    await setFile(e.target.files[0])
   }
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData();
+      formData.append("id", profileData.id);
+      formData.append("name", profileData.name);
+      formData.append("email", profileData.email);
+      formData.append("bio", bio);
+      formData.append("path_to_pic", path_to_pic);
+      formData.append("username", profileData.username);
+      formData.append("tier1", false);
+      formData.append("tier2", false);
+      formData.append("tier3", false);
+      formData.append("imageFile", file);
+
+      const response = await fetch("/api/user", {
+        method: "POST",
+        body: formData
+      });
+      const data = await response.json();
+      setProfileData(data);
+
+      let newData = profileData;
+      newData.loggedIn = true;
+      setProfileData(newData);
+
+      changeView('home');
+    } catch (error) {
+      console.error('error in user post', error);
+    }
+  };
+
+
 
 
   return (
@@ -46,14 +79,14 @@ export default function NewAccount({ changeView, profileData }) {
             <br /><img src={path_to_pic} /><br />
             <Button variant="contained" component="label">
               Change
-              <input type="file" name="path" accept="image/*" onChange={(e) => console.log(e.target.files[0])} style={{ display: 'none' }} />
+              <input type="file" name="path" accept="image/*" onChange={(e) => handleFile(e)} style={{ display: 'none' }} required />
             </Button>
           </label>
         </div>
         <div>
           <label htmlFor="username">
             Username:
-            <input type="text" name="username" data-testid="username" onChange={(e) => handleChange(e)} required />
+            <input type="text" name="username" data-testid="username" onChange={(e) => handleChange(e)} />
           </label>
         </div>
         <div>
@@ -64,7 +97,7 @@ export default function NewAccount({ changeView, profileData }) {
           </label>
         </div>
       </form>
-      <Button variant="contained" component="label" onClick={onSubmit}>
+      <Button variant="contained" component="label" onClick={(e) => onSubmit(e)}>
         Submit
       </Button>
     </div>
