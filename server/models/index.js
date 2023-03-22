@@ -4,7 +4,7 @@ const { v4: uuid } = require('uuid');
 // different db and table names for testing
 const songsTable = process.env.NODE_ENV === 'test' ? 'temp_songs' : 'songs';
 const usersTable = process.env.NODE_ENV === 'test' ? 'temp_users' : 'users';
-const tagsTable = process.env.NODE_ENV === 'test' ? 'temp_tags' : 'tags';
+const tagsTable = process.env.NODE_ENV === 'test' ? 'temp_tags' : 'song_tags';
 
 const addSong = async (data) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
