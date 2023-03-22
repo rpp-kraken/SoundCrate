@@ -160,7 +160,13 @@ describe('Reviews route', () => {
 
       expect(initialGet.rows[0].title).toStrictEqual('yum')
       expect(rows[0].title).toStrictEqual(response.title);
+    });
 
+    it('should send a 404 when trying to update title of song that does not exist', async function () {
+      const req = {
+        title: 'yummy'
+      };
+      await updateTitleFail(req);
     });
   });
 
@@ -224,6 +230,14 @@ describe('Reviews route', () => {
   const updateTitle = async (req, status = 204) => {
     const { body } = await request(app)
       .put('/api/editTitle?songId=1')
+      .send(req)
+      .expect(status);
+    return body;
+  };
+
+  const updateTitleFail = async (req, status = 404) => {
+    const { body } = await request(app)
+      .put('/api/editTitle?songId=5')
       .send(req)
       .expect(status);
     return body;
