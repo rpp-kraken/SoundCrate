@@ -36,6 +36,8 @@ describe('Reviews route', () => {
     await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_tags (LIKE song_tags INCLUDING ALL) ON COMMIT PRESERVE ROWS');
     await global.client.query(`INSERT INTO temp_users (id, name, email, bio, path_to_pic, username)
       VALUES (1, 'calpal', 'cp@gmail.com', 'cool guy', 'path', 'cp')`);
+    await global.client.query(`INSERT INTO temp_users (id, name, email, bio, path_to_pic, username)
+      VALUES (2, 'Mindi Test 123', 'test@123test.com', 'my bio', 'path', 'mintest123')`);
     await global.client.query(`INSERT INTO temp_songs (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
       VALUES (1, 'yum', '2023-03-11T19:43:02+00:00', 'https://google.com', 1, 1, 'https://google.com', 1)`);
   }, 10000);
@@ -147,7 +149,7 @@ describe('Reviews route', () => {
     });
   });
 
-  const postSong = async (req, status = 201) => {
+    const postSong = async (req, status = 201) => {
     const { body } = await request(app)
       .post('/api/uploadSong')
       .field('audioFile', req.audioFile, 'audio.m4a')
