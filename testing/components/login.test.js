@@ -12,7 +12,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import App from '../../client/src/components/App.jsx';
 import NewAccount from '../../client/src/components/login/NewAccount.jsx';
 
-let renderComponent = () => {
+let renderComponent = async () => {
   return render(<GoogleOAuthProvider clientId="167666531989-d7dfo41ka45sqoc28pbjilvkr9892up3.apps.googleusercontent.com">
     <App />
   </GoogleOAuthProvider>);

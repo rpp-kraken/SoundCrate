@@ -7,13 +7,12 @@ import CreateAudioWaveform from './CreateAudioWaveform.jsx'
 import { MicrophoneRecorder } from './CreateMicRecord.jsx';
 import { Publish } from './Publish.jsx';
 
-export default function Create() {
+export default function Create(props) {
 
   const [listOfTracks, setListOfTracks] = useState([]);
   const [listPlayers, setListPlayers] = useState({});
   const [song, setSong] = useState(null);
   const [openPublish, setOpenPublish] = useState(false);
-  // const [maxDuration, setMaxDuration] = useState(0);
 
   const [maxTracks, setMax] = useState(0);
   const [underMax, setUnderMax] = useState(true);
@@ -22,9 +21,9 @@ export default function Create() {
   // const [activeSoundCard, setActiveSoundCard] = useState(1);
 
   useEffect(() => {
-    // console.log('first render!',);
-    // TODO: COLLABORATE (put track URL into this array)
+    if (props.collaborateSongPath) {
     let trackUrlSources = [
+      props.collaborateSongPath
       // 'https://s3-us-west-1.amazonaws.com/leesamples/samples/Rhythmics/60+bpm/Ping+Pong+Ping.mp3',
       // 'https://dl.dropboxusercontent.com/s/w303ydczmgrkfh8/New%20Recording%2075.m4a?dl=0',
       // 'https://tonejs.github.io/audio/berklee/gong_1.mp3',
@@ -35,6 +34,7 @@ export default function Create() {
     ];
     setMax(trackUrlSources.length);
     setListOfTracks(trackUrlSources);
+    }
   }, []);
 
   useEffect(() => {
@@ -177,9 +177,7 @@ export default function Create() {
     var maxDuration = 0;
 
     Tone.loaded().then(() => {
-      // Create a Gain node to use as the output destination
-      const output = new Tone.Gain().toDestination();
-      // Create a new recorder and connect it to the output node
+
       const recorder = new Tone.Recorder();
       Tone.Master.connect(recorder);
       // Start recording
