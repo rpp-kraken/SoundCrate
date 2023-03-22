@@ -144,8 +144,23 @@ describe('Reviews route', () => {
 
   describe('PUT song routes', function() {
     it('should update the title of a song', async function () {
-      const initialGet = await global.client.query(`SELECT id, title, path_to_song, play_count, fav_count, path_to_artwork
-      FROM temp_songs WHERE user_id = $1`, [1]);
+      const req = {
+        title: 'yummy'
+      };
+
+      const response = {
+        title: 'yummy'
+      };
+
+      const initialGet = await global.client.query(`SELECT title FROM temp_songs WHERE user_id = $1`, [1]);
+
+      await updateTitle(req, 204);
+
+      const { rows } = await global.client.query(`SELECT title FROM temp_songs WHERE user_id = $1`, [1]);
+
+      expect(initialGet.rows[0].title).toStrictEqual('yum')
+      expect(rows[0].title).toStrictEqual(response.title);
+
     });
   });
 
@@ -206,9 +221,10 @@ describe('Reviews route', () => {
     return body;
   };
 
-  const updateTitle = async (status = 204) => {
+  const updateTitle = async (req, status = 204) => {
     const { body } = await request(app)
       .put('/api/editTitle?songId=1')
+      .send(req)
       .expect(status);
     return body;
   };
