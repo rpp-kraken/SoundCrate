@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import { Home, Search, Person } from '@material-ui/icons';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
@@ -10,7 +10,12 @@ import { useTheme } from '@mui/material/styles';
 export default function NavBar(props) {
   const theme = useTheme();
 
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+
+  // useEffect(() => {
+  //   console.log("Changing NavBar to: " + props.changeNavBar);
+  //   setValue(props.changeNavBar);
+  // }, [])
 
   return (
     <BottomNavigation
