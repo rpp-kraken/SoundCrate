@@ -4,6 +4,7 @@ const models = require('../models/index');
 
 const newUser = async (req, res) => {
   const data = req.body;
+  const usersTable = process.env.NODE_ENV === 'test' ? 'temp_users' : 'users';
   console.log(data);
 
   try {
@@ -16,7 +17,9 @@ const newUser = async (req, res) => {
         });
     }
 
-    console.log('data', data)
+    // await models.addUser(data, usersTable);
+    // console.log('data', data)
+
     await models.addUser(data);
     res.status(201).json('successfully added new user');
   } catch (error) {

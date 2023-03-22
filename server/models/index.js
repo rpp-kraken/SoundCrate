@@ -30,6 +30,13 @@ const addTags = async (tags, titleOfSong) => {
   });
 };
 
+const getAllSongsHome = async () => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
+  const result = await db.query(`SELECT * FROM ${songsTable}`);
+  return result.rows;
+};
+
+
 const getAllSongs = async (user) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${user}'`);
@@ -79,5 +86,5 @@ const deleteSong = async (songId) => {
 };
 
 module.exports = {
-  addUser, addSong, addTags, getAllSongs, getSong, deleteSong
+  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, deleteSong
 };
