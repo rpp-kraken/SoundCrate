@@ -11,6 +11,7 @@ const { getAllSongsHome } = require('./controllers/getAllSongsHome');
 const { newUser } = require('./controllers/newUser');
 const { getUser } = require('./controllers/getUser');
 const { handleDelete } = require('./controllers/deleteSong');
+const { editTitle } = require('./controllers/editTitle');
 const upload = multer();
 
 app.use(express.static('./client/dist'));
@@ -26,6 +27,7 @@ app.post('/api/uploadSong', upload.fields([
   {name: 'audioFile', maxCount: 1},
   {name: 'imageFile', maxCount: 1}
 ]), handleUpload);
+app.put('/api/editTitle', editTitle);
 app.delete('/api/deleteSong', handleDelete);
 app.post('/api/user', upload.fields([
   {name: 'imageFile', maxCount: 1}

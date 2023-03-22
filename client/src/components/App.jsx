@@ -108,7 +108,7 @@ export default function App() {
       // case "discover":
       //   return <Discover changeView={changeView} />;
       case "create":
-        return <Create collaborateSongPath={collaborateSongPath} />;
+        return <Create changeView={changeView} collaborateSongPath={collaborateSongPath}/>;
       case "favorites":
         return <Favorites changeView={changeView} />;
       case "newAccount":

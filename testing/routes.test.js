@@ -149,7 +149,35 @@ describe('Reviews route', () => {
     });
   });
 
-    const postSong = async (req, status = 201) => {
+  describe('PUT song routes', function() {
+    it('should update the title of a song', async function () {
+      const req = {
+        title: 'yummy'
+      };
+
+      const response = {
+        title: 'yummy'
+      };
+
+      const initialGet = await global.client.query(`SELECT title FROM temp_songs WHERE user_id = $1`, [1]);
+
+      await updateTitle(req, 204);
+
+      const { rows } = await global.client.query(`SELECT title FROM temp_songs WHERE user_id = $1`, [1]);
+
+      expect(initialGet.rows[0].title).toStrictEqual('yum')
+      expect(rows[0].title).toStrictEqual(response.title);
+    });
+
+    it('should send a 404 when trying to update title of song that does not exist', async function () {
+      const req = {
+        title: 'yummy'
+      };
+      await updateTitleFail(req);
+    });
+  });
+
+  const postSong = async (req, status = 201) => {
     const { body } = await request(app)
       .post('/api/uploadSong')
       .field('audioFile', req.audioFile, 'audio.m4a')
@@ -202,6 +230,22 @@ describe('Reviews route', () => {
   const deleteSongFail = async (status = 404) => {
     const { body } = await request(app)
       .delete('/api/deleteSong?songId=5')
+      .expect(status);
+    return body;
+  };
+
+  const updateTitle = async (req, status = 204) => {
+    const { body } = await request(app)
+      .put('/api/editTitle?songId=1')
+      .send(req)
+      .expect(status);
+    return body;
+  };
+
+  const updateTitleFail = async (req, status = 404) => {
+    const { body } = await request(app)
+      .put('/api/editTitle?songId=5')
+      .send(req)
       .expect(status);
     return body;
   };
