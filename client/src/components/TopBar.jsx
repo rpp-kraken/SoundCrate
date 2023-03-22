@@ -52,10 +52,6 @@ export default function TopBar({setUser, imageURL, changeView}) {
               <ListItemIcon><LoginIcon /></ListItemIcon>
               <Login setUser={setUser}/>
             </ListItem>
-            <ListItem>
-              <ListItemIcon><AccountCircle /></ListItemIcon>
-              <ListItemText primary="My Account" />
-            </ListItem>
             <ListItem button>
               <ListItemIcon><Edit /></ListItemIcon>
               <ListItemText primary="Edit Profile" onClick={onClickMyAccount} />

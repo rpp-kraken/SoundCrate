@@ -81,19 +81,19 @@ export default function App() {
           }
         })
           .then((res) => {
-            let userEmail = res.data.email;
-            axios.get(`api/user/?userEmail=${userEmail}`)
-              .then(res => {
-                if (!res.data) {
-                  setProfileData(res.data);
-                  setView({ name: 'newAccount' });
-                } else {
-                  let userData = res.data;
-                  userData.loggedIn = true;
-                  setProfileData(userData);
-                  setView({ name: 'home' });
-                }
-              })
+            setProfileData(res.data);
+            return axios.get(`api/user/?userEmail=${res.data.email}`)
+          })
+          .then(res => {
+            let keys = Object.keys(res.data)
+            if (keys.length === 0) {
+              setView({ name: 'newAccount' });
+            } else {
+              let userData = res.data;
+              userData.loggedIn = true;
+              setProfileData(userData);
+              setView({ name: 'home' });
+            }
           })
           .catch((err) => console.log('error in oauth', err));
       }
