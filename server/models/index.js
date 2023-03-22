@@ -6,20 +6,6 @@ const songsTable = process.env.NODE_ENV === 'test' ? 'temp_songs' : 'songs';
 const usersTable = process.env.NODE_ENV === 'test' ? 'temp_users' : 'users';
 const tagsTable = process.env.NODE_ENV === 'test' ? 'temp_tags' : 'tags';
 
-const addUser = async (user) => {
-  db = process.env.NODE_ENV === 'test' ? global.client : db;
-  const userId = uuid();
-  const email = user.email || '';
-  const bio = user.bio || '';
-  const path_to_pic = user.path_to_pic || '';
-  const username = user.username || '';
-  const tier1 = user.tier1 || false;
-  const tier2 = user.tier2 || false;
-  const tier3 = user.tier3 || false;
-  return await db.query(`INSERT INTO ${usersTable} (id, name, email, bio, path_to_pic, username, tier1, tier2, tier3)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`, [userId, user.name, email, bio, path_to_pic, username, tier1, tier2, tier3]);
-};
-
 const addSong = async (data) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   const songId = uuid();
@@ -82,6 +68,14 @@ const getSong = async (songId) => {
 const deleteSong = async (songId) => {
   await db.query(`DELETE FROM ${tagsTable} WHERE song_id = $1`, [songId]);
   return db.query(`DELETE FROM ${songsTable} WHERE id = $1`, [songId]);
+};
+
+ const addUser = async (data) => {
+    db = process.env.NODE_ENV === 'test' ? global.client : db;
+    const userId = uuid();
+    return db.query(`INSERT INTO ${usersTable} (id, name, email, bio, path_to_pic, username, tier1, tier2, tier3)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`, [userId, data.name, data.email, data.bio, data.path_to_pic,
+      data.username, data.tier1, data.tier2, data.tier3]);
 };
 
 module.exports = {

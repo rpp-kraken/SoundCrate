@@ -6,6 +6,7 @@ const app = express();
 const multer = require('multer');
 const { handleUpload } = require('./controllers/handleUpload');
 const { getSongs } = require('./controllers/getSongs');
+const { newUser } = require('./controllers/newUser');
 const { handleDelete } = require('./controllers/deleteSong');
 const upload = multer();
 
@@ -20,8 +21,10 @@ app.post('/api/uploadSong', upload.fields([
   {name: 'imageFile', maxCount: 1}
 ]), handleUpload);
 app.delete('/api/deleteSong', handleDelete);
+app.post('/api/user', upload.fields([
+  {name: 'imageFile', maxCount: 1}
+]), newUser)
 
-// const port = process.env.PORT || 3000;
 const port = secrets.PORT || process.env.PORT || 3000;
 
 const server = app.listen(port, () => {
