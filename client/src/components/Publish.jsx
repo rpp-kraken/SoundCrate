@@ -22,7 +22,7 @@ const buttonContainerStyle = {
 
 export const Publish = (props) => {
   const theme = useTheme();
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState();
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState([]);
   const [underMax, setUnderMax] =useState(true);
@@ -84,33 +84,40 @@ export const Publish = (props) => {
 
 
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     var tagsString = tags.join(',');
+    console.log("Image in submit: ", image, "    song?  ", props.song);
 
     // formData type
-    const formInfo = {
-      title: title,
-      tags: tagsString,
-      user: 'brian'
-    }
+
+    console.log('here is type of song', typeof props.song);
+
     const formData = new FormData();
     formData.append('audioFile', props.song);
+    formData.append('title', title);
+    formData.append('created_at', new Date().toISOString());
+    formData.append('play_count', 0);
+    formData.append('fav_count', 0);
+    formData.append('user', 'calpal');
     formData.append('imageFile', image);
-    formData.append('formInfo', JSON.stringify(formInfo));
+    formData.append('tags', tagsString);
 
     console.log(formData);
     props.changeView('myReleasedMusic');
 
 
-
-    axios.post('/api/uploadSong', formData)
-    .then((data)=>{
-      console.log(data.data)
-      alert('Question posted!')
-      // switch view {
-      // props.changeView('myReleasedMusic');
-      // }
+    fetch('/api/uploadSong', {
+      method: 'POST',
+      body: formData
     })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
   };
 
   return (
@@ -125,7 +132,7 @@ export const Publish = (props) => {
         <form onSubmit={handleSubmit}>
           <label>
             Song Image:
-            <Button variant="contained" sx={{ marginBottom: '4em' }}>
+            <Button variant="contained" component="label">
               Upload Image
               <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} style={{ display: 'none' }} />
             </Button>

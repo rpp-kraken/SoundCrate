@@ -11,7 +11,7 @@ export default function Create(props) {
 
   const [listOfTracks, setListOfTracks] = useState([]);
   const [listPlayers, setListPlayers] = useState({});
-  const [song, setSong] = useState(null);
+  const [song, setSong] = useState();
   const [openPublish, setOpenPublish] = useState(false);
 
   const [maxTracks, setMax] = useState(0);
@@ -91,10 +91,12 @@ export default function Create(props) {
   };
 
   const handleDelete = (index) => {
-    setListPlayers({});
-    setListOfTracks([]);
-    setUnderMax(true);
-    setMax(0);
+    setListOfTracks(prevList => {
+      const newAudioTracks = [...prevList];
+      newAudioTracks.splice(index, 1);
+      setMax(prevMax => prevMax - 1);
+      return newAudioTracks;
+    });
   };
 
   const handlePlayAll = () => {
@@ -222,7 +224,8 @@ export default function Create(props) {
         // Create a URL for the Blob
         const url = URL.createObjectURL(blob);
 
-        setSong(url);
+        // setSong(url);
+        setSong(blob);
         // Create an anchor tag and allows for download of wav right now
       }, maxDuration);
     });
@@ -237,14 +240,11 @@ export default function Create(props) {
       <button className="outline-button-button" onClick={handleRecordRender}>
         Render and download song
       </button><br />
-      <button className="outline-button-button" onClick={handleDelete}>
-        Delete All Tracks
-      </button>
       <br />
       {/* {listOfTracks.map((urlTrack, i) => { return <WaveformCanvas trackUrl={urlTrack} index={i} key={i}/> })} */}
-      {listOfTracks.map((urlTrack, i) => { return <CreateAudioWaveform trackUrl={urlTrack} index={i} key={i} /> })}
+      {listOfTracks.map((urlTrack, i) => { return <CreateAudioWaveform trackUrl={urlTrack} index={i} key={i} handleDelete={handleDelete} /> })}
       <div className="sidescroller">
-        {listOfTracks.map((urlTrack, i) => { return <CreateFxPanel trackUrl={urlTrack} index={i} key={i} handleAddPlayer={handleAddPlayer} handleDelete={handleDelete} /> })}
+        {listOfTracks.map((urlTrack, i) => { return <CreateFxPanel trackUrl={urlTrack} index={i} key={i} handleAddPlayer={handleAddPlayer} /> })}
       </div>
       <h4>
         Upload File
