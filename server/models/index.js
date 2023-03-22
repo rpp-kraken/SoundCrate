@@ -9,8 +9,8 @@ const tagsTable = process.env.NODE_ENV === 'test' ? 'temp_tags' : 'song_tags';
 const addSong = async (data) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   const songId = uuid();
-  var user_id =  await db.query(`SELECT id FROM ${usersTable} WHERE name = '${data.user}'`);
-  if (!user_id.rows.length) await addUser({ name: data.user});
+  var user_id = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${data.user}'`);
+  if (!user_id.rows.length) await addUser({ name: data.user });
   user_id = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${data.user}'`);
 
   return await db.query(`INSERT INTO ${songsTable} (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
@@ -62,7 +62,7 @@ const getAllSongs = async (user) => {
       )
     )
   ) FROM ${songsTable} WHERE user_id = $1;`, [userId.rows[0].id])
-  .catch(err => console.log(`error retrieving songs for user with id ${userId.rows[0].id}`, err));
+    .catch(err => console.log(`error retrieving songs for user with id ${userId.rows[0].id}`, err));
   return result.rows[0].json_agg;
 };
 
@@ -82,13 +82,19 @@ const deleteSong = async (songId) => {
 };
 
 const addUser = async (data) => {
-    db = process.env.NODE_ENV === 'test' ? global.client : db;
-    const userId = uuid();
-    return db.query(`INSERT INTO ${usersTable} (id, name, email, bio, path_to_pic, username, tier1, tier2, tier3)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`, [userId, data.name, data.email, data.bio, data.path_to_pic,
-      data.username, data.tier1, data.tier2, data.tier3]);
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
+  const userId = uuid();
+  return db.query(`INSERT INTO ${usersTable} (id, name, email, bio, path_to_pic, username, tier1, tier2, tier3)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`, [userId, data.name, data.email, data.bio, data.path_to_pic,
+    data.username, data.tier1, data.tier2, data.tier3]);
+};
+
+const getUser = async (userEmail) => {
+  const user = await db.query(`SELECT * FROM ${usersTable} WHERE email = $1`, [userEmail]);
+  if (!user.rows.length) return {};
+  return user.rows[0];
 };
 
 module.exports = {
-  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, deleteSong, editTitle
+  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong
 };

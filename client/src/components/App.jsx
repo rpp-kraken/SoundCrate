@@ -44,11 +44,11 @@ export default function App() {
   useEffect(() => {
 
     axios.get(`/api/getAllSongsHome`)
-    .then((res) => {
-      console.log("Data from deployed DB: ", res.data);
-      setSongAllHomeData(res.data);
-    })
-    .catch((err) => console.log(err));
+      .then((res) => {
+        console.log("Data from deployed DB: ", res.data);
+        setSongAllHomeData(res.data);
+      })
+      .catch((err) => console.log(err));
   }, [])
 
   // Keeping commented out code for potential props handling in the future
@@ -81,10 +81,21 @@ export default function App() {
           }
         })
           .then((res) => {
-            setProfileData(res.data);
-            setView({ name: 'newAccount' });
+            let userEmail = res.data.email;
+            axios.get(`api/user/?userEmail=${userEmail}`)
+              .then(res => {
+                if (!res.data) {
+                  setProfileData(res.data);
+                  setView({ name: 'newAccount' });
+                } else {
+                  let userData = res.data;
+                  userData.loggedIn = true;
+                  setProfileData(userData);
+                  setView({ name: 'home' });
+                }
+              })
           })
-          .catch((err) => console.log(err));
+          .catch((err) => console.log('error in oauth', err));
       }
     },
     [user]
@@ -97,7 +108,7 @@ export default function App() {
       // case "discover":
       //   return <Discover changeView={changeView} />;
       case "create":
-        return <Create collaborateSongPath={collaborateSongPath}/>;
+        return <Create collaborateSongPath={collaborateSongPath} />;
       case "favorites":
         return <Favorites changeView={changeView} />;
       case "newAccount":
