@@ -76,11 +76,6 @@ const editTitle = async (songId, newTitle) => {
     return db.query(`UPDATE ${songsTable} SET title = $1 WHERE id = $2`, [newTitle, songId]);
 };
 
-cosnt deleteSong = async (songId) => {
-    await db.query(`DELETE FROM ${tagsTable} WHERE song_id = $1`, [songId]);
-    return db.query(`DELETE FROM ${songsTable} WHERE id = $1`, [songId]);
-};
-
 const deleteSong = async (songId) => {
   await db.query(`DELETE FROM ${tagsTable} WHERE song_id = $1`, [songId]);
   return db.query(`DELETE FROM ${songsTable} WHERE id = $1`, [songId]);
@@ -95,5 +90,5 @@ const addUser = async (data) => {
 };
 
 module.exports = {
-  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, deleteSong
+  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, deleteSong, editTitle
 };

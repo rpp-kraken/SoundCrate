@@ -4,8 +4,8 @@ const editTitle = async (req, res) => {
   const songId = req.query.songId;
   const { title } = req.body;
   try {
-    const { rowCount } = await models.getSong(songId);
-    if (rowCount === 0) {
+    const rowCount = await models.getSong(songId);
+    if (Object.keys(rowCount).length === 0) {
       return res.status(404).json({ message: 'Song not found '});
     }
     await models.editTitle(songId, title);
