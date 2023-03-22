@@ -1,5 +1,9 @@
 import React, { useState, useRef } from 'react';
 import getBlobDuration from 'get-blob-duration';
+import { IconButton } from '@mui/material';
+import MicIcon from '@mui/icons-material/Mic';
+
+
 
 export const MicrophoneRecorder = (props) => {
   const [recording, setRecording] = useState(false);
@@ -34,7 +38,7 @@ export const MicrophoneRecorder = (props) => {
               props.setUnderMax(false);
             };
           } else {
-            alert(`'Your recording is ${duration*1000} seconds. Please record less than 30 seconds.'`);
+            alert(`'Your recording is ${duration * 1000} seconds. Please record less than 30 seconds.'`);
           }
         })
       });
@@ -53,10 +57,9 @@ export const MicrophoneRecorder = (props) => {
 
 
   return (
-    <div>
-      {props.underMax && <button onClick={recording ? stopRecording : startRecording}>
-        {recording ? 'Stop Recording' : 'Start Recording'}
-      </button>}
-    </div>
+    <IconButton variant="contained" color="secondary" onClick={recording ? stopRecording : startRecording} disabled={!props.underMax}>
+      <MicIcon />
+      {recording ? 'Stop Recording' : 'Start Recording'}
+    </IconButton>
   );
 }

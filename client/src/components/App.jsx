@@ -123,6 +123,8 @@ export default function App() {
         return <ConfirmLogOut />;
       case "confirmDeleteAccount":
         return <ConfirmDeleteAccount />;
+      case "theme":
+        return <ThemeExample />;
       default:
         return <FourOhFour />;
     }
