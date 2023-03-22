@@ -113,7 +113,7 @@ export default function App() {
       case "newAccount":
         return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} />;
       case "profile":
-        return <ArtistProfile changeView={changeView} artistData={artistData} />;
+        return <ArtistProfile changeView={changeView} artistData={artistData} handleSetArtistSongData={handleSetArtistSongData}/>;
       case "play":
         return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} />;
       case "myReleasedMusic":
