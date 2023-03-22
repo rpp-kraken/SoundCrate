@@ -4,6 +4,10 @@ const models = require('../models/index');
 
 
 const handleUpload = async (req, res) => {
+  if (!req.files['audioFile']) {
+    res.sendStatus(500);
+    return;
+  }
   console.log('here is req.body',req.body)
   console.log('REQ FILES', req.body.audioFile)
   // const data = req.body;
@@ -27,20 +31,14 @@ const handleUpload = async (req, res) => {
   const tagsTable = process.env.NODE_ENV === 'test' ? 'temp_tags' : 'song_tags';
   const usersTable = process.env.NODE_ENV === 'test' ? 'temp_users' : 'users';
   try {
-    await uploadAudioFile(audioFileData)
-      .then(audioFileUrl => {
-        data.path_to_song = audioFileUrl;
-        return uploadImageFile(imageFileData);
-      })
-      .then(imageFileUrl => {
-        data.path_to_artwork = imageFileUrl;
-      });
-      await models.addSong(data, songsTable, usersTable);
-      await models.addTags(tags, req.body.title, songsTable, tagsTable);
-      res.status(201).json('successfully uploaded song');
+    data.path_to_song = await uploadAudioFile(audioFileData);
+    data.path_to_artwork = await uploadImageFile(imageFileData);
+    await models.addSong(data);
+    await models.addTags(data.tags, req.body.title);
+    res.status(201).json('successfully uploaded song');
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Failed to upload audio file' });
+    console.error(error);
+    res.status(500).json({ error: 'Failed to upload audio file' });
   }
 };
 

@@ -5,6 +5,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import Login from '../components/login/Login.jsx';
+// import logo from '../../dist/name-and-icon-white.PNG';
 
 // export default function TopBar({ imageUrl }) {
 export default function TopBar({setUser, imageURL, changeView}) {
