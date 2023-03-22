@@ -17,14 +17,18 @@ import ConfirmDeleteAccount from './ConfirmDeleteAccount.jsx';
 import Play from './Play.jsx';
 // import Publish from './Publish.jsx';
 import FourOhFour from './404.jsx';
-import { songData } from '../../../DummyData/dummyData.js'
+// import { songData } from '../../../DummyData/dummyData.js'
 import axios from 'axios';
 
 export default function App() {
-  const [ user, setUser ] = useState([]);
-  const [ profileData, setProfileData ] = useState([]);
-  const [ artistData, setArtistData] = useState();
-  const [ songData, setSongData ] = useState();
+  const [user, setUser] = useState([]);
+  const [profileData, setProfileData] = useState([]);
+  const [artistData, setArtistData] = useState();
+  const [songData, setSongData] = useState();
+  const [songAllHomeData, setSongAllHomeData] = useState([]);
+  // const [changeNavBar, setChangeNavBar] = useState(0);
+
+  const [collaborateSongPath, setCollaborateSongPath] = useState(null);
   // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
   // View State changes on click
@@ -32,7 +36,20 @@ export default function App() {
 
   useEffect(() => {
     console.log("Changing view to: " + view.name);
+    // if (view.name === "create") {
+    //   setChangeNavBar(1);
+    // }
   }, [view])
+
+  useEffect(() => {
+
+    axios.get(`/api/getAllSongsHome`)
+    .then((res) => {
+      console.log("Data from deployed DB: ", res.data);
+      setSongAllHomeData(res.data);
+    })
+    .catch((err) => console.log(err));
+  }, [])
 
   // Keeping commented out code for potential props handling in the future
   // const changeView = (name, someProps = {}) => {
@@ -63,34 +80,34 @@ export default function App() {
             Accept: 'application/json'
           }
         })
-        .then((res) => {
-          setProfileData(res.data);
-          setView({name: 'newAccount'});
-        })
-        .catch((err) => console.log(err));
+          .then((res) => {
+            setProfileData(res.data);
+            setView({ name: 'newAccount' });
+          })
+          .catch((err) => console.log(err));
       }
     },
-    [ user ]
+    [user]
   );
 
   const renderView = () => {
     switch (view.name) {
       case "home":
-        return <Home songs={songData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />;
+        return <Home songs={songAllHomeData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />;
       // case "discover":
       //   return <Discover changeView={changeView} />;
       case "create":
-        return <Create />;
+        return <Create collaborateSongPath={collaborateSongPath}/>;
       case "favorites":
-        return <Favorites changeView={changeView}/>;
+        return <Favorites changeView={changeView} />;
       case "newAccount":
-        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData}/>;
+        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} />;
       case "profile":
-        return <ArtistProfile changeView={changeView} artistData={artistData}/>;
+        return <ArtistProfile changeView={changeView} artistData={artistData} />;
       case "play":
-        return <Play changeView={changeView} songData={songData}/>;
+        return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} />;
       case "myReleasedMusic":
-        return <MyReleasedMusic changeView={changeView}/>;
+        return <MyReleasedMusic changeView={changeView} />;
       case "confirmLogOut":
         return <ConfirmLogOut />;
       case "confirmDeleteAccount":
@@ -103,7 +120,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData}/>}
+      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} />}
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>

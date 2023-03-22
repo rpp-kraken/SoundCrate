@@ -9,6 +9,12 @@ export default function Play(props) {
   //   props.handleClose();
   // }
 
+  const handleCollab = (event) => {
+    event.stopPropagation();
+    props.setCollaborateSongPath(props.songData.path_to_song);
+    props.changeView('create');
+  }
+
   return (
     <div>
       <div style={{
@@ -29,6 +35,7 @@ export default function Play(props) {
         <div>{"Favorited: " + props.songData.likedCount}</div>
         <div>{"PlayCount: " + props.songData.play_count}</div>
         {/* <button onClick={handleClosePlayView}>Back Arrow</button> */}
+        <button onClick={handleCollab}>Collaborate</button>
       </div>
     </div>
   );
