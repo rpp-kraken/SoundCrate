@@ -12,6 +12,7 @@ export default function Create(props) {
   const [listOfTracks, setListOfTracks] = useState([]);
   const [listPlayers, setListPlayers] = useState({});
   const [song, setSong] = useState();
+  const [songUrl, setSongUrl] = useState();
   const [openPublish, setOpenPublish] = useState(false);
 
   const [maxTracks, setMax] = useState(0);
@@ -225,7 +226,7 @@ export default function Create(props) {
         // Create a URL for the Blob
         const url = URL.createObjectURL(blob);
 
-        // setSong(url);
+        setSongUrl(url);
         setSong(blob);
         // Create an anchor tag and allows for download of wav right now
       }, maxDuration);
@@ -258,7 +259,7 @@ export default function Create(props) {
       </h4>
       {underMax && <MicrophoneRecorder setListOfTracks={setListOfTracks} setMax={setMax} maxTracks={maxTracks} setUnderMax={setUnderMax} underMax={underMax} />}
       <button onClick={handlePublish}> Publish </button>
-      {openPublish && <Publish setOpenPublish={setOpenPublish} song={song} changeView={props.changeView} changeView={props.changeView}/>}
+      {openPublish && <Publish setOpenPublish={setOpenPublish} song={song} songUrl={songUrl} changeView={props.changeView} />}
       <br/><br/>
       <br/><br/>
       <br/><br/>

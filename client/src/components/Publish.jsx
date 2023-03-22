@@ -87,11 +87,11 @@ export const Publish = (props) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     var tagsString = tags.join(',');
-    console.log("Image in submit: ", image, "    song?  ", props.song);
+    // console.log("Image in submit: ", image, "    song?  ", props.song);
 
     // formData type
 
-    console.log('here is type of song', typeof props.song);
+    // console.log('here is type of song', typeof props.song);
 
     const formData = new FormData();
     formData.append('audioFile', props.song);
@@ -157,10 +157,10 @@ export const Publish = (props) => {
             <div>
             <br />
           Preview: <br />
-          {props.song ? null : "Recording and rendering your song..."}
+          {props.songUrl ? null : "Recording and rendering your song..."}
           <audio
             ref={audioRef}
-            src={props.song}
+            src={props.songUrl}
             controls
             onPlay={handlePlay}
             onPause={handlePause}
