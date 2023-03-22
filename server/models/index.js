@@ -85,6 +85,12 @@ const deleteSong = async (songId) => {
       data.username, data.tier1, data.tier2, data.tier3]);
 };
 
+const getUsersFavoriteSongs = async (user) => {
+  const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = $1`, [user]);
+  return db.query(`SELECT songs.*, users.id AS user_id FROM users JOIN favorites ON users.id = favorites.user_id
+    JOIN songs ON favorites.song_id = songs.id WHERE users.id = $1`, [userId.rows[0].id]);
+};
+
 module.exports = {
-  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, deleteSong
+  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, deleteSong, getUsersFavoriteSongs
 };
