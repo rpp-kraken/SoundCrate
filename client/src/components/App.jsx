@@ -81,16 +81,17 @@ export default function App() {
           }
         })
           .then((res) => {
-            let userEmail = res.data.email
+            let userEmail = res.data.email;
             axios.get(`api/user/?userEmail=${userEmail}`)
               .then(res => {
                 if (!res.data) {
                   setProfileData(res.data);
                   setView({ name: 'newAccount' });
                 } else {
-                  let userData = res.data
-                  userData.loggedIn = true
-                  setProfileData(userData)
+                  let userData = res.data;
+                  userData.loggedIn = true;
+                  setProfileData(userData);
+                  setView({ name: 'home' });
                 }
               })
           })
@@ -113,7 +114,7 @@ export default function App() {
       case "newAccount":
         return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} />;
       case "profile":
-        return <ArtistProfile changeView={changeView} artistData={artistData} handleSetArtistSongData={handleSetArtistSongData}/>;
+        return <ArtistProfile changeView={changeView} artistData={artistData} />;
       case "play":
         return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} />;
       case "myReleasedMusic":
