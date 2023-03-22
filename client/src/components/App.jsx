@@ -32,7 +32,7 @@ export default function App() {
   // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
   // View State changes on click
-  const [view, setView] = useState({ name: 'create' });
+  const [view, setView] = useState({ name: 'home' });
 
   useEffect(() => {
     console.log("Changing view to: " + view.name);

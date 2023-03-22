@@ -99,13 +99,21 @@ export default function Create(props) {
     // console.log('adding player to multiplayer...', listPlayers);
   };
 
+  // Delete One logic... still bugged
+  // const handleDelete = (index) => {
+  //   setListOfTracks(prevList => {
+  //     const newAudioTracks = [...prevList];
+  //     newAudioTracks.splice(index, 1);
+  //     setMax(prevMax => prevMax - 1);
+  //     return newAudioTracks;
+  //   });
+  // };
+
   const handleDelete = (index) => {
-    setListOfTracks(prevList => {
-      const newAudioTracks = [...prevList];
-      newAudioTracks.splice(index, 1);
-      setMax(prevMax => prevMax - 1);
-      return newAudioTracks;
-    });
+    setListPlayers({});
+    setListOfTracks([]);
+    setUnderMax(true);
+    setMax(0);
   };
 
   const handlePlayAll = () => {
@@ -295,8 +303,7 @@ export default function Create(props) {
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         <Button variant="contained" onClick={handlePublish}> Publish </Button>
       </Box>
-      {openPublish && <Publish setOpenPublish={setOpenPublish} song={song} />}
-      <br /><br />
+      {openPublish && <Publish setOpenPublish={setOpenPublish} song={song} songUrl={songUrl} changeView={props.changeView} />}      <br /><br />
       <br /><br />
       <br /><br />
     </Box>
