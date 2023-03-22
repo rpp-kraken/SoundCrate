@@ -10,6 +10,7 @@ const { getSongs } = require('./controllers/getSongs');
 const { getAllSongsHome } = require('./controllers/getAllSongsHome');
 const { newUser } = require('./controllers/newUser');
 const { handleDelete } = require('./controllers/deleteSong');
+const { getFavoriteSongs } = require('./controllers/getFavoriteSongs');
 const upload = multer();
 
 app.use(express.static('./client/dist'));
@@ -20,6 +21,7 @@ app.use(express.json());
 app.get('/api/songs', getSongs);
 // app.get('/api/songSingle', getOneSong);
 app.get('/api/getAllSongsHome', getAllSongsHome);
+app.get('/api/getFavoriteSongs', getFavoriteSongs)
 app.post('/api/uploadSong', upload.fields([
   {name: 'audioFile', maxCount: 1},
   {name: 'imageFile', maxCount: 1}
