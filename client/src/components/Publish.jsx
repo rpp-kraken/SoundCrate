@@ -25,10 +25,8 @@ export const Publish = (props) => {
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState([]);
   const [underMax, setUnderMax] =useState(true);
-  const [tagNum, setTagNum] = useState(0);
-  const [doneRendering, setDoneRendering] = useState(false);
-
-  const audioRef = React.useRef(null);
+  const [tagNum, setTagNum] = useState(0)
+    const audioRef = React.useRef(null);
 
 
   const handleInput = async (e) => {
@@ -103,7 +101,7 @@ export const Publish = (props) => {
         <form onSubmit={handleSubmit}>
           <label>
             Song Image:
-            <Button variant="contained" sx={{ marginBottom: '4em' }}>
+            <Button variant="contained" component="label">
               Upload Image
               <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} style={{ display: 'none' }} />
             </Button>
@@ -119,7 +117,7 @@ export const Publish = (props) => {
             {tags.map((tag, index) => (
               <li key={index}>
                 {tag}
-                <button type="button" onClick={() => handleDelete(index)} sx={{ marginBottom: '4em' }}>
+                <button type="button" onClick={() => handleDelete(index)}>
                   X
                 </button>
               </li>
@@ -127,8 +125,8 @@ export const Publish = (props) => {
             </ul>
             <div>
             <br />
-          Preview: <br />
-          {props.song ? null : "Recording and rendering your song..."}
+          Preview:
+        {props.song && (
           <audio
             ref={audioRef}
             src={props.song}
@@ -136,16 +134,8 @@ export const Publish = (props) => {
             onPlay={handlePlay}
             onPause={handlePause}
           />
-        {/* {props.song && (
-          <audio
-            ref={audioRef}
-            src={props.song}
-            controls
-            onPlay={handlePlay}
-            onPause={handlePause}
-          />
-        )} */}
-        <Button variant="contained" onClick={handleClose} sx={{ marginBottom: '4em' }}>Cancel</Button>
+        )}
+        <Button variant="contained" onClick={handleClose}>Cancel</Button>
         </div>
           <Button variant="contained" type="submit">Submit</Button>
         </form>

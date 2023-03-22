@@ -1,1 +1,14 @@
+.MuiBottomNavigationAction-root {
+  color: #ffffff !important;
+}
 
+.MuiBottomNavigationAction-root.Mui-selected {
+  color: #b061ff !important;
+}
+
+
+/* the container where wavesurfer adds the audio waveform */
+.waveform-container {
+  margin: 0 auto;
+  max-width: 80vw;
+}

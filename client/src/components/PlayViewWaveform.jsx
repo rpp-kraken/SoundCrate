@@ -182,6 +182,7 @@ const PlayViewWaveform = (props) => {
 	return (
 		<section className='waveform-container'>
 			<h2>Play View</h2>
+			<button onClick={handleClosePlayView}>Back Arrow</button>
 
 			<div ref={wavesurferRef} id='waveform' />
 			<div ref={timelineRef} id='wave-timeline' />

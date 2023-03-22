@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { CssBaseline, Box, Container } from '@mui/material/';
+import { CssBaseline } from '@mui/material/';
 import theme from '../themes/default.jsx';
 import ThemeExample from './ThemeExample.jsx';
 import TopBar from './TopBar.jsx';
@@ -10,25 +10,19 @@ import Favorites from './Favorites.jsx';
 import Discover from './Discover.jsx'
 import NavBar from './NavBar.jsx';
 import NewAccount from '../components/login/NewAccount.jsx';
-import ArtistProfile from './ArtistProfile.jsx';
+import Profile from './Profile.jsx';
 import MyReleasedMusic from './MyReleasedMusic.jsx';
 import ConfirmLogOut from './ConfirmLogOut.jsx';
 import ConfirmDeleteAccount from './ConfirmDeleteAccount.jsx';
-import Play from './Play.jsx';
+// import Play from './Play.jsx';
 // import Publish from './Publish.jsx';
 import FourOhFour from './404.jsx';
-// import { songData } from '../../../DummyData/dummyData.js'
+import { songData } from '../../../DummyData/dummyData.js'
 import axios from 'axios';
 
 export default function App() {
-  const [user, setUser] = useState([]);
-  const [profileData, setProfileData] = useState([]);
-  const [artistData, setArtistData] = useState();
-  const [songData, setSongData] = useState();
-  const [songAllHomeData, setSongAllHomeData] = useState([]);
-  // const [changeNavBar, setChangeNavBar] = useState(0);
-
-  const [collaborateSongPath, setCollaborateSongPath] = useState(null);
+  const [ user, setUser ] = useState([]);
+  const [ profileData, setProfileData ] = useState([]);
   // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
   // View State changes on click
@@ -36,20 +30,7 @@ export default function App() {
 
   useEffect(() => {
     console.log("Changing view to: " + view.name);
-    // if (view.name === "create") {
-    //   setChangeNavBar(1);
-    // }
   }, [view])
-
-  useEffect(() => {
-
-    axios.get(`/api/getAllSongsHome`)
-      .then((res) => {
-        console.log("Data from deployed DB: ", res.data);
-        setSongAllHomeData(res.data);
-      })
-      .catch((err) => console.log(err));
-  }, [])
 
   // Keeping commented out code for potential props handling in the future
   // const changeView = (name, someProps = {}) => {
@@ -61,63 +42,45 @@ export default function App() {
     // };
   };
 
-  const handleSetArtistSongData = (artistData, songData) => {
-    console.log(artistData, songData);
-    setArtistData(artistData);
-    setSongData(songData);
-  }
-
   const handleSetUser = (data) => {
     setUser(data);
   }
 
   useEffect(
     () => {
-      if (user.length !== 0) {
-        axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-          headers: {
-            Authorization: `Bearer ${user.access_token}`,
-            Accept: 'application/json'
-          }
-        })
-          .then((res) => {
-            let userEmail = res.data.email
-            axios.get(`api/user/?userEmail=${userEmail}`)
-              .then(res => {
-                if (!res.data) {
-                  setProfileData(res.data);
-                  setView({ name: 'newAccount' });
-                } else {
-                  let userData = res.data
-                  userData.loggedIn = true
-                  setProfileData(userData)
+      if (user) {
+          axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+                headers: {
+                  Authorization: `Bearer ${user.access_token}`,
+                  Accept: 'application/json'
                 }
-              })
-          })
-          .catch((err) => console.log('error in oauth', err));
-      }
+            })
+            .then((res) => {
+                setProfileData(res.data);
+                setView({name: 'newAccount'});
+            })
+            .catch((err) => console.log(err));
+        }
     },
-    [user]
+    [ user ]
   );
 
   const renderView = () => {
     switch (view.name) {
       case "home":
-        return <Home songs={songAllHomeData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />;
+        return <Home songs={songData} changeView={changeView} />;
       // case "discover":
       //   return <Discover changeView={changeView} />;
       case "create":
-        return <Create collaborateSongPath={collaborateSongPath} />;
+        return <Create />;
       case "favorites":
-        return <Favorites changeView={changeView} />;
+        return <Favorites changeView={changeView}/>;
       case "newAccount":
-        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} />;
+        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData}/>;
       case "profile":
-        return <ArtistProfile changeView={changeView} artistData={artistData} />;
-      case "play":
-        return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} />;
+        return <Profile changeView={changeView} profileData={profileData}/>;
       case "myReleasedMusic":
-        return <MyReleasedMusic changeView={changeView} />;
+        return <MyReleasedMusic changeView={changeView}/>;
       case "confirmLogOut":
         return <ConfirmLogOut />;
       case "confirmDeleteAccount":
@@ -130,11 +93,11 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} />}
-      <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
+      {view.name !== 'profile' && <TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData}/>}
+      <main>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
-      </Container>
-      {<NavBar changeView={changeView} />}
+      </main>
+      {view.name !== 'profile' && <NavBar changeView={changeView} />}
     </ThemeProvider>
   );
 }

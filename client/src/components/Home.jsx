@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createTheme } from '@mui/material/styles';
 import SongCardList from './SongCardList.jsx';
 import Search from './Search.jsx';
-// import { songData } from '../../../DummyData/dummyData.js';
+import { songData } from '../../../DummyData/dummyData.js';
 
 const filterData = (query, data) => {
   return !query ? data : data.filter((d) => {
@@ -13,18 +13,13 @@ const filterData = (query, data) => {
 
 export default function Home(props) {
   const [searchQuery, setSearchQuery] = useState("");
-
-  // useEffect(() => {
-  //   // console.log("PropsSongs: ");
-  // }. [])
-
   // query the database for the first ten songs
   // for now, just use dummy data
-  let songs = filterData(searchQuery, props.songs);
+  let songs = filterData(searchQuery, songData);
   return (
     <div className="discover">
       <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      <SongCardList songs={songs} changeView={props.changeView} handleSetArtistSongData={props.handleSetArtistSongData} />
+      <SongCardList songs={songs} />
       <br/><br/><br/>
     </div>
   )

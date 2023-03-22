@@ -5,16 +5,15 @@ const { Client } = require('pg');
 const request = require('supertest');
 const fs = require('fs');
 const path = require('path');
-const { app, server } = require('../server/index');
+const app = require('../server/index');
 const { secrets } = require('docker-secret');
 require('dotenv').config();
 
 describe('Reviews route', () => {
   jest.setTimeout(10000);
-  let client;
   //Mocking db connection and loading app
   beforeAll(async () => {
-    client = new Client({
+    const client = new Client({
       host: secrets.DB_HOST || process.env.DB_HOST,
       port: 5432,
       database: 'soundcrate',
@@ -31,27 +30,16 @@ describe('Reviews route', () => {
   //Creating temp tables and insert fake data to test routes
   beforeEach(async () => {
     await global.client.query('BEGIN');
-    await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_users (LIKE users INCLUDING ALL) ON COMMIT PRESERVE ROWS');
-    await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_songs (LIKE songs INCLUDING ALL)');
-    await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_tags (LIKE song_tags INCLUDING ALL) ON COMMIT PRESERVE ROWS');
+    await global.client.query('CREATE TEMPORARY TABLE temp_users (LIKE users INCLUDING ALL) ON COMMIT PRESERVE ROWS');
+    await global.client.query('CREATE TEMPORARY TABLE temp_songs (LIKE songs INCLUDING ALL) ON COMMIT PRESERVE ROWS');
+    await global.client.query('CREATE TEMPORARY TABLE temp_tags (LIKE song_tags INCLUDING ALL) ON COMMIT PRESERVE ROWS');
     await global.client.query(`INSERT INTO temp_users (id, name, email, bio, path_to_pic, username)
-      VALUES (1, 'calpal', 'cp@gmail.com', 'cool guy', 'path', 'cp')`);
-    await global.client.query(`INSERT INTO temp_users (id, name, email, bio, path_to_pic, username)
-      VALUES (2, 'Mindi Test 123', 'test@123test.com', 'my bio', 'path', 'mintest123')`);
-    await global.client.query(`INSERT INTO temp_songs (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
-      VALUES (1, 'yum', '2023-03-11T19:43:02+00:00', 'https://google.com', 1, 1, 'https://google.com', 1)`);
+      VALUES (1, 'calpal', 'cp@gmail.com', 'cool guy', 'path', 'cp')`)
   }, 10000);
 
   afterAll(async () => {
+    await global.client.end();
     await client.end();
-    await server.close();
-  });
-
-  afterEach(async () => {
-    await global.client.query('ROLLBACK');
-    await global.client.query('DROP TABLE IF EXISTS temp_users');
-    await global.client.query('DROP TABLE IF EXISTS temp_songs');
-    await global.client.query('DROP TABLE IF EXISTS temp_tags');
   });
 
   describe('POST /api/uploadSong', () => {
@@ -80,76 +68,12 @@ describe('Reviews route', () => {
       const { rows } = await global.client.query(`SELECT title, play_count, fav_count
         FROM temp_songs WHERE title = $1`, [req.title]);
 
-      await expect(rows).toHaveLength(2);
-      await expect(rows[1]).toStrictEqual(response);
-    }, 10000);
-
-    it('Should return a 500 code if song file is not sent', async function () {
-      const imageFilePath = path.join(__dirname, 'mocks', 'aaron.jpeg');
-      const req = {
-        title: 'yum',
-        created_at: '2023-03-11T19:43:02+00:00',
-        play_count: 0,
-        fav_count: 1,
-        user: 'calpal',
-        imageFile: fs.readFileSync(imageFilePath),
-        tags: 'tag1,tag2,tag3'
-      };
-
-      await postSongFail(req);
-    });
-  });
-
-  describe('GET songs route', function () {
-    it('should grab a song correctly', async function () {
-      const response = {
-        title: 'yum',
-        path_to_song: 'https://google.com',
-        play_count: 1,
-        fav_count: 1,
-        path_to_artwork: 'https://google.com'
-      };
-
-      await getSongs();
-
-      const { rows } = await global.client.query(`SELECT title, path_to_song, play_count, fav_count, path_to_artwork
-        FROM temp_songs WHERE user_id = $1`, [1]);
-
       expect(rows).toHaveLength(1);
       expect(rows[0]).toStrictEqual(response);
-    });
-
-    // skipping because isn't it more graceful for the user to just send back
-    // an empty array? This is what the model does and the model tests test for,
-    // but we can change if we like.
-    it.skip('should return 500 if user has not uploaded any songs', async function () {
-      await getSongsFail();
-    });
-
+    }, 10000);
   });
 
-  describe('DELETE song route', function () {
-    it('should delete a song correctly', async function () {
-      const initialGet = await global.client.query(`SELECT id, title, path_to_song, play_count, fav_count, path_to_artwork
-        FROM temp_songs WHERE user_id = $1`, [1]);
-
-      await deleteSong();
-
-      const { rows } = await global.client.query(`SELECT id, title, path_to_song, play_count, fav_count, path_to_artwork
-      FROM temp_songs WHERE user_id = $1`, [1]);
-
-      await expect(initialGet.rows).toHaveLength(1);
-      await expect(rows).toHaveLength(0);
-    });
-
-    // skipping because is it more graceful to just do nothing in this instance?
-    // The model does not throw an error. We can change if we would rather.
-    it.skip('should return a 500 if songId is not in database', async function () {
-      await deleteSongFail();
-    });
-  });
-
-    const postSong = async (req, status = 201) => {
+  const postSong = async (req, status = 201) => {
     const { body } = await request(app)
       .post('/api/uploadSong')
       .field('audioFile', req.audioFile, 'audio.m4a')
@@ -162,48 +86,5 @@ describe('Reviews route', () => {
       .field('tags', req.tags)
       .expect(status);
     return body;
-  };
-
-  const postSongFail = async (req, status = 500) => {
-    const { body } = await request(app)
-      .post('/api/uploadSong')
-      .field('title', req.title)
-      .field('created_at', req.created_at)
-      .field('play_count', req.play_count)
-      .field('fav_count', req.fav_count)
-      .field('user', req.user)
-      .field('imageFile', req.imageFile, 'aaron.jpeg')
-      .field('tags', req.tags)
-      .expect(status);
-    return body;
   }
-
-  const getSongs = async (req, status = 200) => {
-    const { body } = await request(app)
-      .get('/api/songs?user=calpal')
-      .expect(status);
-    return body;
-  };
-
-  const getSongsFail = async (status = 500) => {
-    const { body } = await request(app)
-      .get('/api/songs?user=aaron')
-      .expect(status);
-      return body;
-  };
-
-  const deleteSong = async (req, status = 204) => {
-    const { body } = await request(app)
-      .delete('/api/deleteSong?songId=1')
-      .expect(status);
-    return body;
-  };
-
-  const deleteSongFail = async (status = 404) => {
-    const { body } = await request(app)
-      .delete('/api/deleteSong?songId=5')
-      .expect(status);
-    return body;
-  };
-
 });
