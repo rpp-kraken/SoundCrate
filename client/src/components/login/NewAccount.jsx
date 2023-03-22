@@ -53,10 +53,12 @@ export default function NewAccount({ changeView, profileData, setProfileData }) 
         body: formData
       });
       const data = await response.json();
-      let newData = JSON.parse(data)
+      setProfileData(data);
+
+      let newData = profileData;
       newData.loggedIn = true;
-      console.log(newData)
       setProfileData(newData);
+
       changeView('home');
     } catch (error) {
       console.error('error in user post', error);
