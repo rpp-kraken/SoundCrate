@@ -44,11 +44,11 @@ export default function App() {
   useEffect(() => {
 
     axios.get(`/api/getAllSongsHome`)
-    .then((res) => {
-      console.log("Data from deployed DB: ", res.data);
-      setSongAllHomeData(res.data);
-    })
-    .catch((err) => console.log(err));
+      .then((res) => {
+        console.log("Data from deployed DB: ", res.data);
+        setSongAllHomeData(res.data);
+      })
+      .catch((err) => console.log(err));
   }, [])
 
   // Keeping commented out code for potential props handling in the future
@@ -82,9 +82,20 @@ export default function App() {
         })
           .then((res) => {
             setProfileData(res.data);
-            setView({ name: 'newAccount' });
+            return axios.get(`api/user/?userEmail=${res.data.email}`)
           })
-          .catch((err) => console.log(err));
+          .then(res => {
+            let keys = Object.keys(res.data)
+            if (keys.length === 0) {
+              setView({ name: 'newAccount' });
+            } else {
+              let userData = res.data;
+              userData.loggedIn = true;
+              setProfileData(userData);
+              setView({ name: 'home' });
+            }
+          })
+          .catch((err) => console.log('error in oauth', err));
       }
     },
     [user]
@@ -97,7 +108,7 @@ export default function App() {
       // case "discover":
       //   return <Discover changeView={changeView} />;
       case "create":
-        return <Create collaborateSongPath={collaborateSongPath}/>;
+        return <Create changeView={changeView} collaborateSongPath={collaborateSongPath}/>;
       case "favorites":
         return <Favorites changeView={changeView} />;
       case "newAccount":
@@ -112,6 +123,8 @@ export default function App() {
         return <ConfirmLogOut />;
       case "confirmDeleteAccount":
         return <ConfirmDeleteAccount />;
+      case "theme":
+        return <ThemeExample />;
       default:
         return <FourOhFour />;
     }

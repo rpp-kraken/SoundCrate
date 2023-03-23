@@ -18,14 +18,14 @@ export default function Play(props) {
   return (
     <div>
       <div style={{
-        background: '#fff',
         borderRadius: '5px',
-        backgroundImage: `url(${props.songData.artistImageUrl})`,
+        // backgroundImage: `url(${props.songData.artistImageUrl})`,
         padding: '20px',
         width: '100%',
         height: '100%',
         maxWidth: '100%',
-        maxHeight: '100%',
+        // maxHeight: '100%',
+        maxHeight: '100vh',
         overflow: 'auto'
       }}>
         {/* <div style={{ fontSize: '24px', color: 'black' }}>Play View</div> */}
