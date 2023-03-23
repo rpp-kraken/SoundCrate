@@ -16,8 +16,8 @@ const { handleDelete } = require('./controllers/deleteSong');
 const { editTitle } = require('./controllers/editTitle');
 
 // TO BE TURNED ON WITH SSL CERT/KEY
-// const privateKey  = fs.readFileSync('/PATH', 'utf8');
-// const certificate = fs.readFileSync('/PAT', 'utf8');
+// const privateKey  = fs.readFileSync('/Users/briankuzma/Desktop/HR/Kraken/SoundCrate/server/key.pem', 'utf8');
+// const certificate = fs.readFileSync('/Users/briankuzma/Desktop/HR/Kraken/SoundCrate/server/cert.pem', 'utf8');
 // const credentials = {key: privateKey, cert: certificate};
 
 const upload = multer();
@@ -53,28 +53,31 @@ app.post('/api/user', upload.fields([
 const port = secrets.PORT || process.env.PORT || 3000;
 
 //OLD SERVER
-// const server = app.listen(port, () => {
-//   console.log(`listening on port ${port}...`);
-// });
-
-
-const httpPort = 3000;
-
-// TURN ON ONCE SSL CERT/KEY ADDED
-const httpsPort = 443;
-
-const httpServer = http.createServer(app);
-
-httpServer.listen(port, () => {
-  console.log(`HTTP Server running on port ${port}`);
+const server = app.listen(port, () => {
+  console.log(`listening on port ${port}...`);
 });
 
+
+
+
+
+//NOT NEEDED
+// const httpPort = 3000;
+// const httpServer = http.createServer(app);
+// httpServer.listen(port, () => {
+//   console.log(`HTTP Server running on port ${port}`);
+// });
+
+// TURN ON ONCE SSL CERT/KEY ADDED
+
+// const httpsPort = 443;
+// const httpsServer = https.createServer(app);
 // httpsServer.listen(httpsPort, () => {
 //   console.log(`HTTPS Server running on port ${httpsPort}`);
 // });
 
 //EXPORT httpsServer <<<<<<<<<<<<<<<<
-module.exports = { app, httpServer };
+module.exports = { app, server };
 
 
 
