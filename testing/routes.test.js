@@ -184,6 +184,10 @@ describe('Reviews route', () => {
 
       await expect(result).toStrictEqual(response);
     });
+
+    it('should returna 404 error when trying to access a user\'s favorite songs if user doesn\'t exist', async function () {
+      await getFavoriteSongsFail();
+    });
   });
 
     const postSong = async (req, status = 201) => {
@@ -246,6 +250,13 @@ describe('Reviews route', () => {
   const getFavoriteSongs = async (status = 200) => {
     const { body } = await request(app)
       .get('/api/getFavoriteSongs?user=calpal')
+      .expect(status);
+    return body;
+  };
+
+  const getFavoriteSongsFail = async (status = 404) => {
+    const { body } = await request(app)
+      .get('/api/getFavoriteSongs?user=aaron')
       .expect(status);
     return body;
   };
