@@ -7,7 +7,7 @@ import axios from 'axios';
 import Login from '../components/login/Login.jsx';
 // import logo from '../../dist/name-and-icon-white.PNG';
 
-export default function TopBar({ setUser, imageURL, changeView, loggedIn }) {
+export default function TopBar({ setUser, imageURL, changeView, profileData, loggedIn }) {
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -36,7 +36,7 @@ export default function TopBar({ setUser, imageURL, changeView, loggedIn }) {
           <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer} data-testid="drawer">
             <Menu />
           </IconButton>
-          <Avatar alt="Profile Picture" style={{ height: '50px', width: '50px' }} />
+          <Avatar alt="Profile Picture" src={profileData.path_to_pic} style={{ height: '50px', width: '50px' }} />
         </Toolbar>
       </AppBar>
       <Drawer anchor="left" open={openDrawer} onClose={toggleDrawer}>

@@ -85,13 +85,13 @@ export default function App() {
             setProfileData(res.data);
             return axios.get(`api/user/?userEmail=${res.data.email}`)
           })
-          .then(res => {
+          .then(async (res) => {
             let keys = Object.keys(res.data)
             if (keys.length === 0) {
               setView({ name: 'newAccount' });
             } else {
               setLoggedIn(true);
-              setProfileData(userData);
+              setProfileData(res.data);
               setView({ name: 'home' });
             }
           })
@@ -108,7 +108,7 @@ export default function App() {
       // case "discover":
       //   return <Discover changeView={changeView} />;
       case "create":
-        return <Create changeView={changeView} collaborateSongPath={collaborateSongPath}/>;
+        return <Create changeView={changeView} collaborateSongPath={collaborateSongPath} />;
       case "favorites":
         return <Favorites changeView={changeView} />;
       case "newAccount":
