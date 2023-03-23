@@ -19,8 +19,9 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
 //ROUTES
+
+// song routes
 app.get('/api/songs', getSongs);
-app.get('/api/user', getUser);
 // app.get('/api/songSingle', getOneSong);
 app.get('/api/getAllSongsHome', getAllSongsHome);
 app.post('/api/uploadSong', upload.fields([
@@ -29,6 +30,9 @@ app.post('/api/uploadSong', upload.fields([
 ]), handleUpload);
 app.put('/api/editTitle', editTitle);
 app.delete('/api/deleteSong', handleDelete);
+
+// user routes
+app.get('/api/user', getUser);
 app.post('/api/user', upload.fields([
   {name: 'imageFile', maxCount: 1}
 ]), newUser)
