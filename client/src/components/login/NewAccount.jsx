@@ -73,7 +73,7 @@ export default function NewAccount({ changeView, profileData, setProfileData, se
             Profile Picture:
             <br /><img src={path_to_pic} /><br />
             <Button variant="contained" component="label">
-              Change
+              Update
               <input type="file" name="path" accept="image/*" onChange={(e) => handleFile(e)} style={{ display: 'none' }} required />
             </Button>
           </label>

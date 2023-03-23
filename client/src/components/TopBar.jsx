@@ -7,7 +7,7 @@ import axios from 'axios';
 import Login from '../components/login/Login.jsx';
 // import logo from '../../dist/name-and-icon-white.PNG';
 
-export default function TopBar({ setUser, imageURL, changeView, profileData, loggedIn }) {
+export default function TopBar({ setUser, imageURL, changeView, profileData, setArtistData, loggedIn }) {
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -16,6 +16,7 @@ export default function TopBar({ setUser, imageURL, changeView, profileData, log
   };
 
   const onClickMyAccount = (event) => {
+    setArtistData(profileData);
     changeView('profile');
   };
   const onClickMyMusic = (event) => {
