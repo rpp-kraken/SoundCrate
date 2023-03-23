@@ -12,6 +12,7 @@ const { newUser } = require('./controllers/newUser');
 const { getUser } = require('./controllers/getUser');
 const { handleDelete } = require('./controllers/deleteSong');
 const { editTitle } = require('./controllers/editTitle');
+const { handleDeleteUser } = require('./controllers/deleteUser');
 const upload = multer();
 
 app.use(express.static('./client/dist'));
@@ -30,6 +31,7 @@ app.post('/api/uploadSong', upload.fields([
 ]), handleUpload);
 app.put('/api/editTitle', editTitle);
 app.delete('/api/deleteSong', handleDelete);
+app.delete('/api/deleteUser', handleDeleteUser);
 
 // user routes
 app.get('/api/user', getUser);
