@@ -90,10 +90,7 @@ const addUser = async (data) => {
       data.username, data.tier1, data.tier2, data.tier3]);
 };
 
-const getUsersFavoriteSongs = async (user) => {
-  const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = $1`, [user]);
-  // return db.query(`SELECT songs.*, users.id AS user_id FROM ${usersTable} JOIN favorites ON users.id = favorites.user_id
-  //   JOIN songs ON favorites.song_id = songs.id WHERE users.id = $1`, [userId.rows[0].id]);
+const getUsersFavoriteSongs = async (userId) => {
   return db.query(`SELECT
     ${songsTable}.*,
     ${usersTable}.id AS user_id,
@@ -110,7 +107,7 @@ const getUsersFavoriteSongs = async (user) => {
     ${usersTable}.id = $1
   GROUP BY
     ${songsTable}.id, ${usersTable}.id;
-`, [userId.rows[0].id]);
+`, [userId]);
 };
 
 const getUser = async (userEmail) => {
@@ -119,6 +116,12 @@ const getUser = async (userEmail) => {
   return user.rows[0];
 };
 
+const getUserId = async (user) => {
+  const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = $1`, [user]);
+  if (!userId.rows.length) return {};
+  return userId.rows[0].id;
+};
+
 module.exports = {
-  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs
+  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, getUserId
 };
