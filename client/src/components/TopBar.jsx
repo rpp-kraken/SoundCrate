@@ -7,8 +7,7 @@ import axios from 'axios';
 import Login from '../components/login/Login.jsx';
 // import logo from '../../dist/name-and-icon-white.PNG';
 
-// export default function TopBar({ imageUrl }) {
-export default function TopBar({setUser, imageURL, changeView}) {
+export default function TopBar({ setUser, imageURL, changeView, loggedIn }) {
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -28,7 +27,6 @@ export default function TopBar({setUser, imageURL, changeView}) {
   const onClickDeleteAccount = (event) => {
     changeView('confirmDeleteAccount');
   };
-
 
 
   return (
@@ -60,14 +58,14 @@ export default function TopBar({setUser, imageURL, changeView}) {
               <ListItemIcon><MusicNote /></ListItemIcon>
               <ListItemText primary="My Music" onClick={onClickMyMusic}/>
             </ListItem>
-            <ListItem button>
+            {loggedIn && <ListItem button>
               <ListItemIcon><ExitToApp /></ListItemIcon>
               <ListItemText primary="Log Out" onClick={onClickLogOut}/>
-            </ListItem>
-            <ListItem button>
+            </ListItem>}
+            {loggedIn && <ListItem button>
               <ListItemIcon><Delete /></ListItemIcon>
               <ListItemText primary="Delete Account" onClick={onClickDeleteAccount} />
-            </ListItem>
+            </ListItem> }
           </List>
         </div>
       </Drawer>

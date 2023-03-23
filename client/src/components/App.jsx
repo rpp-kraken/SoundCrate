@@ -21,6 +21,7 @@ import FourOhFour from './404.jsx';
 import axios from 'axios';
 
 export default function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState([]);
   const [profileData, setProfileData] = useState([]);
   const [artistData, setArtistData] = useState();
@@ -89,8 +90,7 @@ export default function App() {
             if (keys.length === 0) {
               setView({ name: 'newAccount' });
             } else {
-              let userData = res.data;
-              userData.loggedIn = true;
+              setLoggedIn(true);
               setProfileData(userData);
               setView({ name: 'home' });
             }
@@ -112,7 +112,7 @@ export default function App() {
       case "favorites":
         return <Favorites changeView={changeView} />;
       case "newAccount":
-        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} />;
+        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "profile":
         return <ArtistProfile changeView={changeView} artistData={artistData} />;
       case "play":
@@ -133,7 +133,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} />}
+      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} loggedIn={loggedIn} />}
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>
