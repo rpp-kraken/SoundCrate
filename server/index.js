@@ -1,4 +1,6 @@
-require('dotenv').config();
+// use docker-secret instead of .env for env variables in production
+require('dotenv').config()
+const { secrets } = require('docker-secret');
 const express = require('express');
 const fs = require('fs');
 const http = require('http');
@@ -6,6 +8,12 @@ const https = require('https');
 const multer = require('multer');
 const { handleUpload } = require('./controllers/handleUpload');
 const { getSongs } = require('./controllers/getSongs');
+// const { getOneSong } = require('./controllers/getOneSong');
+const { getAllSongsHome } = require('./controllers/getAllSongsHome');
+const { newUser } = require('./controllers/newUser');
+const { getUser } = require('./controllers/getUser');
+const { handleDelete } = require('./controllers/deleteSong');
+const { editTitle } = require('./controllers/editTitle');
 const upload = multer();
 
 const app = express();
@@ -14,34 +22,29 @@ app.use(express.static('./client/dist'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// ROUTES
+//ROUTES
+
+// song routes
 app.get('/api/songs', getSongs);
-app.post(
-  '/api/uploadSong',
-  upload.fields([
-    { name: 'audioFile', maxCount: 1 },
-    { name: 'imageFile', maxCount: 1 },
-  ]),
-  handleUpload
-);
+// app.get('/api/songSingle', getOneSong);
+app.get('/api/getAllSongsHome', getAllSongsHome);
+app.post('/api/uploadSong', upload.fields([
+  {name: 'audioFile', maxCount: 1},
+  {name: 'imageFile', maxCount: 1}
+]), handleUpload);
+app.put('/api/editTitle', editTitle);
+app.delete('/api/deleteSong', handleDelete);
 
+// user routes
+app.get('/api/user', getUser);
+app.post('/api/user', upload.fields([
+  {name: 'imageFile', maxCount: 1}
+]), newUser)
 
-// Need SSL KEY AND CERTS
-const httpPort = 3000;
-const httpsPort = 443;
-// const key = fs.readFileSync(process.env.SSL_KEY_PATH);
-// const cert = fs.readFileSync(process.env.SSL_CERT_PATH);
+const port = secrets.PORT || process.env.PORT || 3000;
 
-
-const httpServer = http.createServer(app);
-// const httpsServer = https.createServer({ key, cert }, app);
-
-httpServer.listen(httpPort, () => {
-  console.log(`HTTP server listening on port ${httpPort}...`);
+const server = app.listen(port, () => {
+  console.log(`listening on port ${port}...`);
 });
 
-// httpsServer.listen(httpsPort, () => {
-//   console.log(`HTTPS server listening on port ${httpsPort}...`);
-// });
-
-module.exports = app;
+module.exports = { app, server };

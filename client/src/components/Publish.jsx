@@ -5,6 +5,7 @@ import Modal from '@mui/material/Modal';
 import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import { Button } from '@mui/material';
+import axios from "axios";
 
 const style = {
   display: 'flex',
@@ -21,12 +22,14 @@ const buttonContainerStyle = {
 
 export const Publish = (props) => {
   const theme = useTheme();
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState();
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState([]);
   const [underMax, setUnderMax] =useState(true);
-  const [tagNum, setTagNum] = useState(0)
-    const audioRef = React.useRef(null);
+  const [tagNum, setTagNum] = useState(0);
+  const [doneRendering, setDoneRendering] = useState(false);
+
+  const audioRef = React.useRef(null);
 
 
   const handleInput = async (e) => {
@@ -58,8 +61,6 @@ export const Publish = (props) => {
     }
   };
 
-
-
   const paperStyle = {
     backgroundColor: useTheme().palette.primary.dark,
     boxShadow: 'none',
@@ -83,10 +84,40 @@ export const Publish = (props) => {
 
 
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // setAudio(new Audio(props.song));
+    var tagsString = tags.join(',');
+    // console.log("Image in submit: ", image, "    song?  ", props.song);
 
+    // formData type
+
+    // console.log('here is type of song', typeof props.song);
+
+    const formData = new FormData();
+    formData.append('audioFile', props.song);
+    formData.append('title', title);
+    formData.append('created_at', new Date().toISOString());
+    formData.append('play_count', 0);
+    formData.append('fav_count', 0);
+    formData.append('user', 'calpal');
+    formData.append('imageFile', image);
+    formData.append('tags', tagsString);
+
+    console.log(formData);
+    props.changeView('myReleasedMusic');
+
+
+    fetch('/api/uploadSong', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
   };
 
   return (
@@ -117,7 +148,7 @@ export const Publish = (props) => {
             {tags.map((tag, index) => (
               <li key={index}>
                 {tag}
-                <button type="button" onClick={() => handleDelete(index)}>
+                <button type="button" onClick={() => handleDelete(index)} sx={{ marginBottom: '4em' }}>
                   X
                 </button>
               </li>
@@ -125,8 +156,16 @@ export const Publish = (props) => {
             </ul>
             <div>
             <br />
-          Preview:
-        {props.song && (
+          Preview: <br />
+          {props.songUrl ? null : "Recording and rendering your song..."}
+          <audio
+            ref={audioRef}
+            src={props.songUrl}
+            controls
+            onPlay={handlePlay}
+            onPause={handlePause}
+          />
+        {/* {props.song && (
           <audio
             ref={audioRef}
             src={props.song}
@@ -134,8 +173,8 @@ export const Publish = (props) => {
             onPlay={handlePlay}
             onPause={handlePause}
           />
-        )}
-        <Button variant="contained" onClick={handleClose}>Cancel</Button>
+        )} */}
+        <Button variant="contained" onClick={handleClose} sx={{ marginBottom: '4em' }}>Cancel</Button>
         </div>
           <Button variant="contained" type="submit">Submit</Button>
         </form>

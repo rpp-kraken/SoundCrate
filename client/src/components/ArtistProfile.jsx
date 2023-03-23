@@ -1,0 +1,63 @@
+import React, { useState, useEffect } from 'react';
+import { Typography, Card, TableCell, Button } from '@mui/material';
+import { Avatar } from '@material-ui/core';
+import { useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Unstable_Grid2';
+import { songData } from '../../../DummyData/dummyData.js';
+import SongCardList from './SongCardList.jsx';
+
+export default function ArtistProfile({ artistData, changeView }) {
+  const theme = useTheme();
+  const gridItemStyle = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+
+  const onClickBackToHome = (event) => {
+    changeView('home');
+  };
+
+  return (
+    <Box id='profile-header' sx={{ width: '100%' }} p={0}>
+      <Grid container direction='column' spacing={0} p={4} sx={{ backgroundColor: '#000000', height: 'fit-content' }}>
+
+        <Grid item xs={12} sx={{ ...gridItemStyle }}>
+          <Avatar alt="Profile Picture" style={{ height: '100px', width: '100px' }} />
+        </Grid>
+
+        <Grid item xs={12} sx={{ ...gridItemStyle }}>
+          <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center', marginTop: '10px' }}>{artistData.artist}</Typography>
+        </Grid>
+
+        <Grid container direction='col' style={{ ...gridItemStyle, fontSize: '12px' }}>
+
+          <Grid item xs={12} sx={{ ...gridItemStyle }}>
+            <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center', marginTop: '10px' }}>@{artistData.artist}</Typography>
+          </Grid>
+
+          <Grid item xs={12} sx={{ ...gridItemStyle }}>
+            <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center' }}>~Some bio here~</Typography>
+          </Grid>
+
+        </Grid>
+
+        <Grid container direction='row' style={{ ...gridItemStyle, fontSize: '12px', marginTop: '10px' }}>
+
+          <Grid item sx={{ ...gridItemStyle, flexDirection: 'column', minWidth: '80px' }}>
+            <Typography variant='bodyText' style={{ textAlign: 'center' }}>9</Typography>
+            <Typography variant='bodyText' style={{ textAlign: 'center' }}>Song</Typography>
+          </Grid>
+          <div style={{ boxSizing: 'border-box', borderLeft: '1px solid gray', height: '15px' }}></div>
+          <Grid item sx={{ ...gridItemStyle, flexDirection: 'column', minWidth: '80px' }}>
+            <Typography variant='bodyText' style={{ textAlign: 'center' }}>99</Typography>
+            <Typography variant='bodyText' style={{ textAlign: 'center' }}>Favorites</Typography>
+          </Grid>
+
+        </Grid>
+      </Grid>
+      <SongCardList songs={ songData } />
+    </Box>
+  );
+}
