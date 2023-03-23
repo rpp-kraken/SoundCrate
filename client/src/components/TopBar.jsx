@@ -50,14 +50,14 @@ export default function TopBar({ setUser, imageURL, changeView, loggedIn }) {
               <ListItemIcon><LoginIcon /></ListItemIcon>
               <Login setUser={setUser}/>
             </ListItem>}
-            <ListItem button>
+            {loggedIn && <ListItem button>
               <ListItemIcon><Edit /></ListItemIcon>
               <ListItemText primary="Edit Profile" onClick={onClickMyAccount} />
-            </ListItem>
-            <ListItem button>
+            </ListItem>}
+            {loggedIn && <ListItem button>
               <ListItemIcon><MusicNote /></ListItemIcon>
               <ListItemText primary="My Music" onClick={onClickMyMusic}/>
-            </ListItem>
+            </ListItem>}
             {loggedIn && <ListItem button>
               <ListItemIcon><ExitToApp /></ListItemIcon>
               <ListItemText primary="Log Out" onClick={onClickLogOut}/>
