@@ -14,13 +14,22 @@ const { newUser } = require('./controllers/newUser');
 const { getUser } = require('./controllers/getUser');
 const { handleDelete } = require('./controllers/deleteSong');
 const { editTitle } = require('./controllers/editTitle');
+
+// TO BE TURNED ON WITH SSL CERT/KEY
+// const privateKey  = fs.readFileSync('/PATH', 'utf8');
+// const certificate = fs.readFileSync('/PAT', 'utf8');
+// const credentials = {key: privateKey, cert: certificate};
+
 const upload = multer();
 
+
 const app = express();
+
 
 app.use(express.static('./client/dist'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 
 //ROUTES
 
@@ -43,8 +52,30 @@ app.post('/api/user', upload.fields([
 
 const port = secrets.PORT || process.env.PORT || 3000;
 
-const server = app.listen(port, () => {
-  console.log(`listening on port ${port}...`);
+//OLD SERVER
+// const server = app.listen(port, () => {
+//   console.log(`listening on port ${port}...`);
+// });
+
+
+const httpPort = 3000;
+
+// TURN ON ONCE SSL CERT/KEY ADDED
+const httpsPort = 443;
+
+const httpServer = http.createServer(app);
+
+httpServer.listen(port, () => {
+  console.log(`HTTP Server running on port ${port}`);
 });
 
-module.exports = { app, server };
+// httpsServer.listen(httpsPort, () => {
+//   console.log(`HTTPS Server running on port ${httpsPort}`);
+// });
+
+//EXPORT httpsServer <<<<<<<<<<<<<<<<
+module.exports = { app, httpServer };
+
+
+
+
