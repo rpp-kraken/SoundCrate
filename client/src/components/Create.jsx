@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { createTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
+import { Typography, Card, TableCell, Button, IconButton } from '@mui/material';
+import CloudUploadOutlined from '@mui/icons-material/CloudUploadOutlined';
+
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Unstable_Grid2';
 import * as Tone from 'tone';
 import audioBufferToWav from 'audiobuffer-to-wav';
 import CreateFxPanel from './CreateFxPanel.jsx';
@@ -8,10 +14,13 @@ import { MicrophoneRecorder } from './CreateMicRecord.jsx';
 import { Publish } from './Publish.jsx';
 
 export default function Create(props) {
+  const theme = useTheme();
+
 
   const [listOfTracks, setListOfTracks] = useState([]);
   const [listPlayers, setListPlayers] = useState({});
-  const [song, setSong] = useState(null);
+  const [song, setSong] = useState();
+  const [songUrl, setSongUrl] = useState();
   const [openPublish, setOpenPublish] = useState(false);
 
   const [maxTracks, setMax] = useState(0);
@@ -22,18 +31,17 @@ export default function Create(props) {
 
   useEffect(() => {
     if (props.collaborateSongPath) {
-    let trackUrlSources = [
-      props.collaborateSongPath
-      // 'https://s3-us-west-1.amazonaws.com/leesamples/samples/Rhythmics/60+bpm/Ping+Pong+Ping.mp3',
-      // 'https://dl.dropboxusercontent.com/s/w303ydczmgrkfh8/New%20Recording%2075.m4a?dl=0',
-      // 'https://tonejs.github.io/audio/berklee/gong_1.mp3',
-      // 'https://dl.dropboxusercontent.com/s/1emccgj2kebg72a/Transient.m4a?dl=0',
-      // 'https://dl.dropboxusercontent.com/s/c9aome2s0wr4ym7/Cymatics%20-%2021%20Inch%20Ride%20-%20Velocity%204.wav?dl=0',
-      // 'https://dl.dropboxusercontent.com/s/3e7cinfd5ib9u5d/one%20two.m4a?dl=0',
-      // 'https://dl.dropboxusercontent.com/s/d539eig06ioc35s/one%20two.webm?dl=0',
-    ];
-    setMax(trackUrlSources.length);
-    setListOfTracks(trackUrlSources);
+      let trackUrlSources = [
+        props.collaborateSongPath
+        // 'https://dl.dropboxusercontent.com/s/w303ydczmgrkfh8/New%20Recording%2075.m4a?dl=0',
+        // 'https://tonejs.github.io/audio/berklee/gong_1.mp3',
+        // 'https://dl.dropboxusercontent.com/s/1emccgj2kebg72a/Transient.m4a?dl=0',
+        // 'https://dl.dropboxusercontent.com/s/c9aome2s0wr4ym7/Cymatics%20-%2021%20Inch%20Ride%20-%20Velocity%204.wav?dl=0',
+        // 'https://dl.dropboxusercontent.com/s/3e7cinfd5ib9u5d/one%20two.m4a?dl=0',
+        // 'https://dl.dropboxusercontent.com/s/d539eig06ioc35s/one%20two.webm?dl=0',
+      ];
+      setMax(trackUrlSources.length);
+      setListOfTracks(trackUrlSources);
     }
   }, []);
 
@@ -72,8 +80,8 @@ export default function Create(props) {
 
   const handlePublish = async () => {
     if (listOfTracks.length === 0) {
-    alert('There is no song to publish')
-    return;
+      alert('There is no song to publish')
+      return;
     }
     await handleRender();
     setOpenPublish(true);
@@ -90,6 +98,16 @@ export default function Create(props) {
     }));
     // console.log('adding player to multiplayer...', listPlayers);
   };
+
+  // Delete One logic... still bugged
+  // const handleDelete = (index) => {
+  //   setListOfTracks(prevList => {
+  //     const newAudioTracks = [...prevList];
+  //     newAudioTracks.splice(index, 1);
+  //     setMax(prevMax => prevMax - 1);
+  //     return newAudioTracks;
+  //   });
+  // };
 
   const handleDelete = (index) => {
     setListPlayers({});
@@ -223,45 +241,71 @@ export default function Create(props) {
         // Create a URL for the Blob
         const url = URL.createObjectURL(blob);
 
-        setSong(url);
+        setSongUrl(url);
+        setSong(blob);
         // Create an anchor tag and allows for download of wav right now
       }, maxDuration);
     });
   };
 
   return (
-    <div>
-      <h4>Create Tab - Project View</h4>
-      <button className="outline-button-button" onClick={handlePlayAll}>
-        Play All Sounds (with FX)
-      </button><br />
-      <button className="outline-button-button" onClick={handleRecordRender}>
-        Render and download song
-      </button><br />
-      <button className="outline-button-button" onClick={handleDelete}>
-        Delete All Tracks
-      </button>
+    <Box sx={{ flexGrow: 1, minWidth: 'fit-content' }}>
+      <Grid container spacing={1} p={4} sx={{ backgroundColor: theme.palette.background.default, flexDirection: 'column', alignItems: 'center' }}>
+        <Typography color="secondary" variant='bodyText' sx={{ width: '100%', textAlign: 'center' }}>To start creating, upload some audio or record yourself!</Typography>
+
+      </Grid>
+
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
+        {/* <h4>
+            Upload File
+          </h4>
+          <form>
+            {underMax && <input type="file" accept="audio/*" onChange={handleUploadAudio} />}
+          </form> */}
+        {underMax &&
+          <IconButton
+            id="upload-button"
+            component="label"
+            color="secondary"
+            htmlFor="upload-audio"
+          >
+            <CloudUploadOutlined />
+            {" Upload File"}
+            <input
+              id="upload-audio"
+              type="file"
+              accept="audio/*"
+              onChange={handleUploadAudio}
+              hidden
+            />
+          </IconButton>
+        }
+
+        {underMax && <MicrophoneRecorder setListOfTracks={setListOfTracks} setMax={setMax} maxTracks={maxTracks} setUnderMax={setUnderMax} underMax={underMax} />}
+
+      </Box>
       <br />
-      {/* {listOfTracks.map((urlTrack, i) => { return <WaveformCanvas trackUrl={urlTrack} index={i} key={i}/> })} */}
+
       {listOfTracks.map((urlTrack, i) => { return <CreateAudioWaveform trackUrl={urlTrack} index={i} key={i} /> })}
       <div className="sidescroller">
         {listOfTracks.map((urlTrack, i) => { return <CreateFxPanel trackUrl={urlTrack} index={i} key={i} handleAddPlayer={handleAddPlayer} handleDelete={handleDelete} /> })}
       </div>
-      <h4>
-        Upload File
-      </h4>
-      <form>
-        {underMax && <input type="file" accept="audio/*" onChange={handleUploadAudio} />}
-      </form>
-      <h4>
-        Record Audio
-      </h4>
-      {underMax && <MicrophoneRecorder setListOfTracks={setListOfTracks} setMax={setMax} maxTracks={maxTracks} setUnderMax={setUnderMax} underMax={underMax} />}
-      <button onClick={handlePublish}> Publish </button>
-      {openPublish && <Publish setOpenPublish={setOpenPublish} song={song}/>}
-      <br/><br/>
-      <br/><br/>
-      <br/><br/>
-    </div>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
+        <Button variant="contained" onClick={handlePlayAll}>
+          Play All Sounds with FX
+        </Button><br />
+        <Button variant="contained" onClick={handleDelete}>
+          Clear All Tracks
+        </Button>
+      </Box>
+
+      <br />
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Button variant="contained" onClick={handlePublish}> Publish </Button>
+      </Box>
+      {openPublish && <Publish setOpenPublish={setOpenPublish} song={song} songUrl={songUrl} changeView={props.changeView} />}      <br /><br />
+      <br /><br />
+      <br /><br />
+    </Box>
   );
 }

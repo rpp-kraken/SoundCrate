@@ -10,8 +10,8 @@ const favoritesTable = process.env.NODE_ENV === 'test' ? 'temp_favorites' : 'fav
 const addSong = async (data) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   const songId = uuid();
-  var user_id =  await db.query(`SELECT id FROM ${usersTable} WHERE name = '${data.user}'`);
-  if (!user_id.rows.length) await addUser({ name: data.user});
+  var user_id = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${data.user}'`);
+  if (!user_id.rows.length) await addUser({ name: data.user });
   user_id = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${data.user}'`);
 
   return await db.query(`INSERT INTO ${songsTable} (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
@@ -63,7 +63,7 @@ const getAllSongs = async (user) => {
       )
     )
   ) FROM ${songsTable} WHERE user_id = $1;`, [userId.rows[0].id])
-  .catch(err => console.log(`error retrieving songs for user with id ${userId.rows[0].id}`, err));
+    .catch(err => console.log(`error retrieving songs for user with id ${userId.rows[0].id}`, err));
   return result.rows[0].json_agg;
 };
 
@@ -73,12 +73,16 @@ const getSong = async (songId) => {
   return song.rows[0];
 };
 
+const editTitle = async (songId, newTitle) => {
+    return db.query(`UPDATE ${songsTable} SET title = $1 WHERE id = $2`, [newTitle, songId]);
+};
+
 const deleteSong = async (songId) => {
   await db.query(`DELETE FROM ${tagsTable} WHERE song_id = $1`, [songId]);
   return db.query(`DELETE FROM ${songsTable} WHERE id = $1`, [songId]);
 };
 
- const addUser = async (data) => {
+const addUser = async (data) => {
     db = process.env.NODE_ENV === 'test' ? global.client : db;
     const userId = uuid();
     return db.query(`INSERT INTO ${usersTable} (id, name, email, bio, path_to_pic, username, tier1, tier2, tier3)
@@ -109,6 +113,12 @@ const getUsersFavoriteSongs = async (user) => {
 `, [userId.rows[0].id]);
 };
 
+const getUser = async (userEmail) => {
+  const user = await db.query(`SELECT * FROM ${usersTable} WHERE email = $1`, [userEmail]);
+  if (!user.rows.length) return {};
+  return user.rows[0];
+};
+
 module.exports = {
-  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, deleteSong, getUsersFavoriteSongs
+  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs
 };
