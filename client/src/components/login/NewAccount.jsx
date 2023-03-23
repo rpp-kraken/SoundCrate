@@ -42,7 +42,7 @@ export default function NewAccount({ changeView, profileData, setProfileData }) 
       formData.append("email", profileData.email);
       formData.append("bio", bio);
       formData.append("path_to_pic", path_to_pic);
-      formData.append("username", profileData.username);
+      formData.append("username", username);
       formData.append("tier1", false);
       formData.append("tier2", false);
       formData.append("tier3", false);
@@ -53,11 +53,11 @@ export default function NewAccount({ changeView, profileData, setProfileData }) 
         body: formData
       });
       const data = await response.json();
-      setProfileData(data);
+      await setProfileData(data);
 
       let newData = profileData;
       newData.loggedIn = true;
-      setProfileData(newData);
+      await setProfileData(newData);
 
       changeView('home');
     } catch (error) {
