@@ -95,6 +95,10 @@ const getUser = async (userEmail) => {
   return user.rows[0];
 };
 
+const deleteUser = async(userId) => {
+  return await db.query(`DELETE FROM ${usersTable} WHERE id = $1`, [userId]);
+}
+
 module.exports = {
   addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle
 };
