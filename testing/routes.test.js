@@ -149,7 +149,7 @@ describe('Reviews route', () => {
     });
   });
 
-  describe('PUT song routes', function() {
+  describe('PUT song routes', function () {
     it('should update the title of a song', async function () {
       const req = {
         title: 'yummy'
@@ -175,6 +175,50 @@ describe('Reviews route', () => {
       };
       await updateTitleFail(req);
     });
+  });
+
+  describe('POST /api/user', () => {
+    it('Should create a new user', async () => {
+      const imageFilePath = path.join(__dirname, 'mocks', 'aaron.jpeg');
+      const req = {
+        id: 2,
+        name: 'Mindi Test 123',
+        email: 'test@123test.com',
+        bio: 'my bio',
+        path_to_pic: 'path',
+        username: 'mintest123',
+        imageFile: fs.readFileSync(imageFilePath),
+      };
+
+      const response = {
+        name: 'Mindi Test 123',
+        email: 'test@123test.com',
+        bio: 'my bio'
+      };
+
+      await addUser(req);
+
+      const { rows } = await global.client.query(`SELECT name, email, bio
+        FROM temp_users WHERE name = $1`, [req.name]);
+
+      await expect(rows).toHaveLength(2);
+      await expect(rows[1]).toStrictEqual(response);
+    }, 10000);
+
+    // it('Should return a 500 code if song file is not sent', async function () {
+    //   const imageFilePath = path.join(__dirname, 'mocks', 'aaron.jpeg');
+    //   const req = {
+    //     title: 'yum',
+    //     created_at: '2023-03-11T19:43:02+00:00',
+    //     play_count: 0,
+    //     fav_count: 1,
+    //     user: 'calpal',
+    //     imageFile: fs.readFileSync(imageFilePath),
+    //     tags: 'tag1,tag2,tag3'
+    //   };
+
+    //   await postSongFail(req);
+    // });
   });
 
   const postSong = async (req, status = 201) => {
@@ -217,7 +261,7 @@ describe('Reviews route', () => {
     const { body } = await request(app)
       .get('/api/songs?user=aaron')
       .expect(status);
-      return body;
+    return body;
   };
 
   const deleteSong = async (req, status = 204) => {
@@ -249,5 +293,18 @@ describe('Reviews route', () => {
       .expect(status);
     return body;
   };
+
+  const addUser = async (req, status = 201) => {
+    const { body } = await request(app)
+      .post('/api/user')
+      .field('name', req.name)
+      .field('email', req.email)
+      .field('bio', req.bio)
+      .field('path_to_pic', req.path_to_pic)
+      .field('username', req.username)
+      .field('imageFile', req.imageFile, 'aaron.jpeg')
+      .expect(status);
+    return body;
+  }
 
 });
