@@ -4,7 +4,8 @@ const { v4: uuid } = require('uuid');
 // different db and table names for testing
 const songsTable = process.env.NODE_ENV === 'test' ? 'temp_songs' : 'songs';
 const usersTable = process.env.NODE_ENV === 'test' ? 'temp_users' : 'users';
-const tagsTable = process.env.NODE_ENV === 'test' ? 'temp_tags' : 'tags';
+const tagsTable = process.env.NODE_ENV === 'test' ? 'temp_tags' : 'song_tags';
+const favoritesTable = process.env.NODE_ENV === 'test' ? 'temp_favorites' : 'favorites';
 
 const addSong = async (data) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
@@ -90,21 +91,21 @@ const getUsersFavoriteSongs = async (user) => {
   // return db.query(`SELECT songs.*, users.id AS user_id FROM ${usersTable} JOIN favorites ON users.id = favorites.user_id
   //   JOIN songs ON favorites.song_id = songs.id WHERE users.id = $1`, [userId.rows[0].id]);
   return db.query(`SELECT
-    songs.*,
-    users.id AS user_id,
-    COALESCE(ARRAY_AGG(song_tags.name) FILTER (WHERE song_tags.name IS NOT NULL), ARRAY[]::text[]) AS tags
+    ${songsTable}.*,
+    ${usersTable}.id AS user_id,
+    COALESCE(ARRAY_AGG(${tagsTable}.name) FILTER (WHERE ${tagsTable}.name IS NOT NULL), ARRAY[]::text[]) AS tags
   FROM
-    users
+    ${usersTable}
   JOIN
-    favorites ON users.id = favorites.user_id
+    ${favoritesTable} ON ${usersTable}.id = ${favoritesTable}.user_id
   JOIN
-    songs ON favorites.song_id = songs.id
+    ${songsTable} ON ${favoritesTable}.song_id = ${songsTable}.id
   LEFT JOIN
-    song_tags ON songs.id = song_tags.song_id
+    ${tagsTable} ON ${songsTable}.id = ${tagsTable}.song_id
   WHERE
-    users.id = $1
+    ${usersTable}.id = $1
   GROUP BY
-    songs.id, users.id;
+    ${songsTable}.id, ${usersTable}.id;
 `, [userId.rows[0].id]);
 };
 
