@@ -25,11 +25,7 @@ const handleUpload = async (req, res) => {
 
   const audioFileData = req.files['audioFile'][0].buffer;
   const imageFileData = req.files['imageFile'][0].buffer;
-  // console.log("HIT: ", typeof audioFileData, imageFileData);
 
-  const songsTable = process.env.NODE_ENV === 'test' ? 'temp_songs' : 'songs';
-  const tagsTable = process.env.NODE_ENV === 'test' ? 'temp_tags' : 'song_tags';
-  const usersTable = process.env.NODE_ENV === 'test' ? 'temp_users' : 'users';
   try {
     data.path_to_song = await uploadAudioFile(audioFileData);
     data.path_to_artwork = await uploadImageFile(imageFileData);

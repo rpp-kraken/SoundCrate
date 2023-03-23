@@ -29,11 +29,14 @@ const CreateAudioWaveform = (props) => {
 					container: '#waveform',
 					// scrollParent: true,
 					autoCenter: true,
-					cursorColor: 'violet',
+					cursorColor: '#69207F',
 					loopSelection: true,
 					waveColor: '#211027',
-					progressColor: '#69207F',
+					// waveColor: '#69207F',
+					progressColor: '#A371B5',
 					responsive: true,
+					barWidth: 1,
+					barHeight: 4,
 					// plugins: [
 					// 	TimelinePlugin.create({
 					// 		container: '#wave-timeline',
