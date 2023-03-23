@@ -25,7 +25,7 @@ export default function Create(props) {
 
   const [maxTracks, setMax] = useState(0);
   const [underMax, setUnderMax] = useState(true);
-
+  const [isTracks, setIsTracks] = useState(false);
   // TODO: state or active track tapped
   // const [activeSoundCard, setActiveSoundCard] = useState(1);
 
@@ -51,6 +51,9 @@ export default function Create(props) {
     } else {
       setUnderMax(false);
     };
+    if (maxTracks > 0) {
+      setIsTracks(true);
+    }
   }, [maxTracks]);
 
   const listPlayersObj = {};
@@ -116,6 +119,9 @@ export default function Create(props) {
       setMax(prevMax => prevMax - 1);
       return newAudioTracks;
     });
+    if (maxTracks === 0) {
+      setIsTracks(false);
+    }
   };
 
   const handlePlayAll = () => {
@@ -303,7 +309,7 @@ export default function Create(props) {
 
       <br />
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Button variant="contained" onClick={handlePublish}> Publish </Button>
+        {isTracks && <Button variant="contained" onClick={handlePublish}> Publish </Button>}
       </Box>
       {openPublish && <Publish setOpenPublish={setOpenPublish} song={song} songUrl={songUrl} changeView={props.changeView} />}      <br /><br />
       <br /><br />
