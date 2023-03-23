@@ -5,7 +5,11 @@ module.exports = {
     const user = req.query.user;
 
     try {
-      models.getUsersFavoriteSongs(user)
+      const userId = await models.getUserId(user);
+      if (!Object.keys(userId).length) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      models.getUsersFavoriteSongs(userId)
         .then(songs => {
           res.json(songs.rows);
         });
