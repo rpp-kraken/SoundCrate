@@ -207,7 +207,7 @@ describe('Reviews route', () => {
       const { rows } = await global.client.query(`SELECT title FROM temp_songs WHERE user_id = $1`, [1]);
 
       expect(initialGet.rows[0].title).toStrictEqual('yum')
-      expect(rows[0].title).toStrictEqual(response.title);
+      expect(rows[1].title).toStrictEqual(response.title);
     });
 
     it('should send a 404 when trying to update title of song that does not exist', async function () {
@@ -286,7 +286,7 @@ describe('Reviews route', () => {
     const { body } = await request(app)
       .get('/api/getFavoriteSongs?user=aaron')
       .expect(status);
-    return body:
+    return body;
   };
 
   const updateTitle = async (req, status = 204) => {
