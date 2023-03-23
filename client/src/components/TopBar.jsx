@@ -46,10 +46,10 @@ export default function TopBar({ setUser, imageURL, changeView, loggedIn }) {
           onKeyDown={toggleDrawer}
         >
           <List>
-            <ListItem button>
+            {!loggedIn && <ListItem button>
               <ListItemIcon><LoginIcon /></ListItemIcon>
               <Login setUser={setUser}/>
-            </ListItem>
+            </ListItem>}
             <ListItem button>
               <ListItemIcon><Edit /></ListItemIcon>
               <ListItemText primary="Edit Profile" onClick={onClickMyAccount} />
