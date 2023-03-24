@@ -16,6 +16,7 @@ const { handleDelete } = require('./controllers/deleteSong');
 const { getFavoriteSongs } = require('./controllers/getFavoriteSongs');
 const { editTitle } = require('./controllers/editTitle');
 const { editProfileBio } = require('./controllers/editProfileBio');
+const { editProfilePic } = require('./controllers/editProfilePic');
 
 // TO BE TURNED ON WITH SSL CERT/KEY
 // const privateKey  = fs.readFileSync('/Users/briankuzma/Desktop/HR/Kraken/SoundCrate/server/key.pem', 'utf8');
@@ -47,6 +48,7 @@ app.post('/api/uploadSong', upload.fields([
 ]), handleUpload);
 app.put('/api/editTitle', editTitle);
 app.put('/api/editProfileBio', editProfileBio);
+app.put('/api/editProfilePic', upload.single('imageFile'), editProfilePic);
 app.delete('/api/deleteSong', handleDelete);
 app.delete('/api/deleteUser', handleDeleteUser);
 
