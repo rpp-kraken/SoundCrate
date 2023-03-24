@@ -109,7 +109,7 @@ export default function App() {
       // case "discover":
       //   return <Discover changeView={changeView} />;
       case "create":
-        return <Create changeView={changeView} collaborateSongPath={collaborateSongPath} />;
+        return <Create changeView={changeView} collaborateSongPath={collaborateSongPath} profileData={profileData} />;
       case "favorites":
         return <Favorites changeView={changeView} />;
       case "newAccount":
@@ -117,7 +117,7 @@ export default function App() {
       case "profile":
         return <ArtistProfile changeView={changeView} artistData={artistData} profileData={profileData} loggedIn={loggedIn} />;
       case "play":
-        return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} />;
+        return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} profileData={profileData}/>;
       case "myReleasedMusic":
         return <MyReleasedMusic changeView={changeView} />;
       case "confirmLogOut":

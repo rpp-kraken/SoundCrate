@@ -99,7 +99,7 @@ export const Publish = (props) => {
     formData.append('created_at', new Date().toISOString());
     formData.append('play_count', 0);
     formData.append('fav_count', 0);
-    formData.append('user', 'calpal');
+    formData.append('user', `${props.username}`);
     formData.append('imageFile', image);
     formData.append('tags', tagsString);
 
