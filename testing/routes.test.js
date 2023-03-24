@@ -233,6 +233,13 @@ describe('Reviews route', () => {
       expect(initialGet.rows[0].bio).toStrictEqual('cool guy');
       expect(rows[0].bio).toStrictEqual('the cooliest');
     });
+
+    it('Should return a 404 for a user that doesn\'t exist', async function () {
+      const req = {
+        bio: 'the cooliest'
+      };
+      await updateProfileBioFail(req);
+    });
   });
 
   const postSong = async (req, status = 201) => {
@@ -325,6 +332,14 @@ describe('Reviews route', () => {
   const updateBio = async (req, status = 204) => {
     const { body } = await request(app)
       .put('/api/editProfileBio?userId=1')
+      .send(req)
+      .expect(status);
+    return body;
+  };
+
+  const updateProfileBioFail = async (req, status = 404) => {
+    const { body } = await request(app)
+      .put('/api/editProfileBio?userId=7')
       .send(req)
       .expect(status);
     return body;
