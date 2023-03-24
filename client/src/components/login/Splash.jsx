@@ -20,7 +20,7 @@ export default function Splash() {
   return (
     <div style={youTubeStyle}>
       {/* Google Drive */}
-      <iframe style={iframeStyle} src="https://drive.google.com/file/d/1txw4elkjcZFHEDmo6tY4xdE_J2db85eX/preview" width="640" height="480" allow="autoplay"></iframe>
+      <iframe style={iframeStyle} src="https://drive.google.com/file/d/1oHRFh7fYUlh9b_koh4WHqzYTkmm0pPf2/preview" width="640" height="480" allow="autoplay"></iframe>
 
       {/* YouTube */}
       {/* <iframe style={iframeStyle} width="560" height="315" src="https://www.youtube.com/embed/6hNn3_r_MT4?autoplay=1&loop=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> */}
