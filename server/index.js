@@ -54,7 +54,6 @@ app.post('/api/user', upload.fields([
   {name: 'imageFile', maxCount: 1}
 ]), newUser)
 
-const port = secrets.PORT || process.env.PORT || 3000;
 
 
 
@@ -65,23 +64,33 @@ const port = secrets.PORT || process.env.PORT || 3000;
 // const httpPort = 3000;
 // const httpServer = http.createServer(app);
 // httpServer.listen(port, () => {
-//   console.log(`HTTP Server running on port ${port}`);
+  //   console.log(`HTTP Server running on port ${port}`);
 // });
 
-let server = {};
+// let server = {};
 
-console.log(process.env.NODE_ENV)
-if (process.env.NODE_ENV === "production") {
-  const httpsPort = 443;
-  const httpsServer = https.createServer(credentials, app);
-  httpsServer.listen(httpsPort, () => {
-    console.log(`HTTPS Server running on port ${httpsPort}`);
-  });
-} else {
-  server = app.listen(port, () => {
-    console.log(`listening on port ${port}...`);
-  });
-};
+// console.log(process.env.NODE_ENV)
+// if (process.env.NODE_ENV === "production") {
+  //   const httpsPort = 443;
+  //   const httpsServer = https.createServer(credentials, app);
+//   httpsServer.listen(httpsPort, () => {
+  //     console.log(`HTTPS Server running on port ${httpsPort}`);
+  //   });
+  // } else {
+    //   server = app.listen(port, () => {
+//     console.log(`listening on port ${port}...`);
+//   });
+// };
+
+const port = secrets.PORT || process.env.PORT || 3000;
+// const credentials = {
+//   key: secrets.CERT_PRIVATE_KEY || process.env.CERT_PRIVATE_KEY,
+//   cert: secrets.AWS_CERTIFICATE || process.env.AWS_CERTIFICATE
+// }
+// const httpsServer = https.createServer(credentials, app);
+const server = app.listen(port, () => {
+  console.log(`listening on port ${port}...`);
+});
 
 
 //EXPORT httpsServer <<<<<<<<<<<<<<<<
