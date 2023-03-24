@@ -99,7 +99,8 @@ export const Publish = (props) => {
     formData.append('created_at', new Date().toISOString());
     formData.append('play_count', 0);
     formData.append('fav_count', 0);
-    formData.append('user', 'calpal');
+    formData.append('user', `${props.username}`);
+    formData.append('userId', `${props.id}`);
     formData.append('imageFile', image);
     formData.append('tags', tagsString);
 
@@ -134,7 +135,7 @@ export const Publish = (props) => {
             Song Image:
             <Button variant="contained" component="label">
               Upload Image
-              <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} style={{ display: 'none' }} />
+              <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} style={{ display: 'none' }} required/>
             </Button>
           </label>
            <label>

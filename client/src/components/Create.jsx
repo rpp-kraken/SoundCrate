@@ -30,6 +30,9 @@ export default function Create(props) {
   // const [activeSoundCard, setActiveSoundCard] = useState(1);
 
   useEffect(() => {
+
+    console.log("props.profileData, ", props.profileData)
+
     if (props.collaborateSongPath) {
       let trackUrlSources = [
         props.collaborateSongPath
@@ -303,7 +306,7 @@ export default function Create(props) {
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         <Button variant="contained" onClick={handlePublish}> Publish </Button>
       </Box>
-      {openPublish && <Publish setOpenPublish={setOpenPublish} song={song} songUrl={songUrl} changeView={props.changeView} />}      <br /><br />
+      {openPublish && <Publish setOpenPublish={setOpenPublish} song={song} songUrl={songUrl} changeView={props.changeView} username={props.profileData.username} id={props.profileData.id}/>}      <br /><br />
       <br /><br />
       <br /><br />
     </Box>
