@@ -11,7 +11,8 @@ export default function SongCardList({ songs, handleSetArtistSongData, changeVie
         return (
           <SongCard
             title={song.title}
-            artist={song.user_id}
+            user_id={song.user_id}
+            artist={song.username}
             path_to_song={song.path_to_song}
             artistImageUrl={song.path_to_artwork}
             likedCount={song.fav_count}

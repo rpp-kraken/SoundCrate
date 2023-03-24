@@ -11,14 +11,16 @@ const addSong = async (data) => {
   console.log("🚀 ~ file: index.js:11 ~ addSong ~ data:", data)
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   const songId = uuid();
-  var user_id = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${data.user}'`);
-  if (!user_id.rows.length) await addUser({ name: data.user });
-  user_id = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${data.user}'`);
 
-  console.log("🚀 ~ file: index.js:18 ~ addSong ~ user_id:", user_id)
+  // Cannot upload song unless already logged in and user data is already saved in state from App.jsx and passed in. No need for additional query.
+
+  // var user_id = await db.query(`SELECT id FROM ${usersTable} WHERE username = '${data.user}'`);
+  // if (!user_id.rows.length) await addUser({ name: data.user });
+  // user_id = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${data.user}'`);
+
   return await db.query(`INSERT INTO ${songsTable} (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`, [songId, data.title, data.created_at, data.path_to_song, data.play_count,
-    data.fav_count, data.path_to_artwork, user_id.rows[0].id]);
+    data.fav_count, data.path_to_artwork, data.userId]);
 };
 
 // TODO: tags currently expects a string of comma-separated tags, it should be an array of strings
@@ -36,6 +38,12 @@ const addTags = async (tags, titleOfSong) => {
 const getAllSongsHome = async () => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   const result = await db.query(`SELECT * FROM ${songsTable}`);
+  for (const song of result.rows) {
+    console.log("🚀 ~ file: index.js:38 ~ getAllSongsHome ~ song:", song)
+    const findUsername = await db.query(`SELECT username FROM ${usersTable} WHERE id=$1`, [song.user_id]);
+    song.username = findUsername.rows[0].username;
+    // console.log("🚀🚀 ~ file: index.js:40 ~ getAllSongsHome ~ findUsername:", findUsername)
+  }
   return result.rows;
 };
 
@@ -76,7 +84,7 @@ const getSong = async (songId) => {
 };
 
 const editTitle = async (songId, newTitle) => {
-    return db.query(`UPDATE ${songsTable} SET title = $1 WHERE id = $2`, [newTitle, songId]);
+  return db.query(`UPDATE ${songsTable} SET title = $1 WHERE id = $2`, [newTitle, songId]);
 };
 
 const deleteSong = async (songId) => {
@@ -85,11 +93,11 @@ const deleteSong = async (songId) => {
 };
 
 const addUser = async (data) => {
-    db = process.env.NODE_ENV === 'test' ? global.client : db;
-    const userId = uuid();
-    return db.query(`INSERT INTO ${usersTable} (id, name, email, bio, path_to_pic, username, tier1, tier2, tier3)
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
+  const userId = uuid();
+  return db.query(`INSERT INTO ${usersTable} (id, name, email, bio, path_to_pic, username, tier1, tier2, tier3)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`, [userId, data.name, data.email, data.bio, data.path_to_pic,
-      data.username, data.tier1, data.tier2, data.tier3]);
+    data.username, data.tier1, data.tier2, data.tier3]);
 };
 
 const getUsersFavoriteSongs = async (userId) => {
@@ -118,7 +126,7 @@ const getUser = async (userEmail) => {
   return user.rows[0];
 };
 
-const deleteUser = async(userId) => {
+const deleteUser = async (userId) => {
   return await db.query(`DELETE FROM ${usersTable} WHERE id = $1`, [userId]);
 }
 
