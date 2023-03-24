@@ -2,7 +2,9 @@
 require('dotenv').config()
 const { secrets } = require('docker-secret');
 const express = require('express');
-const app = express();
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
 const multer = require('multer');
 const { handleUpload } = require('./controllers/handleUpload');
 const { getSongs } = require('./controllers/getSongs');
@@ -13,13 +15,24 @@ const { getUser } = require('./controllers/getUser');
 const { handleDelete } = require('./controllers/deleteSong');
 const { getFavoriteSongs } = require('./controllers/getFavoriteSongs');
 const { editTitle } = require('./controllers/editTitle');
+
+// TO BE TURNED ON WITH SSL CERT/KEY
+// const privateKey  = fs.readFileSync('/Users/briankuzma/Desktop/HR/Kraken/SoundCrate/server/key.pem', 'utf8');
+// const certificate = fs.readFileSync('/Users/briankuzma/Desktop/HR/Kraken/SoundCrate/server/cert.pem', 'utf8');
+// const credentials = {key: privateKey, cert: certificate};
+
 const { handleDeleteUser } = require('./controllers/deleteUser');
 const upload = multer();
 const {artistBadge} = require('./controllers/artistBadge')
 
+
+const app = express();
+
+
 app.use(express.static('./client/dist'));
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 
 //ROUTES
 
@@ -47,8 +60,37 @@ app.get('/api/userBadge', artistBadge)
 
 const port = secrets.PORT || process.env.PORT || 3000;
 
-const server = app.listen(port, () => {
-  console.log(`listening on port ${port}...`);
-});
 
+
+// Key and Cert should be included as config for httpsServer when created.
+
+
+//NOT NEEDED
+// const httpPort = 3000;
+// const httpServer = http.createServer(app);
+// httpServer.listen(port, () => {
+//   console.log(`HTTP Server running on port ${port}`);
+// });
+
+let server = {};
+
+console.log(process.env.NODE_ENV)
+if (process.env.NODE_ENV === "production") {
+  const httpsPort = 443;
+  const httpsServer = https.createServer(credentials, app);
+  httpsServer.listen(httpsPort, () => {
+    console.log(`HTTPS Server running on port ${httpsPort}`);
+  });
+} else {
+  server = app.listen(port, () => {
+    console.log(`listening on port ${port}...`);
+  });
+};
+
+
+//EXPORT httpsServer <<<<<<<<<<<<<<<<
 module.exports = { app, server };
+
+
+
+
