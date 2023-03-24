@@ -70,7 +70,7 @@ export default function NewAccount({ changeView, profileData, setProfileData }) 
 
   return (
     <div>
-      Let's set up your new account!
+      Are you ready to set up your new account? Let's do it!
       <br /><br />
       <form>
         <div>
@@ -78,7 +78,7 @@ export default function NewAccount({ changeView, profileData, setProfileData }) 
             Profile Picture:
             <br /><img src={path_to_pic} /><br />
             <Button variant="contained" component="label">
-              Change
+              Update
               <input type="file" name="path" accept="image/*" onChange={(e) => handleFile(e)} style={{ display: 'none' }} required />
             </Button>
           </label>

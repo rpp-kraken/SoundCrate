@@ -13,6 +13,7 @@ const { getAllSongsHome } = require('./controllers/getAllSongsHome');
 const { newUser } = require('./controllers/newUser');
 const { getUser } = require('./controllers/getUser');
 const { handleDelete } = require('./controllers/deleteSong');
+const { getFavoriteSongs } = require('./controllers/getFavoriteSongs');
 const { editTitle } = require('./controllers/editTitle');
 
 // TO BE TURNED ON WITH SSL CERT/KEY
@@ -20,6 +21,7 @@ const { editTitle } = require('./controllers/editTitle');
 // const certificate = fs.readFileSync('/Users/briankuzma/Desktop/HR/Kraken/SoundCrate/server/cert.pem', 'utf8');
 // const credentials = {key: privateKey, cert: certificate};
 
+const { handleDeleteUser } = require('./controllers/deleteUser');
 const upload = multer();
 
 
@@ -37,12 +39,14 @@ app.use(express.json());
 app.get('/api/songs', getSongs);
 // app.get('/api/songSingle', getOneSong);
 app.get('/api/getAllSongsHome', getAllSongsHome);
+app.get('/api/getFavoriteSongs', getFavoriteSongs)
 app.post('/api/uploadSong', upload.fields([
   {name: 'audioFile', maxCount: 1},
   {name: 'imageFile', maxCount: 1}
 ]), handleUpload);
 app.put('/api/editTitle', editTitle);
 app.delete('/api/deleteSong', handleDelete);
+app.delete('/api/deleteUser', handleDeleteUser);
 
 // user routes
 app.get('/api/user', getUser);
