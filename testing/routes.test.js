@@ -218,7 +218,6 @@ describe('Reviews route', () => {
     });
   });
 
-<<<<<<< HEAD
   describe('PUT users route', function () {
     it('Should update a user\'s bio', async function () {
       const req = {
@@ -243,7 +242,6 @@ describe('Reviews route', () => {
     });
   });
 
-=======
   describe('DELETE route for /api/deleteUser', () => {
     it('should delete a user for a given id', async () => {
       // check the existing table
@@ -277,7 +275,6 @@ describe('Reviews route', () => {
 
 
   // HELPER FUNCTIONS
->>>>>>> dev
   const postSong = async (req, status = 201) => {
     const { body } = await request(app)
       .post('/api/uploadSong')
