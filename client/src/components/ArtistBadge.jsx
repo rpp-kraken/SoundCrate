@@ -11,7 +11,7 @@ export default function ArtistBadge({ username }) {
       .then((data) => {
         let tier1 = data.data.tier1
         let tier2 = data.data.tier2
-        let tier3 = true || data.data.tier3
+        let tier3 = data.data.tier3
         if (tier1) {
           setBadgeLevel('bronze-icon-badge.PNG')
         }
