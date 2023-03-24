@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 
 
-export default function NewAccount({ changeView, profileData }) {
+export default function NewAccount({ changeView, profileData, setProfileData }) {
   const [bio, setBio] = useState('');
   const [path_to_pic, setPath] = useState('');
   const [file, setFile] = useState('');
@@ -36,70 +36,70 @@ export default function NewAccount({ changeView, profileData }) {
     e.preventDefault();
 
     try {
-    const formData = new FormData();
-    formData.append("id", profileData.id);
-    formData.append("name", profileData.name);
-    formData.append("email", profileData.email);
-    formData.append("bio", bio);
-    formData.append("path_to_pic", path_to_pic);
-    formData.append("username", profileData.username);
-    formData.append("tier1", false);
-    formData.append("tier2", false);
-    formData.append("tier3", false);
-    formData.append("imageFile", file);
-
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+      const formData = new FormData();
+      formData.append("id", profileData.id);
+      formData.append("name", profileData.name);
+      formData.append("email", profileData.email);
+      formData.append("bio", bio);
+      formData.append("path_to_pic", path_to_pic);
+      formData.append("username", username);
+      formData.append("tier1", false);
+      formData.append("tier2", false);
+      formData.append("tier3", false);
+      formData.append("imageFile", file);
 
       const response = await fetch("/api/user", {
         method: "POST",
         body: formData
       });
       const data = await response.json();
-      console.log(data);
+      await setProfileData(data);
+
+      let newData = profileData;
+      newData.loggedIn = true;
+      await setProfileData(newData);
+
+      changeView('home');
     } catch (error) {
-      console.error(error);
+      console.error('error in user post', error);
     }
-
-  changeView('home');
-};
+  };
 
 
 
 
-return (
-  <div>
-    Let's set up your new account!
-    <br /><br />
-    <form>
-      <div>
-        <label htmlFor="path">
-          Profile Picture:
-          <br /><img src={path_to_pic} /><br />
-          <Button variant="contained" component="label">
-            Change
-            <input type="file" name="path" accept="image/*" onChange={(e) => handleFile(e)} style={{ display: 'none' }} required />
-          </Button>
-        </label>
-      </div>
-      <div>
-        <label htmlFor="username">
-          Username:
-          <input type="text" name="username" data-testid="username" onChange={(e) => handleChange(e)} />
-        </label>
-      </div>
-      <div>
-        <label htmlFor="bio">
-          Bio: <br />
-          <textarea rows="3" cols="30" name="bio" placeholder="Tell us about you..." onChange={(e) => handleChange(e)} ></textarea>
-          <br></br>
-        </label>
-      </div>
-    </form>
-    <Button variant="contained" component="label" onClick={(e) => onSubmit(e)}>
-      Submit
-    </Button>
-  </div>
-);
+  return (
+    <div>
+      Let's set up your new account!
+      <br /><br />
+      <form>
+        <div>
+          <label htmlFor="path">
+            Profile Picture:
+            <br /><img src={path_to_pic} /><br />
+            <Button variant="contained" component="label">
+              Change
+              <input type="file" name="path" accept="image/*" onChange={(e) => handleFile(e)} style={{ display: 'none' }} required />
+            </Button>
+          </label>
+        </div>
+        <div>
+          <label htmlFor="username">
+            Username:
+            <input type="text" name="username" data-testid="username" onChange={(e) => handleChange(e)} />
+          </label>
+        </div>
+        <div>
+          <label htmlFor="bio">
+            Bio: <br />
+            <textarea rows="3" cols="30" name="bio" placeholder="Tell us about you..." onChange={(e) => handleChange(e)} ></textarea>
+            <br></br>
+          </label>
+        </div>
+      </form>
+      <Button variant="contained" component="label" onClick={(e) => onSubmit(e)}>
+        Submit
+      </Button>
+    </div>
+  );
 }

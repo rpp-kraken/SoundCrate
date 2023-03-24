@@ -10,6 +10,7 @@ const handleUpload = async (req, res) => {
   const data = req.body;
   const audioFileData = req.files['audioFile'][0].buffer;
   const imageFileData = req.files['imageFile'][0].buffer;
+
   try {
     data.path_to_song = await uploadAudioFile(audioFileData);
     data.path_to_artwork = await uploadImageFile(imageFileData);
