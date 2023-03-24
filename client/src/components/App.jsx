@@ -122,7 +122,7 @@ export default function App() {
       case "play":
         return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} />;
       case "myReleasedMusic":
-        return <MyReleasedMusic changeView={changeView} />;
+        return <MyReleasedMusic changeView={changeView} profileData={profileData} />;
       case "confirmLogOut":
         return <ConfirmLogOut changeView={changeView} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "confirmDeleteAccount":

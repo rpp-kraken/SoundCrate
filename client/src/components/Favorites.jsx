@@ -3,7 +3,6 @@ import { createTheme } from '@mui/material/styles';
 import SongCardList from './SongCardList.jsx';
 
 export default function Favorites(props) {
-  console.log('these are the fav props: ', props);
   const [songs, setSongs] = useState();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
