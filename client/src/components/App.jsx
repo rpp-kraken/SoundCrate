@@ -4,10 +4,9 @@ import { CssBaseline, Box, Container } from '@mui/material/';
 import theme from '../themes/default.jsx';
 import ThemeExample from './ThemeExample.jsx';
 import TopBar from './TopBar.jsx';
-import Home from './Home.jsx'
+import Home from './Home.jsx';
 import Create from './Create.jsx';
 import Favorites from './Favorites.jsx';
-import Discover from './Discover.jsx'
 import NavBar from './NavBar.jsx';
 import NewAccount from '../components/login/NewAccount.jsx';
 import ArtistProfile from './ArtistProfile.jsx';
@@ -50,6 +49,7 @@ export default function App() {
         setSongAllHomeData(res.data);
       })
       .catch((err) => console.log(err));
+
   }, [])
 
   // Keeping commented out code for potential props handling in the future
