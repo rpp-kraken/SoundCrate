@@ -42,7 +42,6 @@ export default function App() {
   }, [view])
 
   useEffect(() => {
-
     axios.get(`/api/getAllSongsHome`)
       .then((res) => {
         console.log("Data from deployed DB: ", res.data);
@@ -80,22 +79,22 @@ export default function App() {
             Accept: 'application/json'
           }
         })
-          .then((res) => {
-            setProfileData(res.data);
-            return axios.get(`api/user/?userEmail=${res.data.email}`)
-          })
-          .then(res => {
-            let keys = Object.keys(res.data)
-            if (keys.length === 0) {
-              setView({ name: 'newAccount' });
-            } else {
-              let userData = res.data;
-              userData.loggedIn = true;
-              setProfileData(userData);
-              setView({ name: 'home' });
-            }
-          })
-          .catch((err) => console.log('error in oauth', err));
+        .then((res) => {
+          setProfileData(res.data);
+          return axios.get(`api/user/?userEmail=${res.data.email}`)
+        })
+        .then(res => {
+          let keys = Object.keys(res.data)
+          if (keys.length === 0) {
+            setView({ name: 'newAccount' });
+          } else {
+            let userData = res.data;
+            userData.loggedIn = true;
+            setProfileData(userData);
+            setView({ name: 'home' });
+          }
+        })
+        .catch((err) => console.log('error in oauth', err));
       }
     },
     [user]
@@ -133,11 +132,11 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} />}
+      <TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} />
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>
-      {<NavBar changeView={changeView} />}
+      <NavBar changeView={changeView} />
     </ThemeProvider>
   );
 }
