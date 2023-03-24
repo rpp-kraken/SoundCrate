@@ -7,7 +7,7 @@ export default function Favorites(props) {
   const [songs, setSongs] = useState();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    fetch(`http://localhost:3000/api/getSongs?user=${encodeURIComponent(props.profileData.name)}`)
+    fetch(`http://localhost:3000/api/songs?user=${encodeURIComponent(props.profileData.name)}`)
       .then(res => {
         if (!res.ok) {
           throw 'There was a problem retrieving the user\'s songs';
