@@ -10,7 +10,7 @@ export default function Favorites(props) {
     fetch(`http://localhost:3000/api/getSongs?user=${encodeURIComponent(props.profileData.name)}`)
       .then(res => {
         if (!res.ok) {
-          throw 'There was a problem retrieving the user\'s favorite songs';
+          throw 'There was a problem retrieving the user\'s songs';
         }
         return res.json();
       })
