@@ -141,6 +141,12 @@ const editProfilePic = async (newPic, userId) => {
   return db.query(`UPDATE ${usersTable} SET path_to_pic = $1 WHERE id = $2`, [newPic, userId]);
 }
 
+const getUserByid = async (id) => {
+  const user = await db.query(`SELECT * FROM ${usersTable} WHERE id = $1`, [id]);
+  if (!user.rows.length) return {};
+  return user.rows[0];
+};
+
 module.exports = {
-  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, getUserId, checkUser, editBio, deleteUser, editProfilePic
+  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, getUserId, checkUser, editBio, deleteUser, editProfilePic, getUserByid
 };
