@@ -2,7 +2,7 @@ const models = require('../models/index');
 
 module.exports = {
   getSongs: (req, res) => {
-    const user = req.query.user;
+    const user = req.query.user.replace('%20', ' ');
     models.getAllSongs(user)
       .then(songs => {
         res.json(songs);
