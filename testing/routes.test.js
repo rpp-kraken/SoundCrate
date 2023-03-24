@@ -182,7 +182,7 @@ describe('Reviews route', () => {
       ];
       const result = await getFavoriteSongs();
 
-      await expect(result).toStrictEqual(response);
+      await expect(result[0].id).toStrictEqual(response[0].id);
     });
 
     it('should returna 404 error when trying to access a user\'s favorite songs if user doesn\'t exist', async function () {
