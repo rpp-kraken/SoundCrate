@@ -30,6 +30,9 @@ export default function Create(props) {
   // const [activeSoundCard, setActiveSoundCard] = useState(1);
 
   useEffect(() => {
+
+    console.log("props.profileData, ", props.profileData)
+
     if (props.collaborateSongPath) {
       let trackUrlSources = [
         props.collaborateSongPath

@@ -4,10 +4,9 @@ import { CssBaseline, Box, Container } from '@mui/material/';
 import theme from '../themes/default.jsx';
 import ThemeExample from './ThemeExample.jsx';
 import TopBar from './TopBar.jsx';
-import Home from './Home.jsx'
+import Home from './Home.jsx';
 import Create from './Create.jsx';
 import Favorites from './Favorites.jsx';
-import Discover from './Discover.jsx'
 import NavBar from './NavBar.jsx';
 import NewAccount from '../components/login/NewAccount.jsx';
 import ArtistProfile from './ArtistProfile.jsx';
@@ -18,9 +17,11 @@ import Play from './Play.jsx';
 // import Publish from './Publish.jsx';
 import FourOhFour from './404.jsx';
 // import { songData } from '../../../DummyData/dummyData.js'
+import Splash from '../components/login/Splash.jsx';
 import axios from 'axios';
 
 export default function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState([]);
   const [profileData, setProfileData] = useState([]);
   const [artistData, setArtistData] = useState();
@@ -32,7 +33,7 @@ export default function App() {
   // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
   // View State changes on click
-  const [view, setView] = useState({ name: 'home' });
+  const [view, setView] = useState({ name: 'splash' });
 
   useEffect(() => {
     console.log("Changing view to: " + view.name);
@@ -49,6 +50,7 @@ export default function App() {
         setSongAllHomeData(res.data);
       })
       .catch((err) => console.log(err));
+
   }, [])
 
   // Keeping commented out code for potential props handling in the future
@@ -82,17 +84,17 @@ export default function App() {
         })
           .then((res) => {
             setProfileData(res.data);
+            setUser({});
             return axios.get(`api/user/?userEmail=${res.data.email}`)
           })
-          .then(res => {
+          .then(async (res) => {
             let keys = Object.keys(res.data)
             if (keys.length === 0) {
-              setView({ name: 'newAccount' });
+              changeView('newAccount');
             } else {
-              let userData = res.data;
-              userData.loggedIn = true;
-              setProfileData(userData);
-              setView({ name: 'home' });
+              setLoggedIn(true);
+              setProfileData(res.data);
+              changeView('home');
             }
           })
           .catch((err) => console.log('error in oauth', err));
@@ -103,26 +105,28 @@ export default function App() {
 
   const renderView = () => {
     switch (view.name) {
+      case "splash":
+        return <Splash />;
       case "home":
         return <Home songs={songAllHomeData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />;
       // case "discover":
       //   return <Discover changeView={changeView} />;
       case "create":
-        return <Create changeView={changeView} collaborateSongPath={collaborateSongPath}/>;
+        return <Create changeView={changeView} collaborateSongPath={collaborateSongPath} profileData={profileData} />;
       case "favorites":
-        return <Favorites changeView={changeView} />;
+        return <Favorites changeView={changeView} profileData={profileData} />;
       case "newAccount":
-        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} />;
+        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "profile":
-        return <ArtistProfile changeView={changeView} artistData={artistData} />;
+        return <ArtistProfile changeView={changeView} artistData={artistData} profileData={profileData} loggedIn={loggedIn} />;
       case "play":
-        return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} />;
+        return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} profileData={profileData}/>;
       case "myReleasedMusic":
-        return <MyReleasedMusic changeView={changeView} />;
+        return <MyReleasedMusic changeView={changeView} profileData={profileData} />;
       case "confirmLogOut":
-        return <ConfirmLogOut />;
+        return <ConfirmLogOut changeView={changeView} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "confirmDeleteAccount":
-        return <ConfirmDeleteAccount />;
+        return <ConfirmDeleteAccount changeView={changeView} />;
       case "theme":
         return <ThemeExample />;
       default:
@@ -133,7 +137,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} />}
+      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} setArtistData={setArtistData} loggedIn={loggedIn}/>}
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>

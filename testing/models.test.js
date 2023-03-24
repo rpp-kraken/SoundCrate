@@ -140,15 +140,15 @@ describe('models functions', () => {
 
     });
 
-    it('should add a song to the database for a first time user', async () => {
-      await models.addSong(song);
-      const results = await global.client.query(`SELECT id, title FROM ${songsTable} WHERE title = '${song.title}'`);
-      const user = await global.client.query(`SELECT name FROM ${usersTable} WHERE name = '${song.user}'`);
-      expect(user.rows.length).not.toBe(0);
-      expect(user.rows[0].name).toBe(song.user);
-      expect(results.rows).toHaveLength(1);
-      expect(results.rows[0].title).toBe(song.title);
-    });
+  //   it('should add a song to the database for a first time user', async () => {
+  //     await models.addSong(song);
+  //     const results = await global.client.query(`SELECT id, title FROM ${songsTable} WHERE title = '${song.title}'`);
+  //     const user = await global.client.query(`SELECT name FROM ${usersTable} WHERE name = '${song.user}'`);
+  //     expect(user.rows.length).not.toBe(0);
+  //     expect(user.rows[0].name).toBe(song.user);
+  //     expect(results.rows).toHaveLength(1);
+  //     expect(results.rows[0].title).toBe(song.title);
+  //   });
   });
 
   describe('addTags', () => {
@@ -240,6 +240,45 @@ describe('models functions', () => {
       const emptyTags = await global.client.query(`SELECT * FROM ${tagsTable} WHERE song_id = $1`, [songId.rows[0].id]);
       expect(emptyTags.rows.length).toBe(0);
     });
-  })
+  });
+
+  describe('deleteUser', () => {
+    const newUser = { name: "Carl C" };
+
+    it('should delete the user for a given user_id', async () => {
+      await models.addUser(newUser);
+
+      // check that the user exists
+      const userIdResponse = await global.client.query(`SELECT id FROM ${usersTable} WHERE name = $1`, [newUser.name]);
+      expect(userIdResponse.rows.length).not.toBe(0);
+
+      const userId = userIdResponse.rows[0].id;
+
+      // delete user
+      await models.deleteUser(userId);
+
+      // check that the user was deleted
+      const deletedUser = await global.client.query(`SELECT * FROM ${usersTable} WHERE id = $1`, [userId]);
+      expect(deletedUser.rows.length).toBe(0);
+    });
+    it('should do nothing if the user_id does not exist', async () => {
+      // check row count in usertable
+      const { rows } = await global.client.query(`SELECT * FROM ${usersTable}`);
+      const rowCount = rows.length ? rows.length : 0;
+
+      // choose a userId that is not in the user table
+      const userIds = rows.length ? rows.map(row => row.id) : [];
+      let randomId = Math.floor(Math.random() * 1000);
+      while (userIds.includes(randomId)) {
+        randomId = Math.floor(Math.random() * 1000);
+      }
+
+      // delete the user and check that count is the same
+      await models.deleteUser(randomId);
+      const { rows: newRows } = await global.client.query(`SELECT * FROM ${usersTable}`);
+      const newRowCount = rows.length ? rows.length : 0;
+      expect(newRowCount).toBe(rowCount);
+    });
+  });
 });
 

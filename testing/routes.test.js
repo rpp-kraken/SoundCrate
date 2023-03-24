@@ -34,12 +34,17 @@ describe('Reviews route', () => {
     await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_users (LIKE users INCLUDING ALL) ON COMMIT PRESERVE ROWS');
     await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_songs (LIKE songs INCLUDING ALL)');
     await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_tags (LIKE song_tags INCLUDING ALL) ON COMMIT PRESERVE ROWS');
+    await global.client.query('CREATE TEMPORARY TABLE IF NOT EXISTS temp_favorites (LIKE favorites INCLUDING ALL)');
     await global.client.query(`INSERT INTO temp_users (id, name, email, bio, path_to_pic, username)
       VALUES (1, 'calpal', 'cp@gmail.com', 'cool guy', 'path', 'cp')`);
     await global.client.query(`INSERT INTO temp_users (id, name, email, bio, path_to_pic, username)
       VALUES (2, 'Mindi Test 123', 'test@123test.com', 'my bio', 'path', 'mintest123')`);
     await global.client.query(`INSERT INTO temp_songs (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
       VALUES (1, 'yum', '2023-03-11T19:43:02+00:00', 'https://google.com', 1, 1, 'https://google.com', 1)`);
+    await global.client.query(`INSERT INTO temp_songs (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
+      VALUES (2, 'yums', '2023-03-11T19:43:02+00:00', 'https://google.com', 1, 1, 'https://google.com', 1)`);
+    await global.client.query(`INSERT INTO temp_favorites (id, user_id, song_id) VALUES (1, 1, 1)`);
+    await global.client.query(`INSERT INTO temp_favorites (id, user_id, song_id) VALUES (2, 1, 2)`);
   }, 10000);
 
   afterAll(async () => {
@@ -115,7 +120,7 @@ describe('Reviews route', () => {
       const { rows } = await global.client.query(`SELECT title, path_to_song, play_count, fav_count, path_to_artwork
         FROM temp_songs WHERE user_id = $1`, [1]);
 
-      expect(rows).toHaveLength(1);
+      expect(rows).toHaveLength(2);
       expect(rows[0]).toStrictEqual(response);
     });
 
@@ -138,14 +143,50 @@ describe('Reviews route', () => {
       const { rows } = await global.client.query(`SELECT id, title, path_to_song, play_count, fav_count, path_to_artwork
       FROM temp_songs WHERE user_id = $1`, [1]);
 
-      await expect(initialGet.rows).toHaveLength(1);
-      await expect(rows).toHaveLength(0);
+      await expect(initialGet.rows).toHaveLength(2);
+      await expect(rows).toHaveLength(1);
     });
 
     // skipping because is it more graceful to just do nothing in this instance?
     // The model does not throw an error. We can change if we would rather.
     it.skip('should return a 500 if songId is not in database', async function () {
       await deleteSongFail();
+    });
+  });
+
+  describe('Favorites routes', function () {
+    it('should get a user\'s favorite songs', async function () {
+      const response = [
+        {
+          "created_at": "2023-03-12T00:43:02.000Z",
+          "fav_count": 1,
+          "id": "1",
+          "path_to_artwork": "https://google.com",
+          "path_to_song": "https://google.com",
+          "play_count": 1,
+          "tags": [],
+          "title": "yum",
+          "user_id": "1"
+        },
+        {
+          "created_at": "2023-03-12T00:43:02.000Z",
+          "fav_count": 1,
+          "id": "2",
+          "path_to_artwork": "https://google.com",
+          "path_to_song": "https://google.com",
+          "play_count": 1,
+          "tags": [],
+          "title": "yums",
+          "user_id": "1"
+        }
+      ];
+      const result = await getFavoriteSongs();
+
+      await expect(result[0].id).toStrictEqual(response[0].id);
+    });
+
+    it('should returna 404 error when trying to access a user\'s favorite songs if user doesn\'t exist', async function () {
+      await getFavoriteSongsFail();
     });
   });
 
@@ -166,7 +207,7 @@ describe('Reviews route', () => {
       const { rows } = await global.client.query(`SELECT title FROM temp_songs WHERE user_id = $1`, [1]);
 
       expect(initialGet.rows[0].title).toStrictEqual('yum')
-      expect(rows[0].title).toStrictEqual(response.title);
+      expect(rows[1].title).toStrictEqual(response.title);
     });
 
     it('should send a 404 when trying to update title of song that does not exist', async function () {
@@ -177,6 +218,80 @@ describe('Reviews route', () => {
     });
   });
 
+  describe('PUT users route', function () {
+    it('Should update a user\'s bio', async function () {
+      const req = {
+        bio: 'the cooliest'
+      };
+
+      const initialGet = await global.client.query(`SELECT bio FROM temp_users WHERE id = $1`, [1]);
+
+      await updateBio(req, 204);
+
+      const { rows } = await global.client.query(`SELECT bio FROM temp_users WHERE id = $1`, [1]);
+
+      expect(initialGet.rows[0].bio).toStrictEqual('cool guy');
+      expect(rows[0].bio).toStrictEqual('the cooliest');
+    });
+
+    it('Should return a 404 for a user that doesn\'t exist', async function () {
+      const req = {
+        bio: 'the cooliest'
+      };
+      await updateProfileBioFail(req);
+    });
+
+    it('Should update a user\'s profile pic', async function () {
+      const imageFilePath = path.join(__dirname, 'mocks', 'cat.jpeg');
+      const req = {
+        imageFile: fs.readFileSync(imageFilePath)
+      };
+      await updateProfilePic(req);
+
+    });
+
+    it('Should return a 404 for a user that doesn\'t exist', async function () {
+      const imageFilePath = path.join(__dirname, 'mocks', 'cat.jpeg');
+      const req = {
+        imageFile: fs.readFileSync(imageFilePath)
+      };
+      await updateProfilePicFail(req);
+    });
+  });
+
+  describe('DELETE route for /api/deleteUser', () => {
+    it('should delete a user for a given id', async () => {
+      // check the existing table
+      const { rows, rowCount } = await global.client.query(`SELECT * FROM temp_users`);
+      expect(rowCount).not.toBe(0);
+
+      // call the deleteUser route with the first userId entry
+      const userId = rows[0].id;
+      await request(app).delete(`/api/deleteUser?userId=${userId}`);
+
+      // check that the user was deleted
+      const { rows: newRows, rowCount: newRowCount } = await global.client.query(`SELECT * FROM temp_users`);
+      expect(newRowCount).not.toBe(rowCount);
+    });
+
+    it('should do nothing for a nonexistent userId', async () => {
+      // check the existing table
+      const { rows, rowCount } = await global.client.query(`SELECT * FROM temp_users`);
+      expect(rowCount).not.toBe(0);
+
+      // call the deleteUser route with an invalid userId entry
+      const userId = 123456;
+      await request(app).delete(`/api/deleteUser?userId=${userId}`);
+
+      // check that the table is the same
+      const { rows: newRows, rowCount: newRowCount } = await global.client.query(`SELECT * FROM temp_users`);
+      expect(newRowCount).toBe(rowCount);
+      expect(newRows).toEqual(rows);
+    });
+  });
+
+
+  // HELPER FUNCTIONS
   const postSong = async (req, status = 201) => {
     const { body } = await request(app)
       .post('/api/uploadSong')
@@ -204,7 +319,7 @@ describe('Reviews route', () => {
       .field('tags', req.tags)
       .expect(status);
     return body;
-  }
+  };
 
   const getSongs = async (req, status = 200) => {
     const { body } = await request(app)
@@ -234,6 +349,20 @@ describe('Reviews route', () => {
     return body;
   };
 
+  const getFavoriteSongs = async (status = 200) => {
+    const { body } = await request(app)
+      .get('/api/getFavoriteSongs?user=calpal')
+      .expect(status);
+    return body;
+  };
+
+  const getFavoriteSongsFail = async (status = 404) => {
+    const { body } = await request(app)
+      .get('/api/getFavoriteSongs?user=aaron')
+      .expect(status);
+    return body;
+  };
+
   const updateTitle = async (req, status = 204) => {
     const { body } = await request(app)
       .put('/api/editTitle?songId=1')
@@ -246,6 +375,38 @@ describe('Reviews route', () => {
     const { body } = await request(app)
       .put('/api/editTitle?songId=5')
       .send(req)
+      .expect(status);
+    return body;
+  };
+
+  const updateBio = async (req, status = 204) => {
+    const { body } = await request(app)
+      .put('/api/editProfileBio?userId=1')
+      .send(req)
+      .expect(status);
+    return body;
+  };
+
+  const updateProfileBioFail = async (req, status = 404) => {
+    const { body } = await request(app)
+      .put('/api/editProfileBio?userId=7')
+      .send(req)
+      .expect(status);
+    return body;
+  };
+
+  const updateProfilePic = async (req, status = 204) => {
+    const { body } = await request(app)
+      .put('/api/editProfilePic?userId=1')
+      .field('imageFile', req.imageFile, 'cat.jpeg')
+      .expect(status);
+    return body;
+  };
+
+  const updateProfilePicFail = async (req, status = 404) => {
+    const { body } = await request(app)
+      .put('/api/editProfilePic?userId=7')
+      .field('imageFile', req.imageFile, 'cat.jpeg')
       .expect(status);
     return body;
   };

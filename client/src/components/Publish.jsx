@@ -98,15 +98,16 @@ export const Publish = (props) => {
 
       // console.log('here is type of song', typeof props.song);
 
-      const formData = new FormData();
-      formData.append('audioFile', props.song);
-      formData.append('title', title);
-      formData.append('created_at', new Date().toISOString());
-      formData.append('play_count', 0);
-      formData.append('fav_count', 0);
-      formData.append('user', 'calpal');
-      formData.append('imageFile', image);
-      formData.append('tags', tagsString);
+    const formData = new FormData();
+    formData.append('audioFile', props.song);
+    formData.append('title', title);
+    formData.append('created_at', new Date().toISOString());
+    formData.append('play_count', 0);
+    formData.append('fav_count', 0);
+    formData.append('user', `${props.username}`);
+    formData.append('userId', `${props.id}`);
+    formData.append('imageFile', image);
+    formData.append('tags', tagsString);
 
       console.log(formData);
       props.changeView('myReleasedMusic');

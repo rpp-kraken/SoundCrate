@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 
 
-export default function NewAccount({ changeView, profileData, setProfileData }) {
+export default function NewAccount({ changeView, profileData, setProfileData, setLoggedIn }) {
   const [bio, setBio] = useState('');
   const [path_to_pic, setPath] = useState('');
   const [file, setFile] = useState('');
@@ -52,13 +52,10 @@ export default function NewAccount({ changeView, profileData, setProfileData }) 
         method: "POST",
         body: formData
       });
+
       const data = await response.json();
-      await setProfileData(data);
-
-      let newData = profileData;
-      newData.loggedIn = true;
-      await setProfileData(newData);
-
+      setProfileData(data);
+      setLoggedIn(true);
       changeView('home');
     } catch (error) {
       console.error('error in user post', error);
@@ -66,11 +63,9 @@ export default function NewAccount({ changeView, profileData, setProfileData }) 
   };
 
 
-
-
   return (
     <div>
-      Let's set up your new account!
+      Are you ready to set up your new account? Let's do it!
       <br /><br />
       <form>
         <div>
@@ -78,7 +73,7 @@ export default function NewAccount({ changeView, profileData, setProfileData }) 
             Profile Picture:
             <br /><img src={path_to_pic} /><br />
             <Button variant="contained" component="label">
-              Change
+              Update
               <input type="file" name="path" accept="image/*" onChange={(e) => handleFile(e)} style={{ display: 'none' }} required />
             </Button>
           </label>
