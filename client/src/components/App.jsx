@@ -83,6 +83,7 @@ export default function App() {
         })
           .then((res) => {
             setProfileData(res.data);
+            setUser({});
             return axios.get(`api/user/?userEmail=${res.data.email}`)
           })
           .then(async (res) => {
@@ -129,7 +130,7 @@ export default function App() {
       case "myReleasedMusic":
         return <MyReleasedMusic changeView={changeView} />;
       case "confirmLogOut":
-        return <ConfirmLogOut />;
+        return <ConfirmLogOut changeView={changeView} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "confirmDeleteAccount":
         return <ConfirmDeleteAccount />;
       case "theme":
@@ -142,7 +143,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} setArtistData={setArtistData} loggedIn={loggedIn} />}
+      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} setArtistData={setArtistData} loggedIn={loggedIn}/>}
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>
