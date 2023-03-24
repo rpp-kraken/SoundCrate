@@ -21,19 +21,29 @@ import FourOhFour from './404.jsx';
 import axios from 'axios';
 
 export default function App() {
+    // View State changes on click
+  const [view, setView] = useState({ name: 'home' });
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState([]);
   const [profileData, setProfileData] = useState([]);
   const [artistData, setArtistData] = useState();
   const [songData, setSongData] = useState();
   const [songAllHomeData, setSongAllHomeData] = useState([]);
-  // const [changeNavBar, setChangeNavBar] = useState(0);
-
   const [collaborateSongPath, setCollaborateSongPath] = useState(null);
-  // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
-  // View State changes on click
-  const [view, setView] = useState({ name: 'home' });
+  const [data, setData] = useState({
+    loggedIn: false,
+    user: null,
+    profile: null,
+    artist: null,
+    song: null,
+    allSongs: null,
+    collaborateSongPath: null,
+  })
+
+  const handleUpdateData = (key, val) => {
+    setData({ ...data, key: val });
+  }
 
   useEffect(() => {
     console.log("Changing view to: " + view.name);
@@ -60,12 +70,6 @@ export default function App() {
     //   setView({ name, viewProps: { ...someProps, ...moreProps } });
     // };
   };
-
-  const handleSetArtistSongData = (artistData, songData) => {
-    console.log(artistData, songData);
-    setArtistData(artistData);
-    setSongData(songData);
-  }
 
   const handleSetUser = (data) => {
     setUser(data);
@@ -103,19 +107,19 @@ export default function App() {
   const renderView = () => {
     switch (view.name) {
       case "home":
-        return <Home songs={songAllHomeData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />;
+        return <Home songs={songAllHomeData} changeView={changeView} handleUpdateData={handleUpdateData} />;
       // case "discover":
       //   return <Discover changeView={changeView} />;
       case "create":
-        return <Create changeView={changeView} collaborateSongPath={collaborateSongPath} />;
+        return <Create changeView={changeView} handleUpdateData={handleUpdateData} />;
       case "favorites":
         return <Favorites changeView={changeView} />;
       case "newAccount":
-        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
+        return <NewAccount changeView={changeView} profileData={profileData} handleUpdateData={handleUpdateData} />;
       case "profile":
-        return <ArtistProfile changeView={changeView} artistData={artistData} profileData={profileData} loggedIn={loggedIn} />;
+        return <ArtistProfile changeView={changeView} data={data} handledUpdateData={handleUpdateData} />;
       case "play":
-        return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} />;
+        return <Play changeView={changeView} songData={data.song} handleUpdateData={handleUpdateData} />;
       case "myReleasedMusic":
         return <MyReleasedMusic changeView={changeView} />;
       case "confirmLogOut":

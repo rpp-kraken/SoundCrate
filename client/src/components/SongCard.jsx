@@ -43,62 +43,52 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
     setLiked(!liked);
   };
 
+  const cardStyle = {
+    margin: '15px',
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.text.primary,
+    borderRadius: 0,
+    minHeight: '16vh',
+    maxHeight: '16vh',
+    cursor: 'pointer',
+    transition: 'transform 0.2s ease-in-out',
+      '&:hover': {
+        transform: 'scale(1.02)',
+    }
+  }
+
+  const handleSongClick = () => {
+    // handleSetArtistSongData(null, {
+    //   title,
+    //   artist,
+    //   artistImageUrl,
+    //   likedCount,
+    //   play_count,
+    //   path_to_song
+    // });
+    changeView('play');
+  }
+
+  const handleArtistClick = (e) => {
+    e.stopPropagation();
+    handleSetArtistSongData({artist}, null);
+    changeView('profile');
+  }
+
   return (
     <Card
       className={classes.card}
       raised
-      style={{
-        margin: '15px',
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.text.primary,
-        borderRadius: 0,
-        minHeight: '16vh',
-        maxHeight: '16vh',
-        cursor: 'pointer',
-        transition: 'transform 0.2s ease-in-out',
-        '&:hover': {
-          transform: 'scale(1.02)',
-        },
-      }}
-      onClick={() => {
-        handleSetArtistSongData(null, {
-          title,
-          artist,
-          artistImageUrl,
-          likedCount,
-          play_count,
-          path_to_song
-        });
-        changeView('play');
-      }}
+      style={{ ...cardStyle }}
+      onClick={() => handleSongClick()}
     >
-    {/* {playViewOpen && (
-      <Play
-        title={title}
-        artist={artist}
-        artistImageUrl={artistImageUrl}
-        likedCount={likedCount}
-        playCount={playCount}
-        trackUrl={path_to_song}
-        handleClose={handleClosePlayView}
-      />
-    )}
-
-        {otherArtistViewOpen && <ProfileOtherArtist
-          artist={artist}
-          handleClose={handleOtherArtistProfileClose} />} */}
-
       <CardContent className={classes.content}>
         <Typography variant="h5" component="h5" style={{ fontSize: '1.25rem' }}>
           {title}
         </Typography>
         <Typography
           variant="subtitle1"
-          onClick={(event) => {
-            event.stopPropagation();
-            handleSetArtistSongData({artist}, null);
-            changeView('profile');
-          }}
+          onClick={(event) => { handleArtistClick(event) }}
           style={{ cursor: 'pointer', marginTop: '8px' }}
         >
           {artist}

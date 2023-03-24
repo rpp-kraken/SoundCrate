@@ -7,7 +7,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { songData } from '../../../DummyData/dummyData.js';
 import SongCardList from './SongCardList.jsx';
 
-export default function ArtistProfile({ artistData, profileData, changeView, loggedIn, handleSetArtistSongData }) {
+export default function ArtistProfile({ changeView, data, handleSetArtistSongData }) {
   const theme = useTheme();
   const gridItemStyle = {
     display: 'flex',
@@ -32,17 +32,17 @@ export default function ArtistProfile({ artistData, profileData, changeView, log
         </Grid>
 
         <Grid item xs={12} sx={{ ...gridItemStyle }}>
-          <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center', marginTop: '10px' }}>{artistData.name}</Typography>
+          <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center', marginTop: '10px' }}>{data.artist.name}</Typography>
         </Grid>
 
         <Grid container direction='col' style={{ ...gridItemStyle, fontSize: '12px' }}>
 
           <Grid item xs={12} sx={{ ...gridItemStyle }}>
-            <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center', marginTop: '10px' }}>@{artistData.username}</Typography>
+            <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center', marginTop: '10px' }}>@{data.artist.username}</Typography>
           </Grid>
 
           <Grid item xs={12} sx={{ ...gridItemStyle }}>
-            <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center' }}>{artistData.bio}</Typography>
+            <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center' }}>{data.artist.bio}</Typography>
           </Grid>
 
         </Grid>
@@ -61,7 +61,7 @@ export default function ArtistProfile({ artistData, profileData, changeView, log
 
         </Grid>
 
-        {(loggedIn && artistData.username === profileData.username) && <Grid item xs={12} sx={{ ...gridItemStyle }}>
+        {(data.loggedIn && data.artist.username === data.profile.username) && <Grid item xs={12} sx={{ ...gridItemStyle }}>
             <Button variant="contained" component="label">
               Edit Profile
               <input type="submit" onClick={() => handleEditProfile()} style={{ display: 'none' }} />
@@ -69,7 +69,7 @@ export default function ArtistProfile({ artistData, profileData, changeView, log
           </Grid>}
 
       </Grid>
-      <SongCardList songs={songData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />
+      <SongCardList changeView={changeView} data={data} handleUpdateData={handleUpdateData} />
     </Box>
   );
 }
