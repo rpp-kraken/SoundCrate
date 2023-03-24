@@ -29,4 +29,4 @@ export default function Favorites(props) {
         : <SongCardList songs={songs} />}
     </div>
   );
-}
+};
