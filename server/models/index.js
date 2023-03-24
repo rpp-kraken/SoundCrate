@@ -5,6 +5,7 @@ const { v4: uuid } = require('uuid');
 const songsTable = process.env.NODE_ENV === 'test' ? 'temp_songs' : 'songs';
 const usersTable = process.env.NODE_ENV === 'test' ? 'temp_users' : 'users';
 const tagsTable = process.env.NODE_ENV === 'test' ? 'temp_tags' : 'song_tags';
+const favoritesTable = process.env.NODE_ENV === 'test' ? 'temp_favorites' : 'favorites';
 
 const addSong = async (data) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
@@ -89,12 +90,75 @@ const addUser = async (data) => {
       data.username, data.tier1, data.tier2, data.tier3]);
 };
 
+const getUsersFavoriteSongs = async (userId) => {
+  return db.query(`SELECT
+    ${songsTable}.*,
+    ${usersTable}.id AS user_id,
+    COALESCE(ARRAY_AGG(${tagsTable}.name) FILTER (WHERE ${tagsTable}.name IS NOT NULL), ARRAY[]::text[]) AS tags
+  FROM
+    ${usersTable}
+  JOIN
+    ${favoritesTable} ON ${usersTable}.id = ${favoritesTable}.user_id
+  JOIN
+    ${songsTable} ON ${favoritesTable}.song_id = ${songsTable}.id
+  LEFT JOIN
+    ${tagsTable} ON ${songsTable}.id = ${tagsTable}.song_id
+  WHERE
+    ${usersTable}.id = $1
+  GROUP BY
+    ${songsTable}.id, ${usersTable}.id;
+`, [userId]);
+};
+
 const getUser = async (userEmail) => {
   const user = await db.query(`SELECT * FROM ${usersTable} WHERE email = $1`, [userEmail]);
   if (!user.rows.length) return {};
   return user.rows[0];
 };
 
+const deleteUser = async(userId) => {
+  return await db.query(`DELETE FROM ${usersTable} WHERE id = $1`, [userId]);
+}
+
+const getUserId = async (user) => {
+  const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = $1`, [user]);
+  if (!userId.rows.length) return {};
+  return userId.rows[0].id;
+};
+
+const checkUser = async (userId) => {
+  const user = await db.query(`SELECT * FROM ${usersTable} WHERE id = $1`, [userId]);
+  if (!user.rows.length) return {};
+  return user.rows[0].id;
+};
+
+const editBio = async (userId, newBio) => {
+  return db.query(`UPDATE ${usersTable} SET bio = $1 WHERE id = $2`, [newBio, userId]);
+};
+
+const editProfilePic = async (newPic, userId) => {
+  return db.query(`UPDATE ${usersTable} SET path_to_pic = $1 WHERE id = $2`, [newPic, userId]);
+}
+
+const getUserByid = async (id) => {
+  const user = await db.query(`SELECT * FROM ${usersTable} WHERE id = $1`, [id]);
+  if (!user.rows.length) return {};
+  return user.rows[0];
+}
+
+const playCountIncrementModel = async (songId) => {
+
+  const query = {
+    text: `UPDATE ${songsTable} SET play_count = play_count + 1 WHERE id = $1`,
+    values: [songId],
+  };
+
+  const result = await db.query(query);
+  return result.rowCount;
+
+
+};
+
 module.exports = {
-  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle
+  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, getUserId, checkUser, playCountIncrementModel, editBio, deleteUser, editProfilePic, getUserByid
 };

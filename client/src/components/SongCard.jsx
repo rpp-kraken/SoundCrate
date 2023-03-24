@@ -6,6 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@mui/material/Box';
 import Play from './Play.jsx';
 import Stack from '@mui/material/Stack';
+import ArtistBadge from './ArtistBadge.jsx'
+
 
 const useStyles = makeStyles({
   card: {
@@ -31,7 +33,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView }) {
+export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView, id }) {
   const theme = useTheme();
   const [liked, setLiked] = useState(isLiked);
   const [playViewOpen, setPlayViewOpen] = useState(false);
@@ -39,8 +41,6 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
 
 
   const classes = useStyles();
-
-
 
   // Favorite Song Event Handling
   const handleLikeClick = (event) => {
@@ -74,68 +74,42 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
             artistImageUrl,
             likedCount,
             play_count,
-            path_to_song
+            path_to_song,
+            id
           }
         );
         changeView('play');
-      }
-      }
->
-  {/* {playViewOpen && (
-    <Play
-      title={title}
-      artist={artist}
-      artistImageUrl={artistImageUrl}
-      likedCount={likedCount}
-      playCount={playCount}
-      trackUrl={path_to_song}
-      handleClose={handleClosePlayView}
-    />
-  )}
-
-      {otherArtistViewOpen && <ProfileOtherArtist
-        artist={artist}
-        handleClose={handleOtherArtistProfileClose} />} */}
-
-  <CardContent className={classes.content}>
-    <Typography variant="h5" component="h5" style={{ fontSize: '1.25rem' }}>
-      {title}
-    </Typography>
-    <Typography
-      variant="subtitle1"
-      onClick={(event) => {
-            event.stopPropagation();
-            handleSetArtistSongData(
-              {
-                artist
-              }, null
-            );
-            changeView('profile');
-          }
-          }
-      style={{ cursor: 'pointer', marginTop: '8px' }}
+      }}
     >
-      {artist}
-    </Typography>
-    <Stack direction="row" alignItems="center" spacing={2} mt={1}>
-      <IconButton onClick={handleLikeClick}>
-        {liked ? <Favorite /> : <FavoriteBorder />}
-      </IconButton>
-      <Typography variant="body2" color="textSecondary" component="span">
-        {likedCount}
-      </Typography>
-      <Typography variant="body2" color="textSecondary" component="span">
-      🎵 {play_count} Plays
-      </Typography>
-    </Stack>
-  </CardContent>
-  <CardMedia className={classes.media} component="img" image={`${artistImageUrl}`} />
-</Card>
-
-
-
-
-
-
+      <CardContent className={classes.content}>
+        <Typography variant="h5" component="h5" style={{ fontSize: '1.25rem' }}>
+          {title}
+        </Typography>
+        <Typography
+          variant="subtitle1"
+          onClick={(event) => {
+            event.stopPropagation();
+            handleSetArtistSongData({ artist }, null);
+            changeView('profile');
+          }}
+          style={{ cursor: 'pointer', marginTop: '8px' }}
+        >
+          {artist}
+          <ArtistBadge username={artist}/>
+        </Typography>
+        <Stack direction="row" alignItems="center" spacing={1} mt={1}>
+          <IconButton onClick={handleLikeClick}>
+            {liked ? <Favorite /> : <FavoriteBorder />}
+          </IconButton>
+          <Typography variant="body2" color="textSecondary" component="span">
+            {likedCount}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="span">
+            {`🎧 ${play_count}`}
+          </Typography>
+        </Stack>
+      </CardContent>
+      <CardMedia className={classes.media} component="img" image={`${artistImageUrl}`} />
+    </Card>
   );
 }

@@ -4,10 +4,9 @@ import { CssBaseline, Box, Container } from '@mui/material/';
 import theme from '../themes/default.jsx';
 import ThemeExample from './ThemeExample.jsx';
 import TopBar from './TopBar.jsx';
-import Home from './Home.jsx'
+import Home from './Home.jsx';
 import Create from './Create.jsx';
 import Favorites from './Favorites.jsx';
-import Discover from './Discover.jsx'
 import NavBar from './NavBar.jsx';
 import NewAccount from '../components/login/NewAccount.jsx';
 import ArtistProfile from './ArtistProfile.jsx';
@@ -21,6 +20,7 @@ import FourOhFour from './404.jsx';
 import axios from 'axios';
 
 export default function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState([]);
   const [profileData, setProfileData] = useState([]);
   const [artistData, setArtistData] = useState();
@@ -49,6 +49,7 @@ export default function App() {
         setSongAllHomeData(res.data);
       })
       .catch((err) => console.log(err));
+
   }, [])
 
   // Keeping commented out code for potential props handling in the future
@@ -82,16 +83,16 @@ export default function App() {
         })
           .then((res) => {
             setProfileData(res.data);
+            setUser({});
             return axios.get(`api/user/?userEmail=${res.data.email}`)
           })
-          .then(res => {
+          .then(async (res) => {
             let keys = Object.keys(res.data)
             if (keys.length === 0) {
               setView({ name: 'newAccount' });
             } else {
-              let userData = res.data;
-              userData.loggedIn = true;
-              setProfileData(userData);
+              setLoggedIn(true);
+              setProfileData(res.data);
               setView({ name: 'home' });
             }
           })
@@ -108,19 +109,19 @@ export default function App() {
       // case "discover":
       //   return <Discover changeView={changeView} />;
       case "create":
-        return <Create changeView={changeView} collaborateSongPath={collaborateSongPath}/>;
+        return <Create changeView={changeView} collaborateSongPath={collaborateSongPath} />;
       case "favorites":
         return <Favorites changeView={changeView} />;
       case "newAccount":
-        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} />;
+        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "profile":
-        return <ArtistProfile changeView={changeView} artistData={artistData} />;
+        return <ArtistProfile changeView={changeView} artistData={artistData} profileData={profileData} loggedIn={loggedIn} />;
       case "play":
         return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} />;
       case "myReleasedMusic":
         return <MyReleasedMusic changeView={changeView} />;
       case "confirmLogOut":
-        return <ConfirmLogOut />;
+        return <ConfirmLogOut changeView={changeView} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "confirmDeleteAccount":
         return <ConfirmDeleteAccount />;
       case "theme":
@@ -133,7 +134,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} />}
+      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} setArtistData={setArtistData} loggedIn={loggedIn}/>}
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>

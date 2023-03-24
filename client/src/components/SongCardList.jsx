@@ -7,6 +7,7 @@ export default function SongCardList({ songs, handleSetArtistSongData, changeVie
   return (
     <div className="songCardList">
       {songs.map((song, i) => {
+       {console.log(song)}
         return (
           <SongCard
             title={song.title}
@@ -15,6 +16,7 @@ export default function SongCardList({ songs, handleSetArtistSongData, changeVie
             artistImageUrl={song.path_to_artwork}
             likedCount={song.fav_count}
             play_count={song.play_count}
+            id={song.id}
             key={i}
             handleSetArtistSongData={handleSetArtistSongData}
             changeView={changeView} />

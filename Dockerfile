@@ -9,6 +9,9 @@ COPY package*.json .
 RUN npm install --legacy-peer-deps
 COPY . .
 
+# Expose port 443 for HTTPS
+EXPOSE 443
+
 # Build the webpack bundle
 RUN npm run build
 
