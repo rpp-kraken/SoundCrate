@@ -23,7 +23,7 @@ export default function ArtistBadge({ username }) {
         }
       })
       .catch((err) => {
-        throw err
+        console.error(err)
       })
   }, [])
   if(!badgeLevelIcon) {
