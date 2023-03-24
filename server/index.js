@@ -52,13 +52,9 @@ app.post('/api/user', upload.fields([
 
 const port = secrets.PORT || process.env.PORT || 3000;
 
-//OLD SERVER
-const server = app.listen(port, () => {
-  console.log(`listening on port ${port}...`);
-});
 
 
-
+// Key and Cert should be included as config for httpsServer when created.
 
 
 //NOT NEEDED
@@ -68,13 +64,21 @@ const server = app.listen(port, () => {
 //   console.log(`HTTP Server running on port ${port}`);
 // });
 
-// TURN ON ONCE SSL CERT/KEY ADDED
+let server = {};
 
-// const httpsPort = 443;
-// const httpsServer = https.createServer(app);
-// httpsServer.listen(httpsPort, () => {
-//   console.log(`HTTPS Server running on port ${httpsPort}`);
-// });
+console.log(process.env.NODE_ENV)
+if (process.env.NODE_ENV === "production") {
+  const httpsPort = 443;
+  const httpsServer = https.createServer(credentials, app);
+  httpsServer.listen(httpsPort, () => {
+    console.log(`HTTPS Server running on port ${httpsPort}`);
+  });
+} else {
+  server = app.listen(port, () => {
+    console.log(`listening on port ${port}...`);
+  });
+};
+
 
 //EXPORT httpsServer <<<<<<<<<<<<<<<<
 module.exports = { app, server };
