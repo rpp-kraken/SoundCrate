@@ -15,7 +15,6 @@ export default function Favorites(props) {
         return res.json();
       })
       .then(songs => {
-        console.log(songs);
         setSongs(songs);
         setLoading(false);
       })
