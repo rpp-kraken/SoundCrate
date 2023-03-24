@@ -7,7 +7,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { songData } from '../../../DummyData/dummyData.js';
 import SongCardList from './SongCardList.jsx';
 
-export default function ArtistProfile({ artistData, changeView, handleSetArtistSongData}) {
+export default function ArtistProfile({ artistData, changeView }) {
   const theme = useTheme();
   const gridItemStyle = {
     display: 'flex',
@@ -19,26 +19,30 @@ export default function ArtistProfile({ artistData, changeView, handleSetArtistS
     changeView('home');
   };
 
+  const handleEditProfile = () => {
+    console.log('clicked to edit profile');
+  }
+
   return (
     <Box id='profile-header' sx={{ width: '100%' }} p={0}>
       <Grid container direction='column' spacing={0} p={4} sx={{ backgroundColor: '#000000', height: 'fit-content' }}>
 
         <Grid item xs={12} sx={{ ...gridItemStyle }}>
-          <Avatar alt="Profile Picture" style={{ height: '100px', width: '100px' }} />
+          <Avatar alt="Profile Picture" src={artistData.path_to_pic} style={{ height: '100px', width: '100px' }} />
         </Grid>
 
         <Grid item xs={12} sx={{ ...gridItemStyle }}>
-          <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center', marginTop: '10px' }}>{artistData.artist}</Typography>
+          <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center', marginTop: '10px' }}>{artistData.name}</Typography>
         </Grid>
 
         <Grid container direction='col' style={{ ...gridItemStyle, fontSize: '12px' }}>
 
           <Grid item xs={12} sx={{ ...gridItemStyle }}>
-            <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center', marginTop: '10px' }}>@{artistData.artist}</Typography>
+            <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center', marginTop: '10px' }}>@{artistData.username}</Typography>
           </Grid>
 
           <Grid item xs={12} sx={{ ...gridItemStyle }}>
-            <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center' }}>~Some bio here~</Typography>
+            <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center' }}>{artistData.bio}</Typography>
           </Grid>
 
         </Grid>
@@ -56,8 +60,16 @@ export default function ArtistProfile({ artistData, changeView, handleSetArtistS
           </Grid>
 
         </Grid>
+
+        {(loggedIn && artistData.username === profileData.username) && <Grid item xs={12} sx={{ ...gridItemStyle }}>
+            <Button variant="contained" component="label">
+              Edit Profile
+              <input type="submit" onClick={() => handleEditProfile()} style={{ display: 'none' }} />
+            </Button>
+          </Grid>}
+
       </Grid>
-      <SongCardList songs={songData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />
+      <SongCardList songs={ songData } />
     </Box>
   );
 }
