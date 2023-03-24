@@ -13,7 +13,7 @@ const { getUser } = require('./controllers/getUser');
 const { handleDelete } = require('./controllers/deleteSong');
 const { getFavoriteSongs } = require('./controllers/getFavoriteSongs');
 const { editTitle } = require('./controllers/editTitle');
-const { editProfileBio } = require('./controllers/editProfile');
+const { editProfileBio } = require('./controllers/editProfileBio');
 const upload = multer();
 
 app.use(express.static('./client/dist'));
