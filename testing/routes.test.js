@@ -218,6 +218,23 @@ describe('Reviews route', () => {
     });
   });
 
+  describe('PUT users route', function () {
+    it('Should update a user\'s bio', async function () {
+      const req = {
+        bio: 'the cooliest'
+      };
+
+      const initialGet = await global.client.query(`SELECT bio FROM temp_users WHERE id = $1`, [1]);
+
+      await updateBio(req, 204);
+
+      const { rows } = await global.client.query(`SELECT bio FROM temp_users WHERE id = $1`, [1]);
+
+      expect(initialGet.rows[0].bio).toStrictEqual('cool guy');
+      expect(rows[0].bio).toStrictEqual('the cooliest');
+    });
+  });
+
   const postSong = async (req, status = 201) => {
     const { body } = await request(app)
       .post('/api/uploadSong')
@@ -300,6 +317,14 @@ describe('Reviews route', () => {
   const updateTitleFail = async (req, status = 404) => {
     const { body } = await request(app)
       .put('/api/editTitle?songId=5')
+      .send(req)
+      .expect(status);
+    return body;
+  };
+
+  const updateBio = async (req, status = 204) => {
+    const { body } = await request(app)
+      .put('/api/editProfileBio')
       .send(req)
       .expect(status);
     return body;
