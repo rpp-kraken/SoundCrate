@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { createTheme } from '@mui/material/styles';
 import { Button } from '@mui/material';
 
-export default function ConfirmLogOut({ setLoggedIn }) {
+export default function ConfirmLogOut({ changeView, setProfileData, setLoggedIn }) {
   const handleLogout = () => {
-    console.log('log out');
+    setProfileData({})
     setLoggedIn(false);
+    changeView('home');
   }
 
   const handleCancel = () => {
-    console.log('no thanks')
+    changeView('home');
   }
 
   return (

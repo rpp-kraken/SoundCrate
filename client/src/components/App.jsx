@@ -121,7 +121,7 @@ export default function App() {
       case "myReleasedMusic":
         return <MyReleasedMusic changeView={changeView} />;
       case "confirmLogOut":
-        return <ConfirmLogOut setLoggedIn={setLoggedIn} />;
+        return <ConfirmLogOut changeView={changeView} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "confirmDeleteAccount":
         return <ConfirmDeleteAccount />;
       case "theme":
