@@ -116,6 +116,10 @@ const getUser = async (userEmail) => {
   return user.rows[0];
 };
 
+const deleteUser = async(userId) => {
+  return await db.query(`DELETE FROM ${usersTable} WHERE id = $1`, [userId]);
+}
+
 const getUserId = async (user) => {
   const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = $1`, [user]);
   if (!userId.rows.length) return {};
@@ -133,5 +137,5 @@ const editBio = async (userId, newBio) => {
 };
 
 module.exports = {
-  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, getUserId, checkUser, editBio
+  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, getUserId, checkUser, editBio, deleteUser
 };

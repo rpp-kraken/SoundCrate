@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 
 
-export default function NewAccount({ changeView, profileData, setProfileData }) {
+export default function NewAccount({ changeView, profileData, setProfileData, setLoggedIn }) {
   const [bio, setBio] = useState('');
   const [path_to_pic, setPath] = useState('');
   const [file, setFile] = useState('');
@@ -52,20 +52,15 @@ export default function NewAccount({ changeView, profileData, setProfileData }) 
         method: "POST",
         body: formData
       });
+
       const data = await response.json();
-      await setProfileData(data);
-
-      let newData = profileData;
-      newData.loggedIn = true;
-      await setProfileData(newData);
-
+      setProfileData(data);
+      setLoggedIn(true);
       changeView('home');
     } catch (error) {
       console.error('error in user post', error);
     }
   };
-
-
 
 
   return (

@@ -21,6 +21,7 @@ import FourOhFour from './404.jsx';
 import axios from 'axios';
 
 export default function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState([]);
   const [profileData, setProfileData] = useState([]);
   const [artistData, setArtistData] = useState();
@@ -84,14 +85,13 @@ export default function App() {
             setProfileData(res.data);
             return axios.get(`api/user/?userEmail=${res.data.email}`)
           })
-          .then(res => {
+          .then(async (res) => {
             let keys = Object.keys(res.data)
             if (keys.length === 0) {
               setView({ name: 'newAccount' });
             } else {
-              let userData = res.data;
-              userData.loggedIn = true;
-              setProfileData(userData);
+              setLoggedIn(true);
+              setProfileData(res.data);
               setView({ name: 'home' });
             }
           })
@@ -108,13 +108,13 @@ export default function App() {
       // case "discover":
       //   return <Discover changeView={changeView} />;
       case "create":
-        return <Create changeView={changeView} collaborateSongPath={collaborateSongPath}/>;
+        return <Create changeView={changeView} collaborateSongPath={collaborateSongPath} />;
       case "favorites":
         return <Favorites changeView={changeView} />;
       case "newAccount":
-        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} />;
+        return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "profile":
-        return <ArtistProfile changeView={changeView} artistData={artistData} />;
+        return <ArtistProfile changeView={changeView} artistData={artistData} profileData={profileData} loggedIn={loggedIn} />;
       case "play":
         return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} />;
       case "myReleasedMusic":
@@ -133,7 +133,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} />}
+      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} setArtistData={setArtistData} loggedIn={loggedIn} />}
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>
