@@ -324,7 +324,7 @@ describe('Reviews route', () => {
 
   const updateBio = async (req, status = 204) => {
     const { body } = await request(app)
-      .put('/api/editProfileBio')
+      .put('/api/editProfileBio?userId=1')
       .send(req)
       .expect(status);
     return body;

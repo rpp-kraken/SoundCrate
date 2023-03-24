@@ -129,7 +129,7 @@ const checkUser = async (userId) => {
 };
 
 const editBio = async (userId, newBio) => {
-  return db.query(`UPDATE users SET bio = $1 WHERE id = $2`, [newBio, userId]);
+  return db.query(`UPDATE ${usersTable} SET bio = $1 WHERE id = $2`, [newBio, userId]);
 };
 
 module.exports = {
