@@ -3,13 +3,15 @@ import { createTheme } from '@mui/material/styles';
 import { Button } from '@mui/material';
 
 
-export default function ConfirmDeleteAccount(props) {
+export default function ConfirmDeleteAccount({ changeView }) {
   const handleDelete = () => {
     console.log('yes please');
+    changeView('splash');
   }
 
   const handleCancel = () => {
-    console.log('no thanks')
+    console.log('no thanks');
+    changeView('home');
   }
 
   return (

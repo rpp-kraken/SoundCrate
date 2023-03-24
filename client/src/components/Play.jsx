@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { createTheme } from '@mui/material/styles';
 import PlayViewWaveform from './PlayViewWaveform.jsx';
+import axios from 'axios';
 
 export default function Play(props) {
-
   // const handleClosePlayView = (event) => {
   //   event.stopPropagation();
   //   props.handleClose();
   // }
+
+  useEffect(() => {
+    // console.log("props.songData.id: ", props.songData.id);
+    axios.put('/api/playCountIncrement', { id: props.songData.id })
+      .then((res) => {
+        console.log("PLAY INCREMENT SUCCESS! Data from deployed DB: ", res.data);
+      })
+      .catch((err) => console.log(err));
+  }, [])
 
   const handleCollab = (event) => {
     event.stopPropagation();

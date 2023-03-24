@@ -126,12 +126,39 @@ const getUserId = async (user) => {
   return userId.rows[0].id;
 };
 
+const checkUser = async (userId) => {
+  const user = await db.query(`SELECT * FROM ${usersTable} WHERE id = $1`, [userId]);
+  if (!user.rows.length) return {};
+  return user.rows[0].id;
+};
+
+const editBio = async (userId, newBio) => {
+  return db.query(`UPDATE ${usersTable} SET bio = $1 WHERE id = $2`, [newBio, userId]);
+};
+
+const editProfilePic = async (newPic, userId) => {
+  return db.query(`UPDATE ${usersTable} SET path_to_pic = $1 WHERE id = $2`, [newPic, userId]);
+}
+
 const getUserByid = async (id) => {
   const user = await db.query(`SELECT * FROM ${usersTable} WHERE id = $1`, [id]);
   if (!user.rows.length) return {};
   return user.rows[0];
+}
+
+const playCountIncrementModel = async (songId) => {
+
+  const query = {
+    text: `UPDATE ${songsTable} SET play_count = play_count + 1 WHERE id = $1`,
+    values: [songId],
+  };
+
+  const result = await db.query(query);
+  return result.rowCount;
+
+
 };
 
 module.exports = {
-  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, deleteUser, getUserId, getUserByid
+  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, getUserId, checkUser, playCountIncrementModel, editBio, deleteUser, editProfilePic, getUserByid
 };
