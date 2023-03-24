@@ -38,7 +38,7 @@ app.post('/api/user', upload.fields([
   {name: 'imageFile', maxCount: 1}
 ]), newUser)
 
-//artistBadgeWIP
+//artist icon badge
 app.get('/api/userBadge', artistBadge)
 
 const port = secrets.PORT || process.env.PORT || 3000;
