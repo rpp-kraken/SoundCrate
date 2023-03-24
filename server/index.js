@@ -15,6 +15,10 @@ const { getUser } = require('./controllers/getUser');
 const { handleDelete } = require('./controllers/deleteSong');
 const { getFavoriteSongs } = require('./controllers/getFavoriteSongs');
 const { editTitle } = require('./controllers/editTitle');
+const { editProfileBio } = require('./controllers/editProfileBio');
+const { editProfilePic } = require('./controllers/editProfilePic');
+const { playCountIncrement } = require('./controllers/playCountIncrement');
+
 
 // TO BE TURNED ON WITH SSL CERT/KEY
 // const privateKey  = fs.readFileSync('/Users/briankuzma/Desktop/HR/Kraken/SoundCrate/server/key.pem', 'utf8');
@@ -23,6 +27,7 @@ const { editTitle } = require('./controllers/editTitle');
 
 const { handleDeleteUser } = require('./controllers/deleteUser');
 const upload = multer();
+const {artistBadge} = require('./controllers/artistBadge')
 
 
 const app = express();
@@ -45,6 +50,8 @@ app.post('/api/uploadSong', upload.fields([
   {name: 'imageFile', maxCount: 1}
 ]), handleUpload);
 app.put('/api/editTitle', editTitle);
+app.put('/api/editProfileBio', editProfileBio);
+app.put('/api/editProfilePic', upload.single('imageFile'), editProfilePic);
 app.delete('/api/deleteSong', handleDelete);
 app.delete('/api/deleteUser', handleDeleteUser);
 
@@ -54,6 +61,11 @@ app.post('/api/user', upload.fields([
   {name: 'imageFile', maxCount: 1}
 ]), newUser)
 
+// play count routes
+app.put('/api/playCountIncrement', playCountIncrement);
+
+//artist icon badge
+app.get('/api/userBadge', artistBadge)
 
 
 
