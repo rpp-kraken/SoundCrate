@@ -22,10 +22,10 @@ export default function Create(props) {
   const [song, setSong] = useState();
   const [songUrl, setSongUrl] = useState();
   const [openPublish, setOpenPublish] = useState(false);
-
+  const [isTrack, setIsTrack] = useState(false);
   const [maxTracks, setMax] = useState(0);
   const [underMax, setUnderMax] = useState(true);
-  const [isTracks, setIsTracks] = useState(false);
+
   // TODO: state or active track tapped
   // const [activeSoundCard, setActiveSoundCard] = useState(1);
 
@@ -52,7 +52,7 @@ export default function Create(props) {
       setUnderMax(false);
     };
     if (maxTracks > 0) {
-      setIsTracks(true);
+      setIsTrack(true);
     }
   }, [maxTracks]);
 
@@ -74,6 +74,9 @@ export default function Create(props) {
           setMax(maxTracks + 1);
           if (maxTracks >= 2) {
             setUnderMax(false);
+          }
+          if (maxTracks === 0) {
+            setIsTrack(false);
           }
         };
       }
@@ -116,12 +119,10 @@ export default function Create(props) {
     setListOfTracks(prevList => {
       const newAudioTracks = [...prevList];
       newAudioTracks.splice(index, 1);
-      setMax(prevMax => prevMax - 1);
       return newAudioTracks;
     });
-    if (maxTracks === 0) {
-      setIsTracks(false);
-    }
+    setMax(0);
+    setIsTrack(false);
   };
 
   const handlePlayAll = () => {
@@ -299,18 +300,18 @@ export default function Create(props) {
         {listOfTracks.map((urlTrack, i) => { return <CreateFxPanel trackUrl={urlTrack} index={i} key={i} handleAddPlayer={handleAddPlayer} /> })}
       </div>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
-        <Button variant="contained" onClick={handlePlayAll}>
+        {isTrack && <Button variant="contained" onClick={handlePlayAll}>
           Play All Sounds with FX
-        </Button><br />
-        <Button variant="contained" onClick={handleDelete}>
+        </Button>}<br />
+        {isTrack && <Button variant="contained" onClick={handleDelete}>
           Clear All Tracks
-        </Button>
+        </Button>}
       </Box>
 
       <br />
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        {isTracks && <Button variant="contained" onClick={handlePublish}> Publish </Button>}
-      </Box>
+      {isTrack && <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Button variant="contained" onClick={handlePublish}> Publish </Button>
+      </Box>}
       {openPublish && <Publish setOpenPublish={setOpenPublish} song={song} songUrl={songUrl} changeView={props.changeView} />}      <br /><br />
       <br /><br />
       <br /><br />

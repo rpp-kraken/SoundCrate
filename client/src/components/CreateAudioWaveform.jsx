@@ -238,9 +238,6 @@ const CreateAudioWaveform = (props) => {
 					<div className='volume-slide-container'>
 					</div>
 				</div>
-				      <button className="outline-button-button" onClick={props.handleDelete}>
-        Delete All Tracks
-      </button>
 			</div>
 		</section>
 	);
