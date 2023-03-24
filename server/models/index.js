@@ -136,6 +136,10 @@ const editBio = async (userId, newBio) => {
   return db.query(`UPDATE ${usersTable} SET bio = $1 WHERE id = $2`, [newBio, userId]);
 };
 
+const editProfilePic = async (newPic, userId) => {
+  return db.query(`UPDATE ${usersTable} SET path_to_pic = $1 WHERE id = $2`, [newPic, userId]);
+}
+
 module.exports = {
   addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, getUserId, checkUser, editBio, deleteUser
 };
