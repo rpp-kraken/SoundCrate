@@ -15,7 +15,7 @@ export default function Login({setUser}) {
 
   return (
     <div data-testid="google-oauth" onClick={() => login()}>
-      Login
+      <h2>Login</h2>
     </div>
   );
 }
