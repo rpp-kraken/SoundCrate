@@ -240,6 +240,15 @@ describe('Reviews route', () => {
       };
       await updateProfileBioFail(req);
     });
+
+    it('Should update a user\'s profile pic', async function () {
+      const imageFilePath = path.join(__dirname, 'mocks', 'cat.jpeg');
+      const req = {
+        imageFile: fs.readFileSync(imageFilePath)
+      };
+      await updateProfilePic(req);
+
+    });
   });
 
   describe('DELETE route for /api/deleteUser', () => {
@@ -374,6 +383,14 @@ describe('Reviews route', () => {
     const { body } = await request(app)
       .put('/api/editProfileBio?userId=7')
       .send(req)
+      .expect(status);
+    return body;
+  };
+
+  const updateProfilePic = async (req, status = 204) => {
+    const { body } = await request(app)
+      .put('/api/editProfilePic')
+      .field('imageFile', req.imageFile, 'cat.jpeg')
       .expect(status);
     return body;
   };
