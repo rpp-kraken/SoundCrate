@@ -95,6 +95,15 @@ export default function App() {
               setView({ name: 'home' });
             }
           })
+          .then(() => {
+            axios.get('/addCookie')
+              .then(res => console.log(res))
+              .catch(err => console.log(err));
+
+            axios.get('getCookie')
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
+          })
           .catch((err) => console.log('error in oauth', err));
       }
     },
