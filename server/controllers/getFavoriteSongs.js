@@ -2,8 +2,7 @@ const models = require('../models/index');
 
 module.exports = {
   getFavoriteSongs: async (req, res) => {
-    const user = req.query.user;
-
+    const user = req.query.user.replace('%20', ' ');
     try {
       const userId = await models.getUserId(user);
       if (!Object.keys(userId).length) {

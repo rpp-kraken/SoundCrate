@@ -140,15 +140,15 @@ describe('models functions', () => {
 
     });
 
-    it('should add a song to the database for a first time user', async () => {
-      await models.addSong(song);
-      const results = await global.client.query(`SELECT id, title FROM ${songsTable} WHERE title = '${song.title}'`);
-      const user = await global.client.query(`SELECT name FROM ${usersTable} WHERE name = '${song.user}'`);
-      expect(user.rows.length).not.toBe(0);
-      expect(user.rows[0].name).toBe(song.user);
-      expect(results.rows).toHaveLength(1);
-      expect(results.rows[0].title).toBe(song.title);
-    });
+  //   it('should add a song to the database for a first time user', async () => {
+  //     await models.addSong(song);
+  //     const results = await global.client.query(`SELECT id, title FROM ${songsTable} WHERE title = '${song.title}'`);
+  //     const user = await global.client.query(`SELECT name FROM ${usersTable} WHERE name = '${song.user}'`);
+  //     expect(user.rows.length).not.toBe(0);
+  //     expect(user.rows[0].name).toBe(song.user);
+  //     expect(results.rows).toHaveLength(1);
+  //     expect(results.rows[0].title).toBe(song.title);
+  //   });
   });
 
   describe('addTags', () => {

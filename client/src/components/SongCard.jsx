@@ -33,7 +33,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView }) {
+export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView, id }) {
   const theme = useTheme();
   const [liked, setLiked] = useState(isLiked);
   const [playViewOpen, setPlayViewOpen] = useState(false);
@@ -51,30 +51,33 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
 
   return (
     <Card
-      className={classes.card}
-      raised
-      style={{
-        margin: '15px',
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.text.primary,
-        borderRadius: 0,
-        minHeight: '16vh',
-        maxHeight: '16vh',
-        cursor: 'pointer',
-        transition: 'transform 0.2s ease-in-out',
-        '&:hover': {
-          transform: 'scale(1.02)',
-        },
-      }}
-      onClick={() => {
-        handleSetArtistSongData(null, {
-          title,
-          artist,
-          artistImageUrl,
-          likedCount,
-          play_count,
-          path_to_song
-        });
+  className={classes.card}
+  raised
+  style={{
+    margin: '15px',
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.text.primary,
+    borderRadius: 0,
+    minHeight: '16vh',
+    maxHeight: '16vh',
+    cursor: 'pointer',
+    transition: 'transform 0.2s ease-in-out',
+    '&:hover': {
+      transform: 'scale(1.02)',
+    },
+  }}
+  onClick={() => {
+        handleSetArtistSongData(null,
+          {
+            title,
+            artist,
+            artistImageUrl,
+            likedCount,
+            play_count,
+            path_to_song,
+            id
+          }
+        );
         changeView('play');
       }}
     >
