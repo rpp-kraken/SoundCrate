@@ -249,6 +249,14 @@ describe('Reviews route', () => {
       await updateProfilePic(req);
 
     });
+
+    it('Should return a 404 for a user that doesn\'t exist', async function () {
+      const imageFilePath = path.join(__dirname, 'mocks', 'cat.jpeg');
+      const req = {
+        imageFile: fs.readFileSync(imageFilePath)
+      };
+      await updateProfilePicFail(req);
+    });
   });
 
   describe('DELETE route for /api/deleteUser', () => {
@@ -389,7 +397,15 @@ describe('Reviews route', () => {
 
   const updateProfilePic = async (req, status = 204) => {
     const { body } = await request(app)
-      .put('/api/editProfilePic')
+      .put('/api/editProfilePic?userId=1')
+      .field('imageFile', req.imageFile, 'cat.jpeg')
+      .expect(status);
+    return body;
+  };
+
+  const updateProfilePicFail = async (req, status = 404) => {
+    const { body } = await request(app)
+      .put('/api/editProfilePic?userId=7')
       .field('imageFile', req.imageFile, 'cat.jpeg')
       .expect(status);
     return body;

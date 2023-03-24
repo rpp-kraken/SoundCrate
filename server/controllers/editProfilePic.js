@@ -3,12 +3,13 @@ const { uploadImageFile, s3 } = require('../s3');
 const models = require('../models/index');
 
 module.exports = {
-  editProfilePic: (req, res) => {
-    if (!req.files['imageFile']) {
+  editProfilePic: async (req, res) => {
+    // console.log('req: ', req);
+    if (!req.file.buffer) {
       return res.status(500).json({ message: 'Image file not accepted' });
     }
     const userId = req.query.userId;
-    const imageFileData = req.file['imageFile'][0].buffer;
+    const imageFileData = req.file.buffer;
 
     try {
       const user = await models.checkUser(userId);
