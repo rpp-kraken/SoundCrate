@@ -218,6 +218,47 @@ describe('Reviews route', () => {
     });
   });
 
+  describe('PUT users route', function () {
+    it('Should update a user\'s bio', async function () {
+      const req = {
+        bio: 'the cooliest'
+      };
+
+      const initialGet = await global.client.query(`SELECT bio FROM temp_users WHERE id = $1`, [1]);
+
+      await updateBio(req, 204);
+
+      const { rows } = await global.client.query(`SELECT bio FROM temp_users WHERE id = $1`, [1]);
+
+      expect(initialGet.rows[0].bio).toStrictEqual('cool guy');
+      expect(rows[0].bio).toStrictEqual('the cooliest');
+    });
+
+    it('Should return a 404 for a user that doesn\'t exist', async function () {
+      const req = {
+        bio: 'the cooliest'
+      };
+      await updateProfileBioFail(req);
+    });
+
+    it('Should update a user\'s profile pic', async function () {
+      const imageFilePath = path.join(__dirname, 'mocks', 'cat.jpeg');
+      const req = {
+        imageFile: fs.readFileSync(imageFilePath)
+      };
+      await updateProfilePic(req);
+
+    });
+
+    it('Should return a 404 for a user that doesn\'t exist', async function () {
+      const imageFilePath = path.join(__dirname, 'mocks', 'cat.jpeg');
+      const req = {
+        imageFile: fs.readFileSync(imageFilePath)
+      };
+      await updateProfilePicFail(req);
+    });
+  });
+
   describe('DELETE route for /api/deleteUser', () => {
     it('should delete a user for a given id', async () => {
       // check the existing table
@@ -334,6 +375,38 @@ describe('Reviews route', () => {
     const { body } = await request(app)
       .put('/api/editTitle?songId=5')
       .send(req)
+      .expect(status);
+    return body;
+  };
+
+  const updateBio = async (req, status = 204) => {
+    const { body } = await request(app)
+      .put('/api/editProfileBio?userId=1')
+      .send(req)
+      .expect(status);
+    return body;
+  };
+
+  const updateProfileBioFail = async (req, status = 404) => {
+    const { body } = await request(app)
+      .put('/api/editProfileBio?userId=7')
+      .send(req)
+      .expect(status);
+    return body;
+  };
+
+  const updateProfilePic = async (req, status = 204) => {
+    const { body } = await request(app)
+      .put('/api/editProfilePic?userId=1')
+      .field('imageFile', req.imageFile, 'cat.jpeg')
+      .expect(status);
+    return body;
+  };
+
+  const updateProfilePicFail = async (req, status = 404) => {
+    const { body } = await request(app)
+      .put('/api/editProfilePic?userId=7')
+      .field('imageFile', req.imageFile, 'cat.jpeg')
       .expect(status);
     return body;
   };
