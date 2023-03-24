@@ -7,8 +7,7 @@ import axios from 'axios';
 import Login from '../components/login/Login.jsx';
 // import logo from '../../dist/name-and-icon-white.PNG';
 
-// export default function TopBar({ imageUrl }) {
-export default function TopBar({setUser, imageURL, changeView}) {
+export default function TopBar({ setUser, imageURL, changeView, profileData, setArtistData, loggedIn }) {
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -17,6 +16,7 @@ export default function TopBar({setUser, imageURL, changeView}) {
   };
 
   const onClickMyAccount = (event) => {
+    setArtistData(profileData);
     changeView('profile');
   };
   const onClickMyMusic = (event) => {
@@ -30,7 +30,6 @@ export default function TopBar({setUser, imageURL, changeView}) {
   };
 
 
-
   return (
     <>
       <AppBar position="sticky" style={{ backgroundColor: theme.palette.background.secondary, height: '16vh', justifyContent: 'center', boxShadow: 'none' }}>
@@ -38,7 +37,7 @@ export default function TopBar({setUser, imageURL, changeView}) {
           <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer} data-testid="drawer">
             <Menu />
           </IconButton>
-          <Avatar alt="Profile Picture" style={{ height: '50px', width: '50px' }} />
+          <Avatar alt="Profile Picture" src={profileData.path_to_pic} style={{ height: '50px', width: '50px' }} />
         </Toolbar>
       </AppBar>
       <Drawer anchor="left" open={openDrawer} onClose={toggleDrawer}>
@@ -48,26 +47,26 @@ export default function TopBar({setUser, imageURL, changeView}) {
           onKeyDown={toggleDrawer}
         >
           <List>
-            <ListItem button>
+            {!loggedIn && <ListItem button>
               <ListItemIcon><LoginIcon /></ListItemIcon>
               <Login setUser={setUser}/>
-            </ListItem>
-            <ListItem button>
+            </ListItem>}
+            {loggedIn && <ListItem button>
               <ListItemIcon><Edit /></ListItemIcon>
               <ListItemText primary="Edit Profile" onClick={onClickMyAccount} />
-            </ListItem>
-            <ListItem button>
+            </ListItem>}
+            {loggedIn && <ListItem button>
               <ListItemIcon><MusicNote /></ListItemIcon>
               <ListItemText primary="My Music" onClick={onClickMyMusic}/>
-            </ListItem>
-            <ListItem button>
+            </ListItem>}
+            {loggedIn && <ListItem button>
               <ListItemIcon><ExitToApp /></ListItemIcon>
               <ListItemText primary="Log Out" onClick={onClickLogOut}/>
-            </ListItem>
-            <ListItem button>
+            </ListItem>}
+            {loggedIn && <ListItem button>
               <ListItemIcon><Delete /></ListItemIcon>
               <ListItemText primary="Delete Account" onClick={onClickDeleteAccount} />
-            </ListItem>
+            </ListItem> }
           </List>
         </div>
       </Drawer>
