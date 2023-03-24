@@ -1,11 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { createTheme } from '@mui/material/styles';
+import SongCardList from './SongCardList.jsx';
 
-export default function MyReleasedMusic(props) {
-
+export default function Favorites(props) {
+  console.log('these are the fav props: ', props);
+  const [songs, setSongs] = useState();
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    fetch(`http://localhost:3000/api/getSongs?user=${encodeURIComponent(props.profileData.name)}`)
+      .then(res => {
+        if (!res.ok) {
+          throw 'There was a problem retrieving the user\'s favorite songs';
+        }
+        return res.json();
+      })
+      .then(songs => {
+        setSongs(songs);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, [props.profileData.name]);
   return (
     <div>
-      <h3>MyReleasedMusic view - list of user's music</h3>
+      {loading
+        ? <p>Loading...</p>
+        : <SongCardList songs={songs} />}
     </div>
   );
-}
+};
