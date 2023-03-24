@@ -137,7 +137,6 @@ const editBio = async (userId, newBio) => {
 };
 
 const editProfilePic = async (newPic, userId) => {
-  console.log('data from model', newPic, userId);
   return db.query(`UPDATE ${usersTable} SET path_to_pic = $1 WHERE id = $2`, [newPic, userId]);
 }
 
