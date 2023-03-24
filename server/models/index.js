@@ -126,6 +126,12 @@ const getUserId = async (user) => {
   return userId.rows[0].id;
 };
 
+const getUserByid = async (id) => {
+  const user = await db.query(`SELECT * FROM ${usersTable} WHERE id = $1`, [id]);
+  if (!user.rows.length) return {};
+  return user.rows[0];
+};
+
 module.exports = {
-  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, deleteUser, getUserId
+  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, deleteUser, getUserId, getUserByid
 };

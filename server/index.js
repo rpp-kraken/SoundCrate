@@ -23,6 +23,7 @@ const { editTitle } = require('./controllers/editTitle');
 
 const { handleDeleteUser } = require('./controllers/deleteUser');
 const upload = multer();
+const {artistBadge} = require('./controllers/artistBadge')
 
 
 const app = express();
@@ -53,6 +54,9 @@ app.get('/api/user', getUser);
 app.post('/api/user', upload.fields([
   {name: 'imageFile', maxCount: 1}
 ]), newUser)
+
+//artist icon badge
+app.get('/api/userBadge', artistBadge)
 
 const port = secrets.PORT || process.env.PORT || 3000;
 
