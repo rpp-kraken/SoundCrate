@@ -89,8 +89,8 @@ const addUser = async (data) => {
       data.username, data.tier1, data.tier2, data.tier3]);
 };
 
-const getUser = async (userEmail) => {
-  const user = await db.query(`SELECT * FROM ${usersTable} WHERE email = $1`, [userEmail]);
+const getUser = async (col, val) => {
+  const user = await db.query(`SELECT * FROM ${usersTable} WHERE ${col} = ${val}`);
   if (!user.rows.length) return {};
   return user.rows[0];
 };
