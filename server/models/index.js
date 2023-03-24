@@ -130,8 +130,21 @@ const getUserByid = async (id) => {
   const user = await db.query(`SELECT * FROM ${usersTable} WHERE id = $1`, [id]);
   if (!user.rows.length) return {};
   return user.rows[0];
+}
+
+const playCountIncrementModel = async (songId) => {
+
+  const query = {
+    text: `UPDATE ${songsTable} SET play_count = play_count + 1 WHERE id = $1`,
+    values: [songId],
+  };
+
+  const result = await db.query(query);
+  return result.rowCount;
+
+
 };
 
 module.exports = {
-  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, deleteUser, getUserId, getUserByid
+  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, deleteUser, getUserId, getUserByid, playCountIncrementModel
 };

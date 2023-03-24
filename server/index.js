@@ -15,6 +15,7 @@ const { getUser } = require('./controllers/getUser');
 const { handleDelete } = require('./controllers/deleteSong');
 const { getFavoriteSongs } = require('./controllers/getFavoriteSongs');
 const { editTitle } = require('./controllers/editTitle');
+const { playCountIncrement } = require('./controllers/playCountIncrement');
 
 // TO BE TURNED ON WITH SSL CERT/KEY
 // const privateKey  = fs.readFileSync('/Users/briankuzma/Desktop/HR/Kraken/SoundCrate/server/key.pem', 'utf8');
@@ -54,6 +55,9 @@ app.get('/api/user', getUser);
 app.post('/api/user', upload.fields([
   {name: 'imageFile', maxCount: 1}
 ]), newUser)
+
+// play count routes
+app.put('/api/playCountIncrement', playCountIncrement);
 
 //artist icon badge
 app.get('/api/userBadge', artistBadge)
