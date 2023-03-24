@@ -17,6 +17,7 @@ import Play from './Play.jsx';
 // import Publish from './Publish.jsx';
 import FourOhFour from './404.jsx';
 // import { songData } from '../../../DummyData/dummyData.js'
+import Splash from '../components/login/Splash.jsx';
 import axios from 'axios';
 
 export default function App() {
@@ -32,7 +33,7 @@ export default function App() {
   // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
   // View State changes on click
-  const [view, setView] = useState({ name: 'home' });
+  const [view, setView] = useState({ name: 'splash' });
 
   useEffect(() => {
     console.log("Changing view to: " + view.name);
@@ -89,11 +90,11 @@ export default function App() {
           .then(async (res) => {
             let keys = Object.keys(res.data)
             if (keys.length === 0) {
-              setView({ name: 'newAccount' });
+              changeView('newAccount');
             } else {
               setLoggedIn(true);
               setProfileData(res.data);
-              setView({ name: 'home' });
+              changeView('home');
             }
           })
           .catch((err) => console.log('error in oauth', err));
@@ -104,6 +105,8 @@ export default function App() {
 
   const renderView = () => {
     switch (view.name) {
+      case "splash":
+        return <Splash />;
       case "home":
         return <Home songs={songAllHomeData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />;
       // case "discover":
@@ -123,7 +126,7 @@ export default function App() {
       case "confirmLogOut":
         return <ConfirmLogOut changeView={changeView} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "confirmDeleteAccount":
-        return <ConfirmDeleteAccount />;
+        return <ConfirmDeleteAccount changeView={changeView} />;
       case "theme":
         return <ThemeExample />;
       default:

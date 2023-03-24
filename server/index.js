@@ -5,6 +5,7 @@ const express = require('express');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
+const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const { handleUpload } = require('./controllers/handleUpload');
 const { getSongs } = require('./controllers/getSongs');
@@ -36,6 +37,7 @@ const app = express();
 app.use(express.static('./client/dist'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 
 //ROUTES
