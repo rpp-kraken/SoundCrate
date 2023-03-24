@@ -218,6 +218,39 @@ describe('Reviews route', () => {
     });
   });
 
+  describe('DELETE route for /api/deleteUser', () => {
+    it('should delete a user for a given id', async () => {
+      // check the existing table
+      const { rows, rowCount } = await global.client.query(`SELECT * FROM temp_users`);
+      expect(rowCount).not.toBe(0);
+
+      // call the deleteUser route with the first userId entry
+      const userId = rows[0].id;
+      await request(app).delete(`/api/deleteUser?userId=${userId}`);
+
+      // check that the user was deleted
+      const { rows: newRows, rowCount: newRowCount } = await global.client.query(`SELECT * FROM temp_users`);
+      expect(newRowCount).not.toBe(rowCount);
+    });
+
+    it('should do nothing for a nonexistent userId', async () => {
+      // check the existing table
+      const { rows, rowCount } = await global.client.query(`SELECT * FROM temp_users`);
+      expect(rowCount).not.toBe(0);
+
+      // call the deleteUser route with an invalid userId entry
+      const userId = 123456;
+      await request(app).delete(`/api/deleteUser?userId=${userId}`);
+
+      // check that the table is the same
+      const { rows: newRows, rowCount: newRowCount } = await global.client.query(`SELECT * FROM temp_users`);
+      expect(newRowCount).toBe(rowCount);
+      expect(newRows).toEqual(rows);
+    });
+  });
+
+
+  // HELPER FUNCTIONS
   const postSong = async (req, status = 201) => {
     const { body } = await request(app)
       .post('/api/uploadSong')
