@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import '../../../dist/Video.css';
 import Login from './Login.jsx'
 
 
