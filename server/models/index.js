@@ -122,6 +122,16 @@ const getUserId = async (user) => {
   return userId.rows[0].id;
 };
 
+const checkUser = async (userId) => {
+  const user = await db.query(`SELECT * FROM ${usersTable} WHERE id = $1`, [userId]);
+  if (!user.rows.length) return {};
+  return user.rows[0].id;
+};
+
+const editBio = async (userId, newBio) => {
+  return db.query(`UPDATE users SET bio = $1 WHERE id = $2`, [newBio, userId]);
+};
+
 module.exports = {
-  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, getUserId
+  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, getUserId, checkUser, editBio
 };
