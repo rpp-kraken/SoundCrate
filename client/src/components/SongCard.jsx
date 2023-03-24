@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@mui/material/Box';
 import Play from './Play.jsx';
 import Stack from '@mui/material/Stack';
+import ArtistBadge from './ArtistBadge.jsx'
 
 
 const useStyles = makeStyles({
@@ -40,18 +41,6 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
 
 
   const classes = useStyles();
-
-  // const returnIcon = (count) => {
-  //   if(count >= 250000 && count <= 499000) {
-  //     return 'bronze'
-  //   }
-  //   if(count >= 500000 && count <= 999999) {
-  //     return <img src={'/client/dist/silver-icon-badge.PNG'} />
-  //   }
-  //   if(count >= 1000000) {
-  //     return 'gold'
-  //   }
-  // }
 
   // Favorite Song Event Handling
   const handleLikeClick = (event) => {
@@ -103,6 +92,7 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
           style={{ cursor: 'pointer', marginTop: '8px' }}
         >
           {artist}
+          <ArtistBadge username={artist}/>
         </Typography>
         <Stack direction="row" alignItems="center" spacing={1} mt={1}>
           <IconButton onClick={handleLikeClick}>
@@ -110,9 +100,6 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
           </IconButton>
           <Typography variant="body2" color="textSecondary" component="span">
             {likedCount}
-            {likedCount >= 250000 && likedCount <= 499999 && <img src={'silver.png'} className="badge-icon"/>}
-            {likedCount >= 500000 && likedCount <= 999999 && <img src={'bronze-icon-badge.png'} className="badge-icon"/>}
-            {likedCount >= 1000000 && <img src={'gold-icon-badge.png'} className="badge-icon"/>}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="span">
             {`🎧 ${play_count}`}

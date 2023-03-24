@@ -13,6 +13,7 @@ const { getUser } = require('./controllers/getUser');
 const { handleDelete } = require('./controllers/deleteSong');
 const { editTitle } = require('./controllers/editTitle');
 const upload = multer();
+const {artistBadge} = require('./controllers/artistBadge')
 
 app.use(express.static('./client/dist'));
 app.use(express.urlencoded({extended: true}));
@@ -36,6 +37,9 @@ app.get('/api/user', getUser);
 app.post('/api/user', upload.fields([
   {name: 'imageFile', maxCount: 1}
 ]), newUser)
+
+//artistBadgeWIP
+app.get('/api/userBadge', artistBadge)
 
 const port = secrets.PORT || process.env.PORT || 3000;
 
