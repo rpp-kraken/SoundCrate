@@ -5,7 +5,13 @@ export default function Favorites(props) {
   console.log('these are the fav props: ', props);
   const [songs, setSongs] = useState();
   useEffect(() => {
-    fetch(`http://localhost:3000/getFavoriteSongs?user=${encodeURIComponent(props.profileData.name)}`)
+    fetch(`http://localhost:3000/api/getFavoriteSongs?user=${encodeURIComponent(props.profileData.name)}`)
+      .then(res => {
+        if (!res.ok) {
+          throw 'There was a problem retrieving the user\'s favorite songs';
+        }
+        return res.json();
+      })
       .then(songs => {
         console.log(songs);
         setSongs(songs);
