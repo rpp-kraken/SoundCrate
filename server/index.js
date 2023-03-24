@@ -13,6 +13,7 @@ const { getUser } = require('./controllers/getUser');
 const { handleDelete } = require('./controllers/deleteSong');
 const { getFavoriteSongs } = require('./controllers/getFavoriteSongs');
 const { editTitle } = require('./controllers/editTitle');
+const { editProfileBio } = require('./controllers/editProfile');
 const upload = multer();
 
 app.use(express.static('./client/dist'));
@@ -31,6 +32,7 @@ app.post('/api/uploadSong', upload.fields([
   {name: 'imageFile', maxCount: 1}
 ]), handleUpload);
 app.put('/api/editTitle', editTitle);
+app.put('/api/editProfileBio', editProfileBio);
 app.delete('/api/deleteSong', handleDelete);
 
 // user routes
