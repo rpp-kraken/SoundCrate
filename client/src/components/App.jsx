@@ -17,6 +17,7 @@ import Play from './Play.jsx';
 // import Publish from './Publish.jsx';
 import FourOhFour from './404.jsx';
 // import { songData } from '../../../DummyData/dummyData.js'
+import Splash from '../components/login/Splash.jsx';
 import axios from 'axios';
 
 export default function App() {
@@ -32,7 +33,7 @@ export default function App() {
   // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
   // View State changes on click
-  const [view, setView] = useState({ name: 'home' });
+  const [view, setView] = useState({ name: 'splash' });
 
   useEffect(() => {
     console.log("Changing view to: " + view.name);
@@ -113,6 +114,8 @@ export default function App() {
 
   const renderView = () => {
     switch (view.name) {
+      case "splash":
+        return <Splash />;
       case "home":
         return <Home songs={songAllHomeData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />;
       // case "discover":
