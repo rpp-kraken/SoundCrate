@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { createTheme } from '@mui/material/styles';
 import { Button } from '@mui/material';
+import axios from 'axios';
 
 
-export default function ConfirmDeleteAccount({ changeView }) {
-  const handleDelete = () => {
+export default function ConfirmDeleteAccount({ changeView, profileData, setProfileData, setLoggedIn }) {
+  const handleDelete = async () => {
+    await axios.delete(`/api/deleteUser?userId=${profileData.id}`)
+    .catch(err => console.log(`error deleting user with id ${profileData.id}`, err));
+    setLoggedIn(false);
+    setProfileData({});
     console.log('yes please');
     changeView('splash');
   }
