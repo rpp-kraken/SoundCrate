@@ -90,21 +90,12 @@ export default function App() {
           .then(async (res) => {
             let keys = Object.keys(res.data)
             if (keys.length === 0) {
-              setView({ name: 'newAccount' });
+              changeView('newAccount');
             } else {
               setLoggedIn(true);
               setProfileData(res.data);
-              setView({ name: 'home' });
+              changeView('home');
             }
-          })
-          .then(() => {
-            axios.get('/addCookie')
-              .then(res => console.log(res))
-              .catch(err => console.log(err));
-
-            axios.get('getCookie')
-            .then(res => console.log(res))
-            .catch(err => console.log(err));
           })
           .catch((err) => console.log('error in oauth', err));
       }
@@ -135,7 +126,7 @@ export default function App() {
       case "confirmLogOut":
         return <ConfirmLogOut changeView={changeView} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "confirmDeleteAccount":
-        return <ConfirmDeleteAccount />;
+        return <ConfirmDeleteAccount changeView={changeView} />;
       case "theme":
         return <ThemeExample />;
       default:
