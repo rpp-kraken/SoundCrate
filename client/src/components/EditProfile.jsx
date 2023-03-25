@@ -22,7 +22,7 @@ const buttonContainerStyle = {
 export default function EditProfile(props) {
   const theme = useTheme();
   const [bio, setBio] = useState(props.profileData.bio);
-  const [image, setImage] = useState();
+  const [image, setImage] = useState(null);
   const [urlImage, setUrlImage] = useState(false);
 
   const paperStyle = {
@@ -40,9 +40,39 @@ export default function EditProfile(props) {
 
 
   const handleSubmit = async (event) => {
-    const id = props.profileData.id
+    event.preventDefault();
+    const id = props.profileData.id;
 
-   event.preventDefault();
+    if (image === null) {
+      setImage(props.profileData.path_to_pic);
+    };
+
+    console.log('here is image', image);
+    console.log(id);
+
+
+    const formData = new FormData();
+    formData.append('file', image);
+
+    //image
+    fetch(`/api/editProfilePic?userId=${id}`, {
+      method: 'PUT',
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to upload image');
+      }
+      return response.text();
+    })
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+    //Bio
    fetch(`/api/editProfileBio?userId=${id}`, {
     method: 'PUT',
     headers: {
@@ -53,7 +83,7 @@ export default function EditProfile(props) {
     .then(response => response.json())
     .then(data => {
       console.log(data);
-      props.changeView('myReleasedMusic');
+      // props.changeView('myReleasedMusic');
     })
     .catch(error => {
       console.error(error);
