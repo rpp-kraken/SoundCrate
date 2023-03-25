@@ -43,7 +43,6 @@ export default function App() {
   }, [view])
 
   useEffect(() => {
-
     axios.get(`/api/getAllSongsHome`)
       .then((res) => {
         console.log("Data from deployed DB: ", res.data);
@@ -90,21 +89,22 @@ export default function App() {
             Accept: 'application/json'
           }
         })
-          .then((res) => {
-            setProfileData(res.data);
-            return axios.get(`api/user/?col=email&?val=${res.data.email}`)
-          })
-          .then(async (res) => {
-            let keys = Object.keys(res.data)
-            if (keys.length === 0) {
-              changeView('newAccount');
-            } else {
-              setLoggedIn(true);
-              setProfileData(res.data);
-              changeView('home');
-            }
-          })
-          .catch((err) => console.log('error in oauth', err));
+        .then((res) => {
+          setProfileData(res.data);
+          return axios.get(`api/user/?userEmail=${res.data.email}`)
+        })
+        .then(res => {
+          let keys = Object.keys(res.data)
+          if (keys.length === 0) {
+            setView({ name: 'newAccount' });
+          } else {
+            let userData = res.data;
+            userData.loggedIn = true;
+            setProfileData(userData);
+            setView({ name: 'home' });
+          }
+        })
+        .catch((err) => console.log('error in oauth', err));
       }
     },
     [user]
@@ -125,7 +125,7 @@ export default function App() {
       case "newAccount":
         return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "profile":
-        return <ArtistProfile changeView={changeView} artistData={artistData} handleSetArtistSongData={handleSetArtistSongData} />;
+        return <ArtistProfile changeView={changeView} artistData={artistData} profileData={profileData} handleSetArtistSongData={handleSetArtistSongData} loggedIn={loggedIn} />;
       case "play":
         return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} profileData={profileData}/>;
       case "myReleasedMusic":
@@ -144,11 +144,11 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} setArtistData={setArtistData} loggedIn={loggedIn}/>}
+      <TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} setArtistData={setArtistData} loggedIn={loggedIn} />
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>
-      {<NavBar changeView={changeView} />}
+      <NavBar changeView={changeView} />
     </ThemeProvider>
   );
 }
