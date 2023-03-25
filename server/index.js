@@ -13,6 +13,7 @@ const { getSongs } = require('./controllers/getSongs');
 const { getAllSongsHome } = require('./controllers/getAllSongsHome');
 const { newUser } = require('./controllers/newUser');
 const { getUser } = require('./controllers/getUser');
+const { getUserByCol } = require('./controllers/getUserByCol');
 const { handleDelete } = require('./controllers/deleteSong');
 const { getFavoriteSongs } = require('./controllers/getFavoriteSongs');
 const { editTitle } = require('./controllers/editTitle');
@@ -56,6 +57,7 @@ app.delete('/api/deleteSong', handleDelete);
 
 // user routes
 app.get('/api/user', getUser);
+app.get('/api/userbycol', getUserByCol);
 app.post('/api/user', upload.fields([
   {name: 'imageFile', maxCount: 1}
 ]), newUser)

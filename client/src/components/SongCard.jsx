@@ -14,11 +14,9 @@ const useStyles = makeStyles({
     display: 'flex',
   },
   media: {
-    // width: 120,
     width: 156.16,
     height: 'fill',
     objectFit: 'fill',
-    // objectFit: 'cover',
     marginLeft: 'auto'
   },
   content: {
@@ -39,13 +37,13 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
   const [playViewOpen, setPlayViewOpen] = useState(false);
   const [otherArtistViewOpen, setOtherArtistViewOpen] = useState(false);
 
-
   const classes = useStyles();
+
+  console.log('test', path_to_song)
 
   // Favorite Song Event Handling
   const handleLikeClick = (event) => {
     event.stopPropagation();
-    console.log("🚀 handleLikeClick: Handle Heart Click Event Here")
     setLiked(!liked);
   };
 
@@ -89,8 +87,7 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
           variant="subtitle1"
           onClick={(event) => {
             event.stopPropagation();
-            handleSetArtistSongData({ artist }, null);
-            changeView('profile');
+            handleSetArtistSongData(artist, null);
           }}
           style={{ cursor: 'pointer', marginTop: '8px' }}
         >
