@@ -39,8 +39,6 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
 
   const classes = useStyles();
 
-  console.log('test', path_to_song)
-
   // Favorite Song Event Handling
   const handleLikeClick = (event) => {
     event.stopPropagation();
