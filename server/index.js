@@ -16,6 +16,7 @@ const { getUser } = require('./controllers/getUser');
 const { handleDelete } = require('./controllers/deleteSong');
 const { getFavoriteSongs } = require('./controllers/getFavoriteSongs');
 const { editTitle } = require('./controllers/editTitle');
+const { editTier } = require('./controllers/editTier');
 const { editProfileBio } = require('./controllers/editProfileBio');
 const { editProfilePic } = require('./controllers/editProfilePic');
 const { playCountIncrement } = require('./controllers/playCountIncrement');
@@ -51,17 +52,18 @@ app.post('/api/uploadSong', upload.fields([
   {name: 'audioFile', maxCount: 1},
   {name: 'imageFile', maxCount: 1}
 ]), handleUpload);
-app.put('/api/editTitle', editTitle);
-app.put('/api/editProfileBio', editProfileBio);
-app.put('/api/editProfilePic', upload.single('imageFile'), editProfilePic);
 app.delete('/api/deleteSong', handleDelete);
-app.delete('/api/deleteUser', handleDeleteUser);
 
 // user routes
 app.get('/api/user', getUser);
 app.post('/api/user', upload.fields([
   {name: 'imageFile', maxCount: 1}
 ]), newUser)
+app.put('/api/editTitle', editTitle);
+app.put('/api/editProfileBio', editProfileBio);
+app.put('/api/editProfilePic', upload.single('imageFile'), editProfilePic);
+app.put('/api/editTier', editTier);
+app.delete('/api/deleteUser', handleDeleteUser);
 
 // play count routes
 app.put('/api/playCountIncrement', playCountIncrement);

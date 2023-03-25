@@ -149,11 +149,14 @@ const editProfilePic = async (newPic, userId) => {
 }
 
 const editTier = async (userId, newTier, oldTier) => {
-  const user = await db.query(`SELECT * FROM ${usersTable} WHERE id = $1`, [userId]);
-  await db.query(`UPDATE ${usersTable} SET ${newTier} = $1 WHERE id = $2`, [true, userId]);
-  if (oldTier) {
-    await db.query(`UPDATE ${usersTable} SET ${oldTier} = $1 WHERE id = $2`, [false, userId]);
+  try {
+    await db.query(`UPDATE ${usersTable} SET ${newTier} = $1 WHERE id = $2`, [true, userId]);
+    if (oldTier) {
+      await db.query(`UPDATE ${usersTable} SET ${oldTier} = $1 WHERE id = $2`, [false, userId]);
+    }
+    return 'Completed tier update(s).'
   }
+  catch (err) { return err }
 }
 
 const getUserByid = async (id) => {
@@ -173,5 +176,5 @@ const playCountIncrementModel = async (songId) => {
 };
 
 module.exports = {
-  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, getUserId, checkUser, playCountIncrementModel, editBio, deleteUser, editProfilePic, getUserByid
+  addUser, addSong, addTags, getAllSongsHome, getAllSongs, getSong, getUser, deleteSong, editTitle, getUsersFavoriteSongs, getUserId, checkUser, playCountIncrementModel, editBio, deleteUser, editProfilePic, editTier, getUserByid
 };
