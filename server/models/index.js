@@ -148,6 +148,14 @@ const editProfilePic = async (newPic, userId) => {
   return db.query(`UPDATE ${usersTable} SET path_to_pic = $1 WHERE id = $2`, [newPic, userId]);
 }
 
+const editTier = async (userId, newTier, oldTier) => {
+  const user = await db.query(`SELECT * FROM ${usersTable} WHERE id = $1`, [userId]);
+  await db.query(`UPDATE ${usersTable} SET ${newTier} = $1 WHERE id = $2`, [true, userId]);
+  if (oldTier) {
+    await db.query(`UPDATE ${usersTable} SET ${oldTier} = $1 WHERE id = $2`, [false, userId]);
+  }
+}
+
 const getUserByid = async (id) => {
   const user = await db.query(`SELECT * FROM ${usersTable} WHERE id = $1`, [id]);
   if (!user.rows.length) return {};
@@ -155,7 +163,6 @@ const getUserByid = async (id) => {
 }
 
 const playCountIncrementModel = async (songId) => {
-
   const query = {
     text: `UPDATE ${songsTable} SET play_count = play_count + 1 WHERE id = $1`,
     values: [songId],
@@ -163,8 +170,6 @@ const playCountIncrementModel = async (songId) => {
 
   const result = await db.query(query);
   return result.rowCount;
-
-
 };
 
 module.exports = {
