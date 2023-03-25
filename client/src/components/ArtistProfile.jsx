@@ -9,6 +9,8 @@ import EditProfile from './EditProfile.jsx';
 import axios from 'axios';
 
 export default function ArtistProfile({ artistData, changeView, loggedIn, songData, profileData, handleSetArtistSongData }) {
+  const [openEditProfile, setOpenEditProfile] = useState(false);
+
   const theme = useTheme();
   const gridItemStyle = {
     display: 'flex',
