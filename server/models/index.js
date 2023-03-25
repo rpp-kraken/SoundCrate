@@ -119,7 +119,6 @@ const getUsersFavoriteSongs = async (userId) => {
 };
 
 const getUser = async (col, val) => {
-  console.log('col: ', col, 'val: ', val)
   const user = await db.query(`SELECT * FROM ${usersTable} WHERE ${col} = ${val}`);
   if (!user.rows.length) return {};
   return user.rows[0];
@@ -157,7 +156,7 @@ const getUserByid = async (id) => {
 
 const getUserByCol = async (col, val) => {
   console.log(`Column: ${col} | Value: ${val}`)
-  const user = await db.query(`SELECT * FROM ${usersTable} WHERE ${col} = $1`, [val]);
+  const user = await db.query(`SELECT * FROM ${usersTable} WHERE ${col} = $1`, [col, val]);
   if (!user.rows.length) return {};
   return user.rows[0];
 }

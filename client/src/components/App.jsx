@@ -75,7 +75,7 @@ export default function App() {
           artistProfileData.songs = result.data;
           setArtistData(artistProfileData);
           changeView('profile');
-        })
+        }
       })
     } else if (songData) {
       setSongData(songData);
