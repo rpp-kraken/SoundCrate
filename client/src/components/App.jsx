@@ -138,7 +138,7 @@ export default function App() {
       case "confirmDeleteAccount":
         return <ConfirmDeleteAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "verify":
-        return <TierVerification profileData={profileData} likes={275000} />;
+        return <TierVerification profileData={profileData} artistProfileData={artistProfileData} />;
       case "theme":
         return <ThemeExample />;
       default:
