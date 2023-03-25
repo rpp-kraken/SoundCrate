@@ -76,12 +76,14 @@ export default function App() {
           if (result.data) {
             artistProfileData.songCount = result.data.length;
             artistProfileData.favoritesCount = result.data.reduce((total, obj) => obj.fav_count + total, 0);
+            // artistProfileData.favoritesCount = 1000000;
             artistProfileData.songs = result.data;
           }
           setArtistData(artistProfileData);
           changeView('profile');
         })
       })
+      .catch((err) => console.log('error in artistName', err));
     } else if (songData) {
       setSongData(songData);
     }
