@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import SongCardList from './SongCardList.jsx';
 
-export default function ArtistProfile({ artistData, changeView, loggedIn, songData, profileData }) {
+export default function ArtistProfile({ artistData, changeView, loggedIn, songData, profileData, handleSetArtistSongData }) {
   const theme = useTheme();
   const gridItemStyle = {
     display: 'flex',
@@ -70,7 +70,7 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
       </Grid>
       {
       artistData.songs ?
-      <SongCardList songs={ artistData.songs } /> :
+      <SongCardList songs={artistData.songs} handleSetArtistSongData={handleSetArtistSongData} changeView = {changeView} /> :
       null
       }
     </Box>
