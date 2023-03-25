@@ -62,10 +62,24 @@ export default function App() {
     // };
   };
 
-  const handleSetArtistSongData = (artistData, songData) => {
-    console.log(artistData, songData);
-    setArtistData(artistData);
-    setSongData(songData);
+  const handleSetArtistSongData = (artistName, songData) => {
+    if (artistName) {
+      var artistProfileData;
+      axios.get(`/api/userbycol?col=username&val=${artistName}`)
+      .then((result) => { artistProfileData = result.data; })
+      .then(() => {
+        axios.get(`/api/songs?user=${artistProfileData.name}`)
+        .then((result) => {
+          artistProfileData.songCount = result.data.length;
+          artistProfileData.favoritesCount = result.data.reduce((total, obj) => obj.fav_count + total, 0);
+          artistProfileData.songs = result.data;
+          setArtistData(artistProfileData);
+          changeView('profile');
+        })
+      })
+    } else if (songData) {
+      setSongData(songData);
+    }
   }
 
   useEffect(

@@ -85,8 +85,7 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
           variant="subtitle1"
           onClick={(event) => {
             event.stopPropagation();
-            handleSetArtistSongData({ artist }, null);
-            changeView('profile');
+            handleSetArtistSongData(artist, null);
           }}
           style={{ cursor: 'pointer', marginTop: '8px' }}
         >
