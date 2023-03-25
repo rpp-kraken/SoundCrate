@@ -68,7 +68,11 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
           </Grid>}
 
       </Grid>
-      <SongCardList songs={ artistData.songs } />
+      {
+      artistData.songs ?
+      <SongCardList songs={ artistData.songs } /> :
+      null
+      }
     </Box>
   );
 }

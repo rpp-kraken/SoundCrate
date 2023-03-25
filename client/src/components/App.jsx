@@ -72,9 +72,11 @@ export default function App() {
       .then(() => {
         axios.get(`/api/songs?user=${artistProfileData.name}`)
         .then((result) => {
-          artistProfileData.songCount = result.data.length;
-          artistProfileData.favoritesCount = result.data.reduce((total, obj) => obj.fav_count + total, 0);
-          artistProfileData.songs = result.data;
+          if (result.data) {
+            artistProfileData.songCount = result.data.length;
+            artistProfileData.favoritesCount = result.data.reduce((total, obj) => obj.fav_count + total, 0);
+            artistProfileData.songs = result.data;
+          }
           setArtistData(artistProfileData);
           changeView('profile');
         })
