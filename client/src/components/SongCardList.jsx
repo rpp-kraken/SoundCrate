@@ -7,7 +7,6 @@ export default function SongCardList({ songs, handleSetArtistSongData, changeVie
   return (
     <div className="songCardList">
       {songs.map((song, i) => {
-       {console.log(song)}
         return (
           <SongCard
             title={song.title}

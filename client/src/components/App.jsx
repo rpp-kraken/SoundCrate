@@ -43,7 +43,6 @@ export default function App() {
   }, [view])
 
   useEffect(() => {
-
     axios.get(`/api/getAllSongsHome`)
       .then((res) => {
         console.log("Data from deployed DB: ", res.data);
@@ -63,10 +62,26 @@ export default function App() {
     // };
   };
 
-  const handleSetArtistSongData = (artistData, songData) => {
-    console.log(artistData, songData);
-    setArtistData(artistData);
-    setSongData(songData);
+  const handleSetArtistSongData = (artistName, songID) => {
+    if (artistName) {
+      var artistProfileData;
+      axios.get(`/api/userbycol?col=username&val=${artistName}`)
+      .then((result) => {
+        artistProfileData = result.data;
+      })
+      .then(() => {
+        axios.get(`/api/songs?user=${artistProfileData.name}`)
+        .then((result) => {
+          artistProfileData.songCount = result.data.length;
+          artistProfileData.favoritesCount = result.data.reduce((total, obj) => obj.fav_count + total, 0);
+          artistProfileData.songs = result.data;
+          setArtistData(artistProfileData);
+          changeView('profile');
+        })
+      })
+    } else if (songID) {
+      return;
+    }
   }
 
   useEffect(
@@ -114,7 +129,7 @@ export default function App() {
       case "newAccount":
         return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "profile":
-        return <ArtistProfile changeView={changeView} artistData={artistData} profileData={profileData} loggedIn={loggedIn} />;
+        return <ArtistProfile changeView={changeView} artistData={artistData} profileData={profileData} handleSetArtistSongData={handleSetArtistSongData} loggedIn={loggedIn} />;
       case "play":
         return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} profileData={profileData}/>;
       case "myReleasedMusic":
@@ -133,11 +148,11 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {<TopBar setUser={setUser} changeView={changeView} profileData={profileData} setArtistData={setArtistData} loggedIn={loggedIn}/>}
+      {<TopBar setUser={setUser} changeView={changeView} profileData={profileData} handleSetArtistSongData={handleSetArtistSongData} loggedIn={loggedIn}/>}
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>
-      {<NavBar changeView={changeView} />}
+      <NavBar changeView={changeView} />
     </ThemeProvider>
   );
 }
