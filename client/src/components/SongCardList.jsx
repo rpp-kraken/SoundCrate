@@ -3,7 +3,6 @@ import SongCard from './SongCard.jsx';
 
 // export default function SongCardList({ songs }) {
 export default function SongCardList({ songs, handleSetArtistSongData, changeView }) {
-  // song: { title, time, artist, artistImageUrl, isLiked, likedCount, playCount }
   return (
     <div className="songCardList">
       {songs.map((song, i) => {
@@ -17,6 +16,7 @@ export default function SongCardList({ songs, handleSetArtistSongData, changeVie
             likedCount={song.fav_count}
             play_count={song.play_count}
             id={song.id}
+            tag_names_string={song.tag_names_array.join(",")}
             key={i}
             handleSetArtistSongData={handleSetArtistSongData}
             changeView={changeView} />

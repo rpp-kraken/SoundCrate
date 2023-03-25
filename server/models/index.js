@@ -35,13 +35,8 @@ const addTags = async (tags, titleOfSong) => {
 
 const getAllSongsHome = async () => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
-  const result = await db.query(`SELECT * FROM ${songsTable}`);
-  for (const song of result.rows) {
-    // console.log("🚀 ~ file: index.js:38 ~ getAllSongsHome ~ song:", song)
-    const findUsername = await db.query(`SELECT username FROM ${usersTable} WHERE id=$1`, [song.user_id]);
-    song.username = findUsername.rows[0].username;
-    // console.log("🚀🚀 ~ file: index.js:40 ~ getAllSongsHome ~ findUsername:", findUsername)
-  }
+  // const result = await db.query(`SELECT * FROM ${songsTable}`);
+  const result = await db.query(`SELECT songs.*, users.username, ARRAY_AGG(song_tags.name) AS tag_names_array FROM songs INNER JOIN users ON songs.user_id = users.id INNER JOIN song_tags ON songs.id = song_tags.song_id GROUP BY songs.id, users.id`);
   return result.rows;
 };
 
