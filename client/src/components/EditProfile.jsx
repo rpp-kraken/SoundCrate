@@ -52,7 +52,8 @@ export default function EditProfile(props) {
 
 
     const formData = new FormData();
-    formData.append('file', image);
+    formData.append('imageFile', image);
+
 
     //image
     fetch(`/api/editProfilePic?userId=${id}`, {
