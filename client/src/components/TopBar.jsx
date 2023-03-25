@@ -17,7 +17,6 @@ export default function TopBar({ setUser, imageURL, changeView, profileData, han
 
   const onClickMyAccount = (event) => {
     handleSetArtistSongData(profileData.username);
-    changeView('profile');
   };
   const onClickMyMusic = (event) => {
     changeView('myReleasedMusic');

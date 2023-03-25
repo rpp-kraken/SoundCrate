@@ -63,7 +63,7 @@ export default function App() {
     // };
   };
 
-  const handleSetArtistSongData = (artistName, songID) => {
+  const handleSetArtistSongData = (artistName, songData) => {
     if (artistName) {
       var artistProfileData;
       axios.get(`/api/userbycol?col=username&val=${artistName}`)
@@ -73,15 +73,17 @@ export default function App() {
       .then(() => {
         axios.get(`/api/songs?user=${artistProfileData.name}`)
         .then((result) => {
-          artistProfileData.songCount = result.data.length;
-          artistProfileData.favoritesCount = result.data.reduce((total, obj) => obj.fav_count + total, 0);
-          artistProfileData.songs = result.data;
+          if (result.data) {
+            artistProfileData.songCount = result.data.length;
+            artistProfileData.favoritesCount = result.data.reduce((total, obj) => obj.fav_count + total, 0);
+            artistProfileData.songs = result.data;
+          }
           setArtistData(artistProfileData);
           changeView('profile');
         })
       })
-    } else if (songID) {
-      return;
+    } else if (songData) {
+      setSongData(songData);
     }
   }
 
