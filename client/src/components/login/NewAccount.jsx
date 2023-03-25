@@ -54,7 +54,8 @@ export default function NewAccount({ changeView, profileData, setProfileData, se
       });
 
       const data = await response.json();
-      setProfileData(data);
+      console.log(data)
+      await setProfileData(data);
       setLoggedIn(true);
       changeView('home');
     } catch (error) {
