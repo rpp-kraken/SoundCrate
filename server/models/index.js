@@ -155,7 +155,7 @@ const getUserByid = async (id) => {
 }
 
 const getUserByCol = async (col, val) => {
-  const user = await db.query(`SELECT * FROM ${usersTable} WHERE $1 = $2`, [col, val]);
+  const user = await db.query(`SELECT * FROM ${usersTable} WHERE ${col} = $1`, [val]);
   if (!user.rows.length) return {};
   return user.rows[0];
 }
