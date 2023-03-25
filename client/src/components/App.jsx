@@ -62,22 +62,10 @@ export default function App() {
     // };
   };
 
-  const handleSetArtistSongData = (artistName, songID) => {
-    if (artistName) {
-      axios.get(`api/userByCol/?col=name&?val=${artistName}`)
-      .then((artistData) => {
-        setArtistData(artistData);
-      })
-    } else if (songID) {
-      axios.get(`api/songs/?userName=${artistName}`)
-      .then((songs) => {
-        setSongData(songs);
-      })
-    }
-  }
-
-  const handleSetUser = (data) => {
-    setUser(data);
+  const handleSetArtistSongData = (artistData, songData) => {
+    console.log(artistData, songData);
+    setArtistData(artistData);
+    setSongData(songData);
   }
 
   useEffect(
@@ -89,22 +77,22 @@ export default function App() {
             Accept: 'application/json'
           }
         })
-        .then((res) => {
-          setProfileData(res.data);
-          return axios.get(`api/user/?userEmail=${res.data.email}`)
-        })
-        .then(res => {
-          let keys = Object.keys(res.data)
-          if (keys.length === 0) {
-            setView({ name: 'newAccount' });
-          } else {
-            let userData = res.data;
-            userData.loggedIn = true;
-            setProfileData(userData);
-            setView({ name: 'home' });
-          }
-        })
-        .catch((err) => console.log('error in oauth', err));
+          .then((res) => {
+            setProfileData(res.data);
+            return axios.get(`api/user/?userEmail=${res.data.email}`)
+          })
+          .then(async (res) => {
+            let keys = Object.keys(res.data)
+            if (keys.length === 0) {
+              changeView('newAccount');
+            } else {
+              setLoggedIn(true);
+              setProfileData(res.data);
+              changeView('home');
+            }
+            setUser({});
+          })
+          .catch((err) => console.log('error in oauth', err));
       }
     },
     [user]
@@ -133,7 +121,7 @@ export default function App() {
       case "confirmLogOut":
         return <ConfirmLogOut changeView={changeView} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "confirmDeleteAccount":
-        return <ConfirmDeleteAccount changeView={changeView} />;
+        return <ConfirmDeleteAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "theme":
         return <ThemeExample />;
       default:
@@ -144,7 +132,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} setArtistData={setArtistData} loggedIn={loggedIn} />
+      {<TopBar setUser={setUser} changeView={changeView} profileData={profileData} setArtistData={setArtistData} loggedIn={loggedIn}/>}
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>
