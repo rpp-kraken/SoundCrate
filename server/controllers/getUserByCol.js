@@ -1,9 +1,10 @@
 const models = require('../models/index');
 
 module.exports = {
-  getUser: (req, res) => {
-    const userEmail = req.query.userEmail;
-    models.getUser(userEmail)
+  getUserByCol: (req, res) => {
+    const col = req.query.col;
+    const val = req.query.val;
+    models.getUserByCol(col, val)
       .then(user => {
         res.json(user);
       })

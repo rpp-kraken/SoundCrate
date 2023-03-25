@@ -65,7 +65,7 @@ export default function App() {
 
   const handleSetArtistSongData = (artistName, songID) => {
     if (artistName) {
-      axios.get(`api/user/?col=name&?val=${artistName}`)
+      axios.get(`api/userByCol/?col=name&?val=${artistName}`)
       .then((artistData) => {
         setArtistData(artistData);
       })
