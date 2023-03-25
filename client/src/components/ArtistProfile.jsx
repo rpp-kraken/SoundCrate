@@ -8,7 +8,7 @@ import SongCardList from './SongCardList.jsx';
 import EditProfile from './EditProfile.jsx';
 import axios from 'axios';
 
-export default function ArtistProfile({ artistData, changeView, loggedIn, songData, profileData }) {
+export default function ArtistProfile({ artistData, changeView, loggedIn, songData, profileData, handleSetArtistSongData }) {
   const [openEditProfile, setOpenEditProfile] = useState(false);
 
   const theme = useTheme();
@@ -123,9 +123,9 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
 
       </Grid>
       {
-        artistData.songs ?
-          <SongCardList songs={artistData.songs} /> :
-          null
+      artistData.songs ?
+      <SongCardList songs={artistData.songs} handleSetArtistSongData={handleSetArtistSongData} changeView = {changeView} /> :
+      null
       }
     </Box>
   );
