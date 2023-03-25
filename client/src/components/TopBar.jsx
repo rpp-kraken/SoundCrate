@@ -52,7 +52,7 @@ export default function TopBar({ setUser, imageURL, changeView, profileData, han
             </ListItem>}
             {loggedIn && <ListItem button>
               <ListItemIcon><Edit /></ListItemIcon>
-              <ListItemText primary="Edit Profile" onClick={onClickMyAccount} />
+              <ListItemText primary="My Account" onClick={onClickMyAccount} />
             </ListItem>}
             {loggedIn && <ListItem button>
               <ListItemIcon><MusicNote /></ListItemIcon>

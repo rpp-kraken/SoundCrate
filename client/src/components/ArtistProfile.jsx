@@ -5,6 +5,8 @@ import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import SongCardList from './SongCardList.jsx';
+import EditProfile from './EditProfile.jsx';
+import axios from 'axios';
 
 export default function ArtistProfile({ artistData, changeView, loggedIn, songData, profileData, handleSetArtistSongData }) {
   const theme = useTheme();
@@ -16,6 +18,50 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
 
   const onClickBackToHome = (event) => {
     changeView('home');
+  };
+
+  const onClickRequestVerification = (event) => {
+    console.log("🚀 ~ file: ArtistProfile.jsx:25 ~ artistData.favoritesCount: ", artistData.favoritesCount)
+
+    let bronze = 250000;
+    let silver = 500000;
+    let gold = 1000000;
+    let tillNextTier, currentTier;
+
+    const newTiers = {
+      newTier: null,
+      oldTier: null
+    };
+
+
+    if (artistData.favoritesCount >= bronze) {
+      // tillNextTier = silver - likes;
+      // currentTier = 'tier1';
+      newTiers.newTier = "tier1";
+    } else if (artistData.favoritesCount <= silver && artistData.favoritesCount >= gold) {
+      // tillNextTier = gold - artistData.favoritesCount;
+      // currentTier = 'tier2';
+      newTiers.newTier = "tier2";
+    } else if (artistData.favoritesCount >= gold) {
+      // currentTier = 'tier3';
+      newTiers.newTier = "tier3";
+    }
+
+    if (artistData.tier1) newTiers.oldTier = "tier1";
+    if (artistData.tier2) newTiers.oldTier = "tier2";
+    if (artistData.tier3) newTiers.oldTier = "tier3";
+
+    console.log("🚀 ~ file: ArtistProfile.jsx:69 ~ onClickRequestVerification ~ newTiers:", newTiers)
+    if (newTiers.newTier && newTiers.newTier !== newTiers.oldTier) {
+      axios.put(`/api/editTier?userId=${artistData.id}`, newTiers)
+        .then((result) => {
+          console.log("TODO: Send get request to refresh the page for badge to show up ~ result:", result)
+        })
+        .catch((err) => console.log('error in verification request: ', err));
+    } else {
+      console.log("not eligible for tier verification")
+    }
+
   };
 
   const handleEditProfile = () => {
@@ -61,11 +107,17 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
         </Grid>
 
         {(loggedIn && artistData.username === profileData.username) && <Grid item xs={12} sx={{ ...gridItemStyle }}>
-            <Button variant="contained" component="label">
-              Edit Profile
-              <input type="submit" onClick={() => handleEditProfile()} style={{ display: 'none' }} />
-            </Button>
-          </Grid>}
+          <Button variant="contained" component="label">
+            Edit Profile
+            <input onClick={() => setOpenEditProfile(true)} style={{ display: 'none' }} />
+          </Button><br />
+          <Button variant="contained" component="label" onClick={onClickRequestVerification}>
+            Request Verification
+          </Button>
+          <div>
+            {openEditProfile && <EditProfile setOpenEditProfile={setOpenEditProfile} profileData={profileData} />}      <br /><br />
+          </div>
+        </Grid>}
 
       </Grid>
       {

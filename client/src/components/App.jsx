@@ -18,6 +18,7 @@ import Play from './Play.jsx';
 import FourOhFour from './404.jsx';
 // import { songData } from '../../../DummyData/dummyData.js'
 import Splash from '../components/login/Splash.jsx';
+import TierVerification from './TierVerification.jsx';
 import axios from 'axios';
 
 export default function App() {
@@ -75,12 +76,14 @@ export default function App() {
           if (result.data) {
             artistProfileData.songCount = result.data.length;
             artistProfileData.favoritesCount = result.data.reduce((total, obj) => obj.fav_count + total, 0);
+            // artistProfileData.favoritesCount = 1000000;
             artistProfileData.songs = result.data;
           }
           setArtistData(artistProfileData);
           changeView('profile');
         })
       })
+      .catch((err) => console.log('error in artistName', err));
     } else if (songData) {
       setSongData(songData);
     }
@@ -122,8 +125,6 @@ export default function App() {
         return <Splash />;
       case "home":
         return <Home songs={songAllHomeData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />;
-      // case "discover":
-      //   return <Discover changeView={changeView} />;
       case "create":
         return <Create changeView={changeView} collaborateSongPath={collaborateSongPath} profileData={profileData} />;
       case "favorites":
@@ -140,6 +141,8 @@ export default function App() {
         return <ConfirmLogOut changeView={changeView} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "confirmDeleteAccount":
         return <ConfirmDeleteAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
+      case "verify":
+        return <TierVerification profileData={profileData} artistProfileData={artistProfileData} />;
       case "theme":
         return <ThemeExample />;
       default:

@@ -10,6 +10,7 @@ module.exports = {
     }
     const userId = req.query.userId;
     const imageFileData = req.file.buffer;
+    // console.log("image file data", req.file);
 
     try {
       const user = await models.checkUser(userId);
