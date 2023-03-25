@@ -62,7 +62,7 @@ export default function App() {
     // };
   };
 
-  const handleSetArtistSongData = (artistName, songID) => {
+  const handleSetArtistSongData = (artistName, songData) => {
     if (artistName) {
       var artistProfileData;
       axios.get(`/api/userbycol?col=username&val=${artistName}`)
@@ -79,8 +79,8 @@ export default function App() {
           changeView('profile');
         })
       })
-    } else if (songID) {
-      return;
+    } else if (songData) {
+      setSongData(songData);
     }
   }
 
