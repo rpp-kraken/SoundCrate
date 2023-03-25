@@ -6,8 +6,11 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import { songData } from '../../../DummyData/dummyData.js';
 import SongCardList from './SongCardList.jsx';
+import EditProfile from './EditProfile.jsx';
 
 export default function ArtistProfile({ artistData, profileData, changeView, loggedIn }) {
+  const [openEditProfile, setOpenEditProfile] = useState(false);
+
   const theme = useTheme();
   const gridItemStyle = {
     display: 'flex',
@@ -64,8 +67,11 @@ export default function ArtistProfile({ artistData, profileData, changeView, log
         {(loggedIn && artistData.username === profileData.username) && <Grid item xs={12} sx={{ ...gridItemStyle }}>
             <Button variant="contained" component="label">
               Edit Profile
-              <input type="submit" onClick={() => handleEditProfile()} style={{ display: 'none' }} />
+              <input onClick={() => setOpenEditProfile(true)} style={{ display: 'none' }} />
             </Button>
+            <div>
+            {openEditProfile && <EditProfile setOpenEditProfile={setOpenEditProfile} profileData={profileData} />}      <br /><br />
+            </div>
           </Grid>}
 
       </Grid>
