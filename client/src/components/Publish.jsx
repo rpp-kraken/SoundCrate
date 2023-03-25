@@ -104,14 +104,10 @@ export const Publish = (props) => {
     formData.append('created_at', new Date().toISOString());
     formData.append('play_count', 0);
     formData.append('fav_count', 0);
-    formData.append('user', `${props.username}`);
-    formData.append('userId', `${props.id}`);
+    formData.append('user', `${props.profileData.username}`);
+    formData.append('userId', `${props.profileData.id}`);
     formData.append('imageFile', image);
     formData.append('tags', tagsString);
-
-      console.log(formData);
-      props.changeView('myReleasedMusic');
-
 
       fetch('/api/uploadSong', {
         method: 'POST',
@@ -120,6 +116,7 @@ export const Publish = (props) => {
       .then(response => response.json())
       .then(data => {
         console.log(data);
+        props.changeView('myReleasedMusic');
       })
       .catch(error => {
         console.error(error);

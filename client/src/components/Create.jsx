@@ -315,7 +315,7 @@ export default function Create(props) {
       {isTrack && <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         <Button variant="contained" onClick={handlePublish}> Publish </Button>
       </Box>}
-      {openPublish && <Publish setOpenPublish={setOpenPublish} song={song} songUrl={songUrl} changeView={props.changeView} />}      <br /><br />
+      {openPublish && <Publish setOpenPublish={setOpenPublish} song={song} songUrl={songUrl} profileData={props.profileData} changeView={props.changeView} />}      <br /><br />
       <br /><br />
       <br /><br />
     </Box>
