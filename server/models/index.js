@@ -36,36 +36,69 @@ const addTags = async (tags, titleOfSong) => {
 const getAllSongsHome = async () => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   // const result = await db.query(`SELECT * FROM ${songsTable}`);
-  const result = await db.query(`SELECT songs.*, users.username, ARRAY_AGG(song_tags.name) AS tag_names_array FROM songs INNER JOIN users ON songs.user_id = users.id INNER JOIN song_tags ON songs.id = song_tags.song_id GROUP BY songs.id, users.id`);
+  // const result = await db.query(`SELECT songs.*, users.username, ARRAY_AGG(song_tags.name) AS tags FROM songs INNER JOIN users ON songs.user_id = users.id INNER JOIN song_tags ON songs.id = song_tags.song_id GROUP BY songs.id, users.id`);
+  const result = await db.query(`SELECT
+    songs.*,
+    users.username,
+    json_object_agg(
+      song_tags.name,
+      json_build_object(
+        'id', song_tags.id,
+        'song_id', song_tags.song_id,
+        'name', song_tags.name
+      )
+    ) AS tags
+  FROM
+    songs
+    INNER JOIN users ON songs.user_id = users.id
+    INNER JOIN song_tags ON songs.id = song_tags.song_id
+  GROUP BY
+    songs.id,
+    users.id`)
+    .catch(err => console.log(`error retrieving songs on home tab`, err));
+
   return result.rows;
 };
 
 
-const getAllSongs = async (user) => {
+const getSongsByUser = async (user) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${user}'`);
   if (!userId.rows.length) return [];
-  const result = await db.query(`SELECT json_agg(
-    json_build_object(
-      'id', id,
-      'title', title,
-      'created_at', created_at,
-      'path_to_song', path_to_song,
-      'play_count', play_count,
-      'fav_count', fav_count,
-      'path_to_artwork', path_to_artwork,
-      'user_id', user_id,
-      'tags', (
-        SELECT coalesce (json_agg(
+  const result = await db.query(`SELECT
+        json_agg(
           json_build_object(
-            'id', id,
-            'name', name,
-            'song_id', song_id
+            'id', songs.id,
+            'title', songs.title,
+            'created_at', songs.created_at,
+            'path_to_song', songs.path_to_song,
+            'play_count', songs.play_count,
+            'fav_count', songs.fav_count,
+            'path_to_artwork', songs.path_to_artwork,
+            'user_id', songs.user_id,
+            'username', users.username,
+            'tags', (
+              SELECT coalesce (
+                json_agg(
+                  json_build_object(
+                    'id', tags.id,
+                    'name', tags.name,
+                    'song_id', tags.song_id
+                  )
+                ), '[]'::json
+              )
+              FROM ${tagsTable} tags
+              WHERE tags.song_id = songs.id
+            )
           )
-        ), '[]'::json) FROM ${tagsTable} WHERE ${tagsTable}.song_id = ${songsTable}.id
-      )
-    )
-  ) FROM ${songsTable} WHERE user_id = $1;`, [userId.rows[0].id])
+        )
+      FROM
+        ${songsTable} songs
+        INNER JOIN users ON songs.user_id = users.id
+      WHERE
+        user_id = $1;
+      `, [userId.rows[0].id])
+
     .catch(err => console.log(`error retrieving songs for user with id ${userId.rows[0].id}`, err));
   return result.rows[0].json_agg;
 };
@@ -181,7 +214,7 @@ module.exports = {
   addSong,
   addTags,
   getAllSongsHome,
-  getAllSongs,
+  getSongsByUser,
   getSong,
   getUser,
   deleteSong,
