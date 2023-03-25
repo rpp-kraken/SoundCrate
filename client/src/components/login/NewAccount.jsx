@@ -7,6 +7,7 @@ export default function NewAccount({ changeView, profileData, setProfileData, se
   const [bio, setBio] = useState('');
   const [path_to_pic, setPath] = useState('');
   const [file, setFile] = useState('');
+  const [tempFile, setTempFile] = useState('');
   const [username, setUsername] = useState('');
 
   useEffect(() => {
@@ -30,6 +31,7 @@ export default function NewAccount({ changeView, profileData, setProfileData, se
 
   const handleFile = async (e) => {
     await setFile(e.target.files[0])
+    setTempFile(e.target.files[0]);
   }
 
   const onSubmit = async (e) => {
@@ -58,7 +60,7 @@ export default function NewAccount({ changeView, profileData, setProfileData, se
       setLoggedIn(true);
       changeView('home');
     } catch (error) {
-      console.error('error in user post', error);
+      return ('error in user post', error);
     }
   };
 

@@ -18,6 +18,7 @@ import Play from './Play.jsx';
 import FourOhFour from './404.jsx';
 // import { songData } from '../../../DummyData/dummyData.js'
 import Splash from '../components/login/Splash.jsx';
+import TierVerification from './TierVerification.jsx';
 import axios from 'axios';
 
 export default function App() {
@@ -66,16 +67,20 @@ export default function App() {
     if (artistName) {
       var artistProfileData;
       axios.get(`/api/userbycol?col=username&val=${artistName}`)
-      .then((result) => { artistProfileData = result.data; })
+      .then((result) => {
+        artistProfileData = result.data;
+      })
       .then(() => {
         axios.get(`/api/songs?user=${artistProfileData.name}`)
         .then((result) => {
-          artistProfileData.songCount = result.data.length;
-          artistProfileData.favoritesCount = result.data.reduce((total, obj) => obj.fav_count + total, 0);
-          artistProfileData.songs = result.data;
+          if (result.data) {
+            artistProfileData.songCount = result.data.length;
+            artistProfileData.favoritesCount = result.data.reduce((total, obj) => obj.fav_count + total, 0);
+            artistProfileData.songs = result.data;
+          }
           setArtistData(artistProfileData);
           changeView('profile');
-        }
+        })
       })
     } else if (songData) {
       setSongData(songData);
@@ -118,8 +123,6 @@ export default function App() {
         return <Splash />;
       case "home":
         return <Home songs={songAllHomeData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />;
-      // case "discover":
-      //   return <Discover changeView={changeView} />;
       case "create":
         return <Create changeView={changeView} collaborateSongPath={collaborateSongPath} profileData={profileData} />;
       case "favorites":
@@ -136,6 +139,8 @@ export default function App() {
         return <ConfirmLogOut changeView={changeView} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "confirmDeleteAccount":
         return <ConfirmDeleteAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
+      case "verify":
+        return <TierVerification profileData={profileData} artistProfileData={artistProfileData} />;
       case "theme":
         return <ThemeExample />;
       default:
@@ -146,7 +151,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {<TopBar setUser={setUser} changeView={changeView} profileData={profileData} setArtistData={setArtistData} loggedIn={loggedIn}/>}
+      {<TopBar setUser={setUser} changeView={changeView} profileData={profileData} handleSetArtistSongData={handleSetArtistSongData} loggedIn={loggedIn}/>}
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>
