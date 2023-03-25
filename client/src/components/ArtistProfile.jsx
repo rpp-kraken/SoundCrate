@@ -4,11 +4,10 @@ import { Avatar } from '@material-ui/core';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
-import { songData } from '../../../DummyData/dummyData.js';
 import SongCardList from './SongCardList.jsx';
 import EditProfile from './EditProfile.jsx';
 
-export default function ArtistProfile({ artistData, profileData, changeView, loggedIn }) {
+export default function ArtistProfile({ artistData, changeView, loggedIn, songData, profileData }) {
   const [openEditProfile, setOpenEditProfile] = useState(false);
 
   const theme = useTheme();
@@ -53,12 +52,12 @@ export default function ArtistProfile({ artistData, profileData, changeView, log
         <Grid container direction='row' style={{ ...gridItemStyle, fontSize: '12px', marginTop: '10px' }}>
 
           <Grid item sx={{ ...gridItemStyle, flexDirection: 'column', minWidth: '80px' }}>
-            <Typography variant='bodyText' style={{ textAlign: 'center' }}>9</Typography>
+            <Typography variant='bodyText' style={{ textAlign: 'center' }}>{artistData.songCount}</Typography>
             <Typography variant='bodyText' style={{ textAlign: 'center' }}>Song</Typography>
           </Grid>
           <div style={{ boxSizing: 'border-box', borderLeft: '1px solid gray', height: '15px' }}></div>
           <Grid item sx={{ ...gridItemStyle, flexDirection: 'column', minWidth: '80px' }}>
-            <Typography variant='bodyText' style={{ textAlign: 'center' }}>99</Typography>
+            <Typography variant='bodyText' style={{ textAlign: 'center' }}>{artistData.favoritesCount}</Typography>
             <Typography variant='bodyText' style={{ textAlign: 'center' }}>Favorites</Typography>
           </Grid>
 
@@ -75,7 +74,7 @@ export default function ArtistProfile({ artistData, profileData, changeView, log
           </Grid>}
 
       </Grid>
-      <SongCardList songs={songData} />
+      <SongCardList songs={ artistData.songs } />
     </Box>
   );
 }
