@@ -69,10 +69,6 @@ export default function App() {
     setSongData(songData);
   }
 
-  const handleSetUser = (data) => {
-    setUser(data);
-  }
-
   useEffect(
     () => {
       if (user.length !== 0) {
@@ -84,7 +80,6 @@ export default function App() {
         })
           .then((res) => {
             setProfileData(res.data);
-            setUser({});
             return axios.get(`api/user/?userEmail=${res.data.email}`)
           })
           .then(async (res) => {
@@ -96,6 +91,7 @@ export default function App() {
               setProfileData(res.data);
               changeView('home');
             }
+            setUser({});
           })
           .catch((err) => console.log('error in oauth', err));
       }
@@ -126,7 +122,7 @@ export default function App() {
       case "confirmLogOut":
         return <ConfirmLogOut changeView={changeView} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "confirmDeleteAccount":
-        return <ConfirmDeleteAccount changeView={changeView} />;
+        return <ConfirmDeleteAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "theme":
         return <ThemeExample />;
       default:
@@ -137,7 +133,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {<TopBar setUser={handleSetUser} changeView={changeView} profileData={profileData} setArtistData={setArtistData} loggedIn={loggedIn}/>}
+      {<TopBar setUser={setUser} changeView={changeView} profileData={profileData} setArtistData={setArtistData} loggedIn={loggedIn}/>}
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>

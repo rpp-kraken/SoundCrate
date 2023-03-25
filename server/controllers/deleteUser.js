@@ -3,6 +3,7 @@ const models = require('../models/index');
 module.exports = {
   handleDeleteUser: async (req, res) => {
     const userId = req.query.userId;
+    console.log(`handleDeleteUser - req.query: ${JSON.stringify(req.query)}`)
 
     try {
       await models.deleteUser(userId);
