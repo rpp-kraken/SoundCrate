@@ -62,21 +62,24 @@ const getAllSongsHome = async () => {
 
 
 const getSongsByUser = async (user) => {
+  console.log("🚀 ~ file: index.js:65 ~ getSongsByUser ~ user:", user)
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${user}'`);
+  // const userId = await db.query(`SELECT id FROM ${usersTable} WHERE username = '${user}'`);
+  console.log("🚀 ~ file: index.js:69 ~ getSongsByUser ~ userId:", userId)
   if (!userId.rows.length) return [];
   const result = await db.query(`SELECT
         json_agg(
           json_build_object(
-            'id', songs.id,
-            'title', songs.title,
-            'created_at', songs.created_at,
-            'path_to_song', songs.path_to_song,
-            'play_count', songs.play_count,
-            'fav_count', songs.fav_count,
-            'path_to_artwork', songs.path_to_artwork,
-            'user_id', songs.user_id,
-            'username', users.username,
+            'id', ${songsTable}.id,
+            'title', ${songsTable}.title,
+            'created_at', ${songsTable}.created_at,
+            'path_to_song', ${songsTable}.path_to_song,
+            'play_count', ${songsTable}.play_count,
+            'fav_count', ${songsTable}.fav_count,
+            'path_to_artwork', ${songsTable}.path_to_artwork,
+            'user_id', ${songsTable}.user_id,
+            'username', ${usersTable}.username,
             'tags', (
               SELECT coalesce (
                 json_agg(
@@ -88,17 +91,16 @@ const getSongsByUser = async (user) => {
                 ), '[]'::json
               )
               FROM ${tagsTable} tags
-              WHERE tags.song_id = songs.id
+              WHERE tags.song_id = ${songsTable}.id
             )
           )
         )
       FROM
-        ${songsTable} songs
-        INNER JOIN users ON songs.user_id = users.id
+        ${songsTable}
+        INNER JOIN ${usersTable} ON ${songsTable}.user_id = ${usersTable}.id
       WHERE
         user_id = $1;
       `, [userId.rows[0].id])
-
     .catch(err => console.log(`error retrieving songs for user with id ${userId.rows[0].id}`, err));
   return result.rows[0].json_agg;
 };
