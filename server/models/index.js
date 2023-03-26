@@ -62,11 +62,9 @@ const getAllSongsHome = async () => {
 
 
 const getSongsByUser = async (user) => {
-  console.log("🚀 ~ file: index.js:65 ~ getSongsByUser ~ user:", user)
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${user}'`);
   // const userId = await db.query(`SELECT id FROM ${usersTable} WHERE username = '${user}'`);
-  console.log("🚀 ~ file: index.js:69 ~ getSongsByUser ~ userId:", userId)
   if (!userId.rows.length) return [];
   const result = await db.query(`SELECT
         json_agg(
