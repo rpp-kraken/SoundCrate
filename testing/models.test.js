@@ -43,6 +43,8 @@ describe('models functions', () => {
       VALUES (1, 'calpal', 'cp@gmail.com', 'cool guy', 'path', 'cp')`);
     await global.client.query(`INSERT INTO temp_songs (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
       VALUES (1, 'yum', '2023-03-11T19:43:02+00:00', 'https://google.com', 1, 1, 'https://google.com', 1)`);
+    await global.client.query(`INSERT INTO temp_tags (id, name, song_id)
+      VALUES (1, 'tag1', 1)`);
   }, 10000);
 
   afterEach(async () => {
@@ -57,10 +59,10 @@ describe('models functions', () => {
     await client.end();
   });
 
-  describe('getAllSongs', () => {
+  describe('getSongsByUser', () => {
     it('should get all songs from a specific user', async () => {
       const user = 'calpal'
-      const result = await models.getAllSongs(user);
+      const result = await models.getSongsByUser(user);
       const expected = [{
         id: 1,
         title: 'yum',
@@ -78,7 +80,7 @@ describe('models functions', () => {
 
     it('should return an empty array if a userId is not in the database', async () => {
       const user = 'fakeUser';
-      const result = await models.getAllSongs(user);
+      const result = await models.getSongsByUser(user);
       await expect(result).toEqual([]);
     });
   });

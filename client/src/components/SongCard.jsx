@@ -32,7 +32,8 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView, id, profileData, view }) {
+export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView, id, profileData, view, tags }) {
+
   const theme = useTheme();
   const [liked, setLiked] = useState(isLiked);
   const [playViewOpen, setPlayViewOpen] = useState(false);
@@ -77,7 +78,8 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
             likedCount,
             play_count,
             path_to_song,
-            id
+            id,
+            tags
           }
         );
         changeView('play');

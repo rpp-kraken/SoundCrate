@@ -18,8 +18,6 @@ export default function Home(props) {
   //   // console.log("PropsSongs: ");
   // }. [])
 
-  // query the database for the first ten songs
-  // for now, just use dummy data
   let songs = filterData(searchQuery, props.songs);
   return (
     <div className="discover">
