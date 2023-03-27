@@ -85,6 +85,31 @@ describe('models functions', () => {
     });
   });
 
+  describe('getSongsByUserId', () => {
+    it('should get all songs from a specific user for a userId', async () => {
+      const userId = 1;
+      const result = await models.getSongsByUserId(userId);
+      const expected = [{
+        id: 1,
+        title: 'yum',
+        created_at: '2023-03-11T19:43:02+00:00',
+        path_to_song: 'https://google.com',
+        play_count: 1,
+        fav_count: 1,
+        path_to_artwork: 'https://google.com',
+        user_id: 1
+      }]
+      // console.log(JSON.stringify(result));
+      await expect(result.length).not.toBe(0);
+      await expect(result.length).toBe(expected.length);
+    });
+    it('should return an empty array if a userId is not in the database', async () => {
+      const userId = 700;
+      const result = await models.getSongsByUserId(userId);
+      await expect(result).toEqual([]);
+    })
+  })
+
   describe('addUser', () => {
     it('should add a user to the database with full info filled out', async () => {
       const user = {

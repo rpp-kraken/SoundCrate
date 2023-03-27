@@ -60,6 +60,12 @@ const getAllSongsHome = async () => {
   return result.rows;
 };
 
+const getSongsByUserId = async (userId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
+  let name = await db.query(`SELECT name FROM ${usersTable} WHERE id = $1`, [userId]);
+  name = name.rows.length ? name.rows[0].name : '';
+  return getSongsByUser(name);
+}
 
 const getSongsByUser = async (user) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
@@ -239,6 +245,7 @@ module.exports = {
   addTags,
   getAllSongsHome,
   getSongsByUser,
+  getSongsByUserId,
   getSong,
   getUser,
   deleteSong,
