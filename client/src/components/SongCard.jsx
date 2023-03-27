@@ -32,7 +32,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView, id, profileData }) {
+export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView, id, profileData, view }) {
   const theme = useTheme();
   const [liked, setLiked] = useState(isLiked);
   const [playViewOpen, setPlayViewOpen] = useState(false);
@@ -96,7 +96,7 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
           style={{ cursor: 'pointer', marginTop: '8px' }}
         >
           {artist}
-          <ArtistBadge username={artist}/>
+          <ArtistBadge username={artist} view={view}/>
         </Typography>
         <Stack direction="row" alignItems="center" spacing={1} mt={1}>
           <IconButton onClick={handleLikeClick}>
