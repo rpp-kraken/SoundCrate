@@ -154,7 +154,11 @@ const getUser = async (userEmail) => {
 
 const deleteUser = async (userId) => {
   return await db.query(`DELETE FROM ${usersTable} WHERE id = $1`, [userId]);
-}
+};
+
+const deleteTagsByUser = async (userId) => {
+  return await db.query(`DELETE FROM ${tagsTable} WHERE user_id = $1`, [userId]);
+};
 
 const getUserId = async (user) => {
   const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = $1`, [user]);
