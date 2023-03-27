@@ -244,6 +244,56 @@ describe('models functions', () => {
     });
   });
 
+  describe('deleteTagsByUser', () => {
+    it('should delete all tags associated with a given user', async () => {
+      const user = 'calpal';
+
+      // add a second song for 'calpal'
+      await global.client.query(`INSERT INTO temp_songs (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
+      VALUES (2, 'yum2', '2023-03-11T19:43:02+00:00', 'https://google.com', 1, 1, 'https://google.com', 1)`);
+
+      // and one for a different user
+      await global.client.query(`INSERT INTO temp_songs (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
+      VALUES (3, 'yum3', '2023-03-11T19:43:02+00:00', 'https://google.com', 1, 1, 'https://google.com', 2)`);
+
+      const songs = await models.getSongsByUser(user);
+      expect(songs.length).toBe(2);
+
+      // one tag already exists for user #1 from the beforeEach block
+      await global.client.query(`INSERT INTO ${tagsTable} (id, name, song_id) VALUES (1000, 'tag1', 1)`);
+      await global.client.query(`INSERT INTO ${tagsTable} (id, name, song_id) VALUES (1001, 'tag2', 1)`);
+      await global.client.query(`INSERT INTO ${tagsTable} (id, name, song_id) VALUES (2000, 'tag1ForSong2', 2)`);
+
+      // add one tag for song 3 that belongs to user 2
+      await global.client.query(`INSERT INTO ${tagsTable} (id, name, song_id) VALUES (3000, 'tag1ForSong3', 3)`);
+
+      // there should be 5 tags total
+      const { rows, rowCount: tagsCount } = await global.client.query(`SELECT * FROM ${tagsTable}`);
+      expect(tagsCount).toBe(5);
+
+      // there should be 4 tags for user1
+      let user1TagsCount = 0;
+      songs.forEach(song => {
+        user1TagsCount += rows.filter(row => row.song_id === song.id).length;
+      });
+      expect(user1TagsCount).toBe(4);
+
+      // delete all tags associated with user1
+      await models.deleteTagsByUser(1);
+
+      // there should be 1 tag remaining (associated with a different user)
+      const { rows: updatedRows, rowCount: updatedTagsCount } = await global.client.query(`SELECT * FROM ${tagsTable}`);
+      expect(updatedTagsCount).toBe(1);
+
+      // user1 tags should be 0
+      let updatedUser1TagsCount = 0;
+      songs.forEach(song => {
+        updatedUser1TagsCount += updatedRows.filter(row => row.song_id === song.id).length;
+      });
+      expect(updatedUser1TagsCount).toBe(0);
+    });
+  });
+
   describe('deleteUser', () => {
     const newUser = { name: "Carl C" };
 

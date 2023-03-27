@@ -104,16 +104,19 @@ const getSongsByUser = async (user) => {
 };
 
 const getSong = async (songId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   const song = await db.query(`SELECT * FROM ${songsTable} WHERE id = $1`, [songId]);
   if (!song.rows.length) return {};
   return song.rows[0];
 };
 
 const editTitle = async (songId, newTitle) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   return db.query(`UPDATE ${songsTable} SET title = $1 WHERE id = $2`, [newTitle, songId]);
 };
 
 const deleteSong = async (songId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   await db.query(`DELETE FROM ${tagsTable} WHERE song_id = $1`, [songId]);
   return db.query(`DELETE FROM ${songsTable} WHERE id = $1`, [songId]);
 };
@@ -127,6 +130,7 @@ const addUser = async (data) => {
 };
 
 const getUsersFavoriteSongs = async (userId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   return db.query(`SELECT
     ${songsTable}.*,
     ${usersTable}.id AS user_id,
@@ -147,40 +151,53 @@ const getUsersFavoriteSongs = async (userId) => {
 };
 
 const getUser = async (userEmail) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   const user = await db.query(`SELECT * FROM ${usersTable} WHERE email = $1`, [userEmail]);
   if (!user.rows.length) return {};
   return user.rows[0];
 };
 
 const deleteUser = async (userId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   return await db.query(`DELETE FROM ${usersTable} WHERE id = $1`, [userId]);
 };
 
 const deleteTagsByUser = async (userId) => {
-  return await db.query(`DELETE FROM ${tagsTable} WHERE user_id = $1`, [userId]);
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
+  // find all songs associated with that user
+  let songIds = await db.query(`SELECT id FROM ${songsTable} WHERE user_id = $1`, [userId]);
+  songIds = songIds.rows.length ? songIds.rows.map(row => row.id) : [];
+  return songIds.forEach(async (songId) => {
+    return await db.query(`DELETE FROM ${tagsTable} WHERE song_id = $1`, [songId]);
+  });
 };
 
 const getUserId = async (user) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = $1`, [user]);
   if (!userId.rows.length) return {};
   return userId.rows[0].id;
 };
 
 const checkUser = async (userId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   const user = await db.query(`SELECT * FROM ${usersTable} WHERE id = $1`, [userId]);
   if (!user.rows.length) return {};
   return user.rows[0].id;
 };
 
 const editBio = async (userId, newBio) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   return db.query(`UPDATE ${usersTable} SET bio = $1 WHERE id = $2`, [newBio, userId]);
 };
 
 const editProfilePic = async (newPic, userId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   return db.query(`UPDATE ${usersTable} SET path_to_pic = $1 WHERE id = $2`, [newPic, userId]);
 }
 
 const editTier = async (userId, newTier, oldTier) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   try {
     await db.query(`UPDATE ${usersTable} SET ${newTier} = $1 WHERE id = $2`, [true, userId]);
     if (oldTier) {
@@ -192,18 +209,21 @@ const editTier = async (userId, newTier, oldTier) => {
 }
 
 const getUserByid = async (id) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   const user = await db.query(`SELECT * FROM ${usersTable} WHERE id = $1`, [id]);
   if (!user.rows.length) return {};
   return user.rows[0];
 }
 
 const getUserByCol = async (col, val) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   const user = await db.query(`SELECT * FROM ${usersTable} WHERE ${col} = $1`, [val]);
   if (!user.rows.length) return {};
   return user.rows[0];
 }
 
 const playCountIncrementModel = async (songId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   const query = {
     text: `UPDATE ${songsTable} SET play_count = play_count + 1 WHERE id = $1`,
     values: [songId],
@@ -230,6 +250,7 @@ module.exports = {
   playCountIncrementModel,
   editBio,
   deleteUser,
+  deleteTagsByUser,
   editProfilePic,
   getUserByid,
   getUserByCol
