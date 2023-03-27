@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Play from './Play.jsx';
 import Stack from '@mui/material/Stack';
 import ArtistBadge from './ArtistBadge.jsx'
+import axios from 'axios';
 
 
 const useStyles = makeStyles({
@@ -31,7 +32,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView, id }) {
+export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView, id, profileData }) {
   const theme = useTheme();
   const [liked, setLiked] = useState(isLiked);
   const [playViewOpen, setPlayViewOpen] = useState(false);
@@ -43,6 +44,11 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
   const handleLikeClick = (event) => {
     event.stopPropagation();
     setLiked(!liked);
+    try {
+      axios.put('/likeSong', { songName: title, songId: id, userId: profileData.id });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

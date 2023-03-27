@@ -2,7 +2,7 @@ import React from 'react';
 import SongCard from './SongCard.jsx';
 
 // export default function SongCardList({ songs }) {
-export default function SongCardList({ songs, handleSetArtistSongData, changeView }) {
+export default function SongCardList({ songs, handleSetArtistSongData, changeView, profileData }) {
   // song: { title, time, artist, artistImageUrl, isLiked, likedCount, playCount }
   return (
     <div className="songCardList">
@@ -19,7 +19,9 @@ export default function SongCardList({ songs, handleSetArtistSongData, changeVie
             id={song.id}
             key={i}
             handleSetArtistSongData={handleSetArtistSongData}
-            changeView={changeView} />
+            changeView={changeView}
+            profileData={profileData}
+            />
         )
       })}
     </div>

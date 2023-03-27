@@ -23,8 +23,9 @@ export default function Home(props) {
   let songs = filterData(searchQuery, props.songs);
   return (
     <div className="discover">
+      {console.log(props.profileData)}
       <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      <SongCardList songs={songs} changeView={props.changeView} handleSetArtistSongData={props.handleSetArtistSongData} />
+      <SongCardList songs={songs} changeView={props.changeView} handleSetArtistSongData={props.handleSetArtistSongData} profileData={props.profileData}/>
       <br/><br/><br/>
     </div>
   )

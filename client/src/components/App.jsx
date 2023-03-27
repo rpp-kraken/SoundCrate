@@ -123,7 +123,7 @@ export default function App() {
       case "splash":
         return <Splash />;
       case "home":
-        return <Home songs={songAllHomeData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />;
+        return <Home songs={songAllHomeData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} profileData={profileData}/>;
       case "create":
         return <Create changeView={changeView} collaborateSongPath={collaborateSongPath} profileData={profileData} />;
       case "favorites":
