@@ -8,6 +8,7 @@ const path = require('path');
 const { app, server } = require('../server/index');
 const { secrets } = require('docker-secret');
 require('dotenv').config();
+const models = require('../server/models/index');
 
 describe('Reviews route', () => {
   jest.setTimeout(10000);
@@ -43,8 +44,15 @@ describe('Reviews route', () => {
       VALUES (1, 'yum', '2023-03-11T19:43:02+00:00', 'https://google.com', 1, 1, 'https://google.com', 1)`);
     await global.client.query(`INSERT INTO temp_songs (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
       VALUES (2, 'yums', '2023-03-11T19:43:02+00:00', 'https://google.com', 1, 1, 'https://google.com', 1)`);
+    await global.client.query(`INSERT INTO temp_songs (id, title, created_at, path_to_song, play_count, fav_count, path_to_artwork, user_id)
+      VALUES (3, 'yums3', '2023-03-11T19:43:02+00:00', 'https://google.com', 1, 1, 'https://google.com', 2)`);
     await global.client.query(`INSERT INTO temp_favorites (id, user_id, song_id) VALUES (1, 1, 1)`);
     await global.client.query(`INSERT INTO temp_favorites (id, user_id, song_id) VALUES (2, 1, 2)`);
+
+    // add tags
+    await global.client.query(`INSERT INTO temp_tags (id, name, song_id) VALUES (1, 'tag1', 1)`);
+    await global.client.query(`INSERT INTO temp_tags (id, name, song_id) VALUES (2, 'tag2', 1)`);
+    await global.client.query(`INSERT INTO temp_tags (id, name, song_id) VALUES (3, 'tag1User2', 3)`);
   }, 10000);
 
   afterAll(async () => {
@@ -57,6 +65,7 @@ describe('Reviews route', () => {
     await global.client.query('DROP TABLE IF EXISTS temp_users');
     await global.client.query('DROP TABLE IF EXISTS temp_songs');
     await global.client.query('DROP TABLE IF EXISTS temp_tags');
+    await global.client.query(`DROP TABLE IF EXISTS temp_favorites`);
   });
 
   describe('POST /api/uploadSong', () => {
@@ -287,6 +296,39 @@ describe('Reviews route', () => {
       const { rows: newRows, rowCount: newRowCount } = await global.client.query(`SELECT * FROM temp_users`);
       expect(newRowCount).toBe(rowCount);
       expect(newRows).toEqual(rows);
+    });
+
+    it('should delete all songs associated with a given user', async () => {
+      const userId = 1;
+      const { rowCount: allSongCount } = await global.client.query(`SELECT * FROM temp_songs`);
+      const { rows: songs, rowCount: songCount } = await global.client.query(`SELECT * FROM temp_songs WHERE user_id = $1`, [userId]);
+      expect(songCount).not.toBe(0);
+      expect(songCount).not.toBe(allSongCount);
+
+      await request(app).delete(`/api/deleteUser?userId=${userId}`);
+
+      const { rowCount: updatedAllSongCount } = await global.client.query(`SELECT * FROM temp_songs`);
+      const { rows: newSongs, rowCount: newSongCount} = await global.client.query(`SELECT * FROM temp_songs WHERE user_id = $1`, [userId]);
+      expect(newSongs.length).toBe(0);
+      expect(updatedAllSongCount).toBe(allSongCount - songCount);
+    });
+
+    it('should delete all tags associated with a given user', async () => {
+      const userId = 1;
+      const { rows: allTags, rowCount: allTagCount } = await global.client.query(`SELECT * FROM temp_tags`);
+      expect(allTagCount).not.toBe(0);
+
+      const { rows: songs } = await global.client.query(`SELECT * FROM temp_songs WHERE user_id = $1`, [userId]);
+      console.log(JSON.stringify(songs));
+      let userTagCount = 0;
+      songs.forEach(song => userTagCount += allTags.filter(tag => tag.song_id === song.id).length);
+      expect(userTagCount).not.toBe(0);
+      expect(userTagCount).not.toBe(allTagCount);
+
+      await request(app).delete(`/api/deleteUser?userId=${userId}`);
+
+      const { rowCount: updatedAllTagCount } = await global.client.query(`SELECT * FROM temp_tags`);
+      expect(updatedAllTagCount).toBe(allTagCount - userTagCount);
     });
   });
 
