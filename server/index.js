@@ -8,7 +8,7 @@ const https = require('https');
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const { handleUpload } = require('./controllers/handleUpload');
-const { getSongs } = require('./controllers/getSongs');
+const { getSongsByUser } = require('./controllers/getSongsByUser');
 // const { getOneSong } = require('./controllers/getOneSong');
 const { getAllSongsHome } = require('./controllers/getAllSongsHome');
 const { newUser } = require('./controllers/newUser');
@@ -45,10 +45,10 @@ app.use(cookieParser());
 //ROUTES
 
 // song routes
-app.get('/api/songs', getSongs);
-// app.get('/api/songSingle', getOneSong);
 app.get('/api/getAllSongsHome', getAllSongsHome);
+app.get('/api/songs', getSongsByUser);
 app.get('/api/getFavoriteSongs', getFavoriteSongs)
+// app.get('/api/songSingle', getOneSong);
 app.post('/api/uploadSong', upload.fields([
   {name: 'audioFile', maxCount: 1},
   {name: 'imageFile', maxCount: 1}
