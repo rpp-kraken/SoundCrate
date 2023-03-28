@@ -29,11 +29,7 @@ export default function Favorites(props) {
   }, [props.profileData.name]);
   return (
     <div>
-              <video autoPlay muted className="video" >
-          <source src="snarkyFavoritesSplash.mp4" type="video/mp4" />
-          Ouch! Sorry, your browser doesnt support this video! Get logged in to have some fun!
-        </video>
-      {/* {loading
+      {loading
         ?
         <div>
         <video autoPlay muted className="video" >
@@ -41,7 +37,7 @@ export default function Favorites(props) {
           Ouch! Sorry, your browser doesnt support this video! Get logged in to have some fun!
         </video>
       </div>
-        : <SongCardList songs={songs} />} */}
+        : <SongCardList songs={songs} />}
     </div>
   );
 };
