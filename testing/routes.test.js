@@ -319,7 +319,6 @@ describe('Reviews route', () => {
       expect(allTagCount).not.toBe(0);
 
       const { rows: songs } = await global.client.query(`SELECT * FROM temp_songs WHERE user_id = $1`, [userId]);
-      console.log(JSON.stringify(songs));
       let userTagCount = 0;
       songs.forEach(song => userTagCount += allTags.filter(tag => tag.song_id === song.id).length);
       expect(userTagCount).not.toBe(0);

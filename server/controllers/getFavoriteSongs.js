@@ -10,7 +10,6 @@ module.exports = {
       }
       models.getUsersFavoriteSongs(userId)
         .then(songs => {
-          console.log(songs)
           res.json(songs.rows);
         });
     } catch (err) {

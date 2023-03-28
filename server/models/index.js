@@ -139,7 +139,7 @@ const getUsersFavoriteSongs = async (userId) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   return db.query(`SELECT
     ${songsTable}.*,
-    ${usersTable}.id AS user_id,
+    ${usersTable}.*,
     COALESCE(ARRAY_AGG(${tagsTable}.name) FILTER (WHERE ${tagsTable}.name IS NOT NULL), ARRAY[]::text[]) AS tags
   FROM
     ${usersTable}
