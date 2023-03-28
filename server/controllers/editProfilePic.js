@@ -4,13 +4,11 @@ const models = require('../models/index');
 
 module.exports = {
   editProfilePic: async (req, res) => {
-    // console.log('req: ', req);
     if (!req.file.buffer) {
       return res.status(500).json({ message: 'Image file not accepted' });
     }
     const userId = req.query.userId;
     const imageFileData = req.file.buffer;
-    // console.log("image file data", req.file);
 
     try {
       const user = await models.checkUser(userId);
