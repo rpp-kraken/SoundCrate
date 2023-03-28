@@ -6,11 +6,12 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import SongCardList from './SongCardList.jsx';
 import EditProfile from './EditProfile.jsx';
+import ArtistBadgeProfile from './ArtistBadgeProfile.jsx'
 import axios from 'axios';
 
 export default function ArtistProfile({ artistData, changeView, loggedIn, songData, profileData, handleSetArtistSongData }) {
   const [openEditProfile, setOpenEditProfile] = useState(false);
-
+  console.log(artistData)
   const theme = useTheme();
   const gridItemStyle = {
     display: 'flex',
@@ -105,7 +106,11 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
             <Typography variant='bodyText' style={{ textAlign: 'center' }}>{artistData.favoritesCount}</Typography>
             <Typography variant='bodyText' style={{ textAlign: 'center' }}>Favorites</Typography>
           </Grid>
-
+          {(artistData.tier1 || artistData.tier2 || artistData.tier3) &&
+          <Grid item sx={{ ...gridItemStyle, flexDirection: 'column', minWidth: '80px' }}>
+            <ArtistBadgeProfile tier1={artistData.tier1} tier2={artistData.tier2} tier3={artistData.tier3} />
+          </Grid>
+          }
         </Grid>
 
         {(loggedIn && artistData.username === profileData.username) && <Grid item xs={12} sx={{ ...gridItemStyle }}>
@@ -123,9 +128,9 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
 
       </Grid>
       {
-      artistData.songs ?
-      <SongCardList songs={artistData.songs} handleSetArtistSongData={handleSetArtistSongData} changeView = {changeView} /> :
-      null
+        artistData.songs ?
+          <SongCardList songs={artistData.songs} handleSetArtistSongData={handleSetArtistSongData} changeView={changeView} /> :
+          null
       }
     </Box>
   );

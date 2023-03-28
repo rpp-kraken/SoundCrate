@@ -28,7 +28,7 @@ export default function Favorites(props) {
       });
   }, [props.profileData.name]);
   return (
-    <div>
+    <div className="discover" >
       {loading
         ?
         <div>

@@ -8,27 +8,14 @@ const handleUpload = async (req, res) => {
     res.sendStatus(500);
     return;
   }
-  console.log('here is req.body',req.body)
-  // const data = req.body;
-  // const tags = req.body.tags;
-  // const audioFileData = req.body.audioFile;
-  // const imageFileData = req.body.imageFile;
-
-
-
-  // const audioFileData = song;
-  // const imageFileData = image;
-
   const data = req.body;
   const { tags } = req.body;
 
   const audioFileData = req.files['audioFile'][0].buffer;
-  console.log('here is image file', req.body.imageFile);
 
   let imageFileData;
   if (req.body.imageFile === 'undefined') {
     try {
-      console.log('inside try for no image');
       imageFileData = await fs.readFile('server/songImage.png');
     } catch (error) {
       console.error(error);

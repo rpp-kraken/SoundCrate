@@ -139,7 +139,7 @@ const getUsersFavoriteSongs = async (userId) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   return db.query(`SELECT
     ${songsTable}.*,
-    ${usersTable}.id AS user_id,
+    ${usersTable}.*,
     COALESCE(ARRAY_AGG(${tagsTable}.name) FILTER (WHERE ${tagsTable}.name IS NOT NULL), ARRAY[]::text[]) AS tags
   FROM
     ${usersTable}
@@ -239,6 +239,19 @@ const playCountIncrementModel = async (songId) => {
   return result.rowCount;
 };
 
+const addFavoriteSong = async (userId, songId) => {
+  const query = {
+    text: 'INSERT INTO favorites (id, user_id, song_id) VALUES ($1, $2, $3)',
+    values: [`${userId}_${songId}`, userId, songId]
+  };
+  try {
+    await db.query(query);
+    console.log('Song added to favorites!');
+  } catch (err) {
+    console.error('Error adding song to favorites:', err);
+  }
+}
+
 module.exports = {
   addUser,
   addSong,
@@ -260,5 +273,6 @@ module.exports = {
   deleteTagsByUser,
   editProfilePic,
   getUserByid,
-  getUserByCol
+  getUserByCol,
+  addFavoriteSong
 };

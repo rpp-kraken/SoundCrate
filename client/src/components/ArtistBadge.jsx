@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 
-export default function ArtistBadge({ username }) {
+export default function ArtistBadge({ username, view }) {
 
   const [badgeLevelIcon, setBadgeLevel] = useState(null)
-
   useEffect(() => {
     axios
       .get('/api/userBadge', { params: { username } })
@@ -12,14 +11,8 @@ export default function ArtistBadge({ username }) {
         let tier1 = data.data.tier1
         let tier2 = data.data.tier2
         let tier3 = data.data.tier3
-        if (tier1) {
-          setBadgeLevel('bronze-icon-badge.PNG')
-        }
-        if (tier2) {
-          setBadgeLevel('silver.png')
-        }
-        if (tier3) {
-          setBadgeLevel('gold-icon-badge-high-vis.PNG')
+          if (tier1 || tier2 || tier3) {
+            setBadgeLevel('verifiedUser.png')
         }
       })
       .catch((err) => {
