@@ -35,57 +35,94 @@ const addTags = async (tags, titleOfSong) => {
 
 const getAllSongsHome = async () => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
-  const result = await db.query(`SELECT * FROM ${songsTable}`);
-  for (const song of result.rows) {
-    // console.log("🚀 ~ file: index.js:38 ~ getAllSongsHome ~ song:", song)
-    const findUsername = await db.query(`SELECT username FROM ${usersTable} WHERE id=$1`, [song.user_id]);
-    song.username = findUsername.rows[0].username;
-    // console.log("🚀🚀 ~ file: index.js:40 ~ getAllSongsHome ~ findUsername:", findUsername)
-  }
+  // const result = await db.query(`SELECT * FROM ${songsTable}`);
+  // const result = await db.query(`SELECT songs.*, users.username, ARRAY_AGG(song_tags.name) AS tags FROM songs INNER JOIN users ON songs.user_id = users.id INNER JOIN song_tags ON songs.id = song_tags.song_id GROUP BY songs.id, users.id`);
+  const result = await db.query(`SELECT
+    songs.*,
+    users.username,
+    json_object_agg(
+      song_tags.name,
+      json_build_object(
+        'id', song_tags.id,
+        'song_id', song_tags.song_id,
+        'name', song_tags.name
+      )
+    ) AS tags
+  FROM
+    songs
+    INNER JOIN users ON songs.user_id = users.id
+    INNER JOIN song_tags ON songs.id = song_tags.song_id
+  GROUP BY
+    songs.id,
+    users.id`)
+    .catch(err => console.log(`error retrieving songs on home tab`, err));
+
   return result.rows;
 };
 
+const getSongsByUserId = async (userId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
+  let name = await db.query(`SELECT name FROM ${usersTable} WHERE id = $1`, [userId]);
+  name = name.rows.length ? name.rows[0].name : '';
+  return getSongsByUser(name);
+}
 
-const getAllSongs = async (user) => {
+const getSongsByUser = async (user) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = '${user}'`);
+  // const userId = await db.query(`SELECT id FROM ${usersTable} WHERE username = '${user}'`);
   if (!userId.rows.length) return [];
-  const result = await db.query(`SELECT json_agg(
-    json_build_object(
-      'id', id,
-      'title', title,
-      'created_at', created_at,
-      'path_to_song', path_to_song,
-      'play_count', play_count,
-      'fav_count', fav_count,
-      'path_to_artwork', path_to_artwork,
-      'user_id', user_id,
-      'tags', (
-        SELECT coalesce (json_agg(
+  const result = await db.query(`SELECT
+        json_agg(
           json_build_object(
-            'id', id,
-            'name', name,
-            'song_id', song_id
+            'id', ${songsTable}.id,
+            'title', ${songsTable}.title,
+            'created_at', ${songsTable}.created_at,
+            'path_to_song', ${songsTable}.path_to_song,
+            'play_count', ${songsTable}.play_count,
+            'fav_count', ${songsTable}.fav_count,
+            'path_to_artwork', ${songsTable}.path_to_artwork,
+            'user_id', ${songsTable}.user_id,
+            'username', ${usersTable}.username,
+            'tags', (
+              SELECT coalesce (
+                json_agg(
+                  json_build_object(
+                    'id', tags.id,
+                    'name', tags.name,
+                    'song_id', tags.song_id
+                  )
+                ), '[]'::json
+              )
+              FROM ${tagsTable} tags
+              WHERE tags.song_id = ${songsTable}.id
+            )
           )
-        ), '[]'::json) FROM ${tagsTable} WHERE ${tagsTable}.song_id = ${songsTable}.id
-      )
-    )
-  ) FROM ${songsTable} WHERE user_id = $1;`, [userId.rows[0].id])
+        )
+      FROM
+        ${songsTable}
+        INNER JOIN ${usersTable} ON ${songsTable}.user_id = ${usersTable}.id
+      WHERE
+        user_id = $1;
+      `, [userId.rows[0].id])
     .catch(err => console.log(`error retrieving songs for user with id ${userId.rows[0].id}`, err));
   return result.rows[0].json_agg;
 };
 
 const getSong = async (songId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   const song = await db.query(`SELECT * FROM ${songsTable} WHERE id = $1`, [songId]);
   if (!song.rows.length) return {};
   return song.rows[0];
 };
 
 const editTitle = async (songId, newTitle) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   return db.query(`UPDATE ${songsTable} SET title = $1 WHERE id = $2`, [newTitle, songId]);
 };
 
 const deleteSong = async (songId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   await db.query(`DELETE FROM ${tagsTable} WHERE song_id = $1`, [songId]);
   return db.query(`DELETE FROM ${songsTable} WHERE id = $1`, [songId]);
 };
@@ -99,9 +136,10 @@ const addUser = async (data) => {
 };
 
 const getUsersFavoriteSongs = async (userId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   return db.query(`SELECT
     ${songsTable}.*,
-    ${usersTable}.id AS user_id,
+    ${usersTable}.*,
     COALESCE(ARRAY_AGG(${tagsTable}.name) FILTER (WHERE ${tagsTable}.name IS NOT NULL), ARRAY[]::text[]) AS tags
   FROM
     ${usersTable}
@@ -119,36 +157,53 @@ const getUsersFavoriteSongs = async (userId) => {
 };
 
 const getUser = async (userEmail) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   const user = await db.query(`SELECT * FROM ${usersTable} WHERE email = $1`, [userEmail]);
   if (!user.rows.length) return {};
   return user.rows[0];
 };
 
 const deleteUser = async (userId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   return await db.query(`DELETE FROM ${usersTable} WHERE id = $1`, [userId]);
-}
+};
+
+const deleteTagsByUser = async (userId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
+  // find all songs associated with that user
+  let songIds = await db.query(`SELECT id FROM ${songsTable} WHERE user_id = $1`, [userId]);
+  songIds = songIds.rows.length ? songIds.rows.map(row => row.id) : [];
+  return songIds.forEach(async (songId) => {
+    return await db.query(`DELETE FROM ${tagsTable} WHERE song_id = $1`, [songId]);
+  });
+};
 
 const getUserId = async (user) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   const userId = await db.query(`SELECT id FROM ${usersTable} WHERE name = $1`, [user]);
   if (!userId.rows.length) return {};
   return userId.rows[0].id;
 };
 
 const checkUser = async (userId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   const user = await db.query(`SELECT * FROM ${usersTable} WHERE id = $1`, [userId]);
   if (!user.rows.length) return {};
   return user.rows[0].id;
 };
 
 const editBio = async (userId, newBio) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   return db.query(`UPDATE ${usersTable} SET bio = $1 WHERE id = $2`, [newBio, userId]);
 };
 
 const editProfilePic = async (newPic, userId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   return db.query(`UPDATE ${usersTable} SET path_to_pic = $1 WHERE id = $2`, [newPic, userId]);
 }
 
 const editTier = async (userId, newTier, oldTier) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   try {
     await db.query(`UPDATE ${usersTable} SET ${newTier} = $1 WHERE id = $2`, [true, userId]);
     if (oldTier) {
@@ -160,18 +215,21 @@ const editTier = async (userId, newTier, oldTier) => {
 }
 
 const getUserByid = async (id) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   const user = await db.query(`SELECT * FROM ${usersTable} WHERE id = $1`, [id]);
   if (!user.rows.length) return {};
   return user.rows[0];
 }
 
 const getUserByCol = async (col, val) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   const user = await db.query(`SELECT * FROM ${usersTable} WHERE ${col} = $1`, [val]);
   if (!user.rows.length) return {};
   return user.rows[0];
 }
 
 const playCountIncrementModel = async (songId) => {
+  db = process.env.NODE_ENV === 'test' ? global.client : db;
   const query = {
     text: `UPDATE ${songsTable} SET play_count = play_count + 1 WHERE id = $1`,
     values: [songId],
@@ -181,12 +239,26 @@ const playCountIncrementModel = async (songId) => {
   return result.rowCount;
 };
 
+const addFavoriteSong = async (userId, songId) => {
+  const query = {
+    text: 'INSERT INTO favorites (id, user_id, song_id) VALUES ($1, $2, $3)',
+    values: [`${userId}_${songId}`, userId, songId]
+  };
+  try {
+    await db.query(query);
+    console.log('Song added to favorites!');
+  } catch (err) {
+    console.error('Error adding song to favorites:', err);
+  }
+}
+
 module.exports = {
   addUser,
   addSong,
   addTags,
   getAllSongsHome,
-  getAllSongs,
+  getSongsByUser,
+  getSongsByUserId,
   getSong,
   getUser,
   deleteSong,
@@ -198,7 +270,9 @@ module.exports = {
   playCountIncrementModel,
   editBio,
   deleteUser,
+  deleteTagsByUser,
   editProfilePic,
   getUserByid,
-  getUserByCol
+  getUserByCol,
+  addFavoriteSong
 };

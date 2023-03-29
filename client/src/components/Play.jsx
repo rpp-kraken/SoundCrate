@@ -10,7 +10,6 @@ export default function Play(props) {
   // }
 
   useEffect(() => {
-    // console.log("props.songData.id: ", props.songData.id);
     axios.put('/api/playCountIncrement', { id: props.songData.id })
       .then((res) => {
         console.log("PLAY INCREMENT SUCCESS! Data from deployed DB: ", res.data);
@@ -39,8 +38,10 @@ export default function Play(props) {
       }}>
         {/* <div style={{ fontSize: '24px', color: 'black' }}>Play View</div> */}
         <PlayViewWaveform trackUrl={props.songData.path_to_song} />
-        <div>{props.songData.title}</div>
-        <div>{props.songData.artist}</div>
+        <div>{"Song Title: " + props.songData.title}</div>
+        <div>{"Artist Name: " + props.songData.artist}</div>
+        <div>{"Tags: " + props.songData.tags}</div>
+        {/* <div>{"Tags: " + props.songData.tag_names_string}</div> */}
         <div>{"Favorited: " + props.songData.likedCount}</div>
         <div>{"PlayCount: " + props.songData.play_count}</div>
         {/* <button onClick={handleClosePlayView}>Back Arrow</button> */}

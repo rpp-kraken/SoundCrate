@@ -123,7 +123,7 @@ export default function App() {
       case "splash":
         return <Splash />;
       case "home":
-        return <Home songs={songAllHomeData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />;
+        return <Home songs={songAllHomeData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} profileData={profileData} view={view}/>;
       case "create":
         return <Create changeView={changeView} collaborateSongPath={collaborateSongPath} profileData={profileData} />;
       case "favorites":
@@ -135,7 +135,7 @@ export default function App() {
       case "play":
         return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} profileData={profileData}/>;
       case "myReleasedMusic":
-        return <MyReleasedMusic changeView={changeView} profileData={profileData} />;
+        return <MyReleasedMusic changeView={changeView} profileData={profileData} handleSetArtistSongData={handleSetArtistSongData} />;
       case "confirmLogOut":
         return <ConfirmLogOut changeView={changeView} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "confirmDeleteAccount":

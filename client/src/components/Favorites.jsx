@@ -22,7 +22,7 @@ export default function Favorites(props) {
       });
   }, [props.profileData.name]);
   return (
-    <div>
+    <div className="discover" >
       {loading
         ? <p>Loading...</p>
         : <SongCardList songs={songs} />}

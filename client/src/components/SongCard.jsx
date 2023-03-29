@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Play from './Play.jsx';
 import Stack from '@mui/material/Stack';
 import ArtistBadge from './ArtistBadge.jsx'
+import axios from 'axios';
 
 
 const useStyles = makeStyles({
@@ -31,7 +32,8 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView, id }) {
+export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView, id, profileData, view, tags }) {
+
   const theme = useTheme();
   const [liked, setLiked] = useState(isLiked);
   const [playViewOpen, setPlayViewOpen] = useState(false);
@@ -43,6 +45,11 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
   const handleLikeClick = (event) => {
     event.stopPropagation();
     setLiked(!liked);
+    try {
+      axios.put('/likeSong', { songName: title, songId: id, userId: profileData.id });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -71,7 +78,8 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
             likedCount,
             play_count,
             path_to_song,
-            id
+            id,
+            tags
           }
         );
         changeView('play');
@@ -90,7 +98,7 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
           style={{ cursor: 'pointer', marginTop: '8px' }}
         >
           {artist}
-          <ArtistBadge username={artist}/>
+          <ArtistBadge username={artist} view={view}/>
         </Typography>
         <Stack direction="row" alignItems="center" spacing={1} mt={1}>
           <IconButton onClick={handleLikeClick}>
