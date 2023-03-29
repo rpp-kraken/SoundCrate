@@ -119,11 +119,7 @@ export default function Create(props) {
   // };
 
   const handleDelete = (index) => {
-    setListOfTracks(prevList => {
-      const newAudioTracks = [...prevList];
-      newAudioTracks.splice(index, 1);
-      return newAudioTracks;
-    });
+    setListOfTracks([]);
     setMax(0);
     setIsTrack(false);
   };
