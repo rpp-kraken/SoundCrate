@@ -255,7 +255,7 @@ describe('Reviews route', () => {
       await expect(rows[1]).toStrictEqual(response);
     }, 10000);
 
-    it("Should return \'Failed to add new user\'", async () => {
+    it("Should return \'Failed to add new user\' when no data is sent", async () => {
       const req = {};
       await addUserFail(req);
     });

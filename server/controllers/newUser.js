@@ -3,7 +3,7 @@ const { uploadAudioFile, uploadImageFile, s3 } = require('../s3');
 const models = require('../models/index');
 
 const newUser = async (req, res) => {
-  const data = req.body || {};
+  const data = req.body;
 
   try {
     if (req.body.imageFile !== '') {

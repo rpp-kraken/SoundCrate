@@ -98,7 +98,7 @@ export default function App() {
         })
           .then((res) => {
             setProfileData(res.data);
-            return axios.get(`api/user/?userEmail=${res.data.email}`)
+            return axios.get(`api/userbycol?col=email&val=${res.data.email}`)
           })
           .then(async (res) => {
             let keys = Object.keys(res.data)
