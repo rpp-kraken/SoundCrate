@@ -140,7 +140,7 @@ const getUsersFavoriteSongs = async (userId) => {
   return db.query(`SELECT
   ${songsTable}.*,
   ${usersTable}.*,
-  array_agg(${tagsTable}.name) AS tags
+  COALESCE(array_agg(song_tags.name) FILTER (WHERE song_tags.name IS NOT NULL), ARRAY[]::text[]) AS tags
 FROM
   ${favoritesTable}
   JOIN ${songsTable} ON ${favoritesTable}.song_id = ${songsTable}.id
@@ -314,5 +314,6 @@ module.exports = {
   getUserByCol,
   addFavoriteSong,
   incrementFavCount,
-  removeFavoriteSong
+  removeFavoriteSong,
+  decrementFavCount
 };
