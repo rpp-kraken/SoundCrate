@@ -38,23 +38,23 @@ const getAllSongsHome = async () => {
   // const result = await db.query(`SELECT * FROM ${songsTable}`);
   // const result = await db.query(`SELECT songs.*, users.username, ARRAY_AGG(song_tags.name) AS tags FROM songs INNER JOIN users ON songs.user_id = users.id INNER JOIN song_tags ON songs.id = song_tags.song_id GROUP BY songs.id, users.id`);
   const result = await db.query(`SELECT
-    songs.*,
-    users.username,
+    ${songsTable}.*,
+    ${usersTable}.username,
     json_object_agg(
-      song_tags.name,
+      ${tagsTable}.name,
       json_build_object(
-        'id', song_tags.id,
-        'song_id', song_tags.song_id,
-        'name', song_tags.name
+        'id', ${tagsTable}.id,
+        'song_id', ${tagsTable}.song_id,
+        'name', ${tagsTable}.name
       )
     ) AS tags
   FROM
-    songs
-    INNER JOIN users ON songs.user_id = users.id
-    INNER JOIN song_tags ON songs.id = song_tags.song_id
+    ${songsTable}
+    INNER JOIN ${usersTable} ON ${songsTable}.user_id = ${usersTable}.id
+    INNER JOIN ${tagsTable} ON ${songsTable}.id = ${tagsTable}.song_id
   GROUP BY
-    songs.id,
-    users.id`)
+  ${songsTable}.id,
+    ${usersTable}.id`)
     .catch(err => console.log(`error retrieving songs on home tab`, err));
 
   return result.rows;

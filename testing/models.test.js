@@ -45,6 +45,7 @@ describe('models functions', () => {
       VALUES (1, 'yum', '2023-03-11T19:43:02+00:00', 'https://google.com', 1, 1, 'https://google.com', 1)`);
     await global.client.query(`INSERT INTO temp_tags (id, name, song_id)
       VALUES (1, 'tag1', 1)`);
+
   }, 10000);
 
   afterEach(async () => {
@@ -57,6 +58,17 @@ describe('models functions', () => {
   afterAll(async () => {
     await global.client.end();
     await client.end();
+  });
+
+  describe('getAllSongsHome', () => {
+
+    it('should get all songs for home tab', async () => {
+
+      const result = await models.getAllSongsHome();
+
+      await expect(result.length).not.toBe(0);
+      await expect(result.length).toBe(1);
+    });
   });
 
   describe('getSongsByUser', () => {
@@ -167,15 +179,15 @@ describe('models functions', () => {
 
     });
 
-  //   it('should add a song to the database for a first time user', async () => {
-  //     await models.addSong(song);
-  //     const results = await global.client.query(`SELECT id, title FROM ${songsTable} WHERE title = '${song.title}'`);
-  //     const user = await global.client.query(`SELECT name FROM ${usersTable} WHERE name = '${song.user}'`);
-  //     expect(user.rows.length).not.toBe(0);
-  //     expect(user.rows[0].name).toBe(song.user);
-  //     expect(results.rows).toHaveLength(1);
-  //     expect(results.rows[0].title).toBe(song.title);
-  //   });
+    //   it('should add a song to the database for a first time user', async () => {
+    //     await models.addSong(song);
+    //     const results = await global.client.query(`SELECT id, title FROM ${songsTable} WHERE title = '${song.title}'`);
+    //     const user = await global.client.query(`SELECT name FROM ${usersTable} WHERE name = '${song.user}'`);
+    //     expect(user.rows.length).not.toBe(0);
+    //     expect(user.rows[0].name).toBe(song.user);
+    //     expect(results.rows).toHaveLength(1);
+    //     expect(results.rows[0].title).toBe(song.title);
+    //   });
   });
 
   describe('addTags', () => {

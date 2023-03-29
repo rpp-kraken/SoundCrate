@@ -10,7 +10,7 @@ const { secrets } = require('docker-secret');
 require('dotenv').config();
 const models = require('../server/models/index');
 
-describe('Reviews route', () => {
+describe('Route Tests:', () => {
   jest.setTimeout(10000);
   let client;
   //Mocking db connection and loading app
@@ -115,7 +115,16 @@ describe('Reviews route', () => {
   });
 
   describe('GET songs route', function () {
-    it('should grab a song correctly', async function () {
+
+    it('should get all songs in database for home tab', async function () {
+      await getSongsHome();
+      const { rows } = await global.client.query(`SELECT *
+        FROM temp_songs`);
+
+      expect(rows).toHaveLength(3);
+    });
+
+    it('should grab a song by user correctly', async function () {
       const response = {
         title: 'yum',
         path_to_song: 'https://google.com',
@@ -293,6 +302,13 @@ describe('Reviews route', () => {
   const getSongs = async (req, status = 200) => {
     const { body } = await request(app)
       .get('/api/songs?user=calpal')
+      .expect(status);
+    return body;
+  };
+
+  const getSongsHome = async (req, status = 200) => {
+    const { body } = await request(app)
+      .get('/api/getAllSongsHome')
       .expect(status);
     return body;
   };
