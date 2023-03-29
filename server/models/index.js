@@ -153,13 +153,6 @@ GROUP BY
 `, [userId]);
 };
 
-const getUser = async (userEmail) => {
-  db = process.env.NODE_ENV === 'test' ? global.client : db;
-  const user = await db.query(`SELECT * FROM ${usersTable} WHERE email = $1`, [userEmail]);
-  if (!user.rows.length) return {};
-  return user.rows[0];
-};
-
 const deleteUser = async (userId) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   return await db.query(`DELETE FROM ${usersTable} WHERE id = $1`, [userId]);
@@ -257,7 +250,6 @@ module.exports = {
   getSongsByUser,
   getSongsByUserId,
   getSong,
-  getUser,
   deleteSong,
   editTitle,
   editTier,
