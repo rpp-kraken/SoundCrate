@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardMedia, IconButton, Typography } from '@material-ui/core';
 import { FavoriteBorder, Favorite } from '@material-ui/icons';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import { useTheme } from '@mui/material/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@mui/material/Box';
@@ -54,22 +56,22 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
 
   return (
     <Card
-  className={classes.card}
-  raised
-  style={{
-    margin: '15px',
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.text.primary,
-    borderRadius: 0,
-    minHeight: '16vh',
-    maxHeight: '16vh',
-    cursor: 'pointer',
-    transition: 'transform 0.2s ease-in-out',
-    '&:hover': {
-      transform: 'scale(1.02)',
-    },
-  }}
-  onClick={() => {
+      className={classes.card}
+      raised
+      style={{
+        margin: '15px',
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.text.primary,
+        borderRadius: 0,
+        minHeight: '16vh',
+        maxHeight: '16vh',
+        cursor: 'pointer',
+        transition: 'transform 0.2s ease-in-out',
+        '&:hover': {
+          transform: 'scale(1.02)',
+        },
+      }}
+      onClick={() => {
         handleSetArtistSongData(null,
           {
             title,
@@ -98,14 +100,17 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
           style={{ cursor: 'pointer', marginTop: '8px' }}
         >
           {artist}
-          <ArtistBadge username={artist} view={view}/>
+          <ArtistBadge username={artist} view={view} />
         </Typography>
         <Stack direction="row" alignItems="center" spacing={1} mt={1}>
-          <IconButton onClick={handleLikeClick}>
+          {view !== 'favorites' && <IconButton onClick={handleLikeClick}>
             {liked ? <Favorite /> : <FavoriteBorder />}
-          </IconButton>
+          </IconButton>}
+          {view === 'favorites' && <IconButton onClick={handleLikeClick}>
+          {liked ? <FavoriteBorder /> : <Favorite />}
+          </IconButton>}
           <Typography variant="body2" color="textSecondary" component="span">
-            {likedCount}
+            {liked ? likedCount + 1 : likedCount}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="span">
             {`🎧 ${play_count}`}

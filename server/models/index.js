@@ -252,6 +252,19 @@ const addFavoriteSong = async (userId, songId) => {
   }
 }
 
+const incrementFavCount = async (songId) => {
+  const query = {
+    text: 'UPDATE songs SET fav_count = fav_count + 1 WHERE id = $1',
+    values: [songId]
+  };
+  try {
+    const result = await db.query(query);
+    console.log(`Fav count for song ${songId} incremented.`);
+  } catch (err) {
+    console.error('Error incrementing fav count:', err);
+  }
+}
+
 module.exports = {
   addUser,
   addSong,
@@ -274,5 +287,6 @@ module.exports = {
   editProfilePic,
   getUserByid,
   getUserByCol,
-  addFavoriteSong
+  addFavoriteSong,
+  incrementFavCount
 };

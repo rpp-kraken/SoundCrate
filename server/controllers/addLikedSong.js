@@ -6,5 +6,6 @@ module.exports = {
       let songId = req.body.songId
       let user = req.body.userId
       models.addFavoriteSong(user, songId)
+      models.incrementFavCount(songId)
   }
 };
