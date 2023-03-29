@@ -4,27 +4,42 @@ const songData = [
     title: 'bork Bork GRRR',
     path_to_song: 'https://dl.dropboxusercontent.com/s/d539eig06ioc35s/one%20two.webm?dl=0',
     play_count: 569,
-    fav_count: 6789,
+    fav_count: 678913,
     path_to_artwork: 'https://i.imgur.com/1X0s8JI.png',
     user_id: 'Rigby&Co',
+    tags : {
+      id: "7b987c5b-6abe-4821-9315-99fc61781eb1",
+      song_id : "d76d275d-0c54-4f54-8627-edf27712195c",
+      name: "tag"
+    }
   },
   {
     id: 19,
     title: 'Keep On Climbin',
     path_to_song: 'https://soundcrate.s3.us-east-2.amazonaws.com/9308db8f-dbd0-4ca7-b236-eda4f4b56b11.m4a',
     play_count: 100,
-    fav_count: 999,
+    fav_count: 1000001,
     path_to_artwork: 'https://i.imgur.com/HzpcgpP.png',
     user_id: 'B_Kuzma_3000',
+    tags : {
+      id: "7b987c5b-6abe-4821-9315-99fc61781eb1",
+      song_id : "d76d275d-0c54-4f54-8627-edf27712195c",
+      name: "tag"
+    }
   },
   {
     id: 11,
     title: 'On The Run',
     path_to_song: 'https://tonejs.github.io/audio/berklee/gong_1.mp3',
     play_count: 420,
-    fav_count: 69,
+    fav_count: 398752,
     path_to_artwork: 'https://i.imgur.com/Y1M1ENd.png',
     user_id: 'Assumed_Identity_Nate',
+    tags : {
+      id: "7b987c5b-6abe-4821-9315-99fc61781eb1",
+      song_id : "d76d275d-0c54-4f54-8627-edf27712195c",
+      name: "tag"
+    }
   },
   {
     id: 19,
@@ -34,6 +49,11 @@ const songData = [
     fav_count: 999,
     path_to_artwork: 'https://i.imgur.com/3r3cb2c.png',
     user_id: 'PM_4_Lyfe',
+    tags : {
+      id: "7b987c5b-6abe-4821-9315-99fc61781eb1",
+      song_id : "d76d275d-0c54-4f54-8627-edf27712195c",
+      name: "tag"
+    }
   },
   {
     id: 21,
@@ -43,6 +63,11 @@ const songData = [
     fav_count: 6789,
     path_to_artwork: 'https://i.imgur.com/9M7WFcU.png',
     user_id: 'KY_Koder',
+    tags : {
+      id: "7b987c5b-6abe-4821-9315-99fc61781eb1",
+      song_id : "d76d275d-0c54-4f54-8627-edf27712195c",
+      name: "tag"
+    }
   },
   {
     id: 19,
@@ -52,6 +77,11 @@ const songData = [
     fav_count: 999,
     path_to_artwork: 'https://i.imgur.com/iSFHSQo.png',
     user_id: 'WangGang',
+    tags : {
+      id: "7b987c5b-6abe-4821-9315-99fc61781eb1",
+      song_id : "d76d275d-0c54-4f54-8627-edf27712195c",
+      name: "tag"
+    }
   },
   {
     id: 11,
@@ -61,6 +91,11 @@ const songData = [
     fav_count: 69,
     path_to_artwork: 'https://i.imgur.com/cbbilvh.png',
     user_id: 'DJ_Calvin',
+    tags : {
+      id: "7b987c5b-6abe-4821-9315-99fc61781eb1",
+      song_id : "d76d275d-0c54-4f54-8627-edf27712195c",
+      name: "tag"
+    }
   },
   {
     id: 11,
@@ -70,6 +105,11 @@ const songData = [
     fav_count: 69,
     path_to_artwork: 'https://i.imgur.com/AD3MbBi.jpeg',
     user_id: 'ClawzOut',
+    tags : {
+      id: "7b987c5b-6abe-4821-9315-99fc61781eb1",
+      song_id : "d76d275d-0c54-4f54-8627-edf27712195c",
+      name: "tag"
+    }
   },
 
 

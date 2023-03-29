@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 const { uploadAudioFile, uploadImageFile, s3 } = require('../s3');
 const models = require('../models/index');
+const fs = require('fs').promises;
 
 const handleUpload = async (req, res) => {
   if (!req.files['audioFile']) {
@@ -8,8 +9,22 @@ const handleUpload = async (req, res) => {
     return;
   }
   const data = req.body;
+  const { tags } = req.body;
+
   const audioFileData = req.files['audioFile'][0].buffer;
-  const imageFileData = req.files['imageFile'][0].buffer;
+
+  let imageFileData;
+  if (req.body.imageFile === 'undefined') {
+    try {
+      imageFileData = await fs.readFile('server/songImage.png');
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Failed to read default image' });
+      return;
+    }
+  } else {
+    imageFileData = req.files['imageFile'][0].buffer;
+  }
 
   try {
     data.path_to_song = await uploadAudioFile(audioFileData);

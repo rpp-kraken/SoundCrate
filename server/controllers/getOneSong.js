@@ -2,7 +2,6 @@ const models = require('../models/index');
 
 module.exports = {
   getOneSong: (req, res) => {
-    console.log("🚀 ~ file: getSongs.js:17 ~ req:", req.query);
     const songId = req.query.songId;
     models.getSong(songId)
       .then(song => {
