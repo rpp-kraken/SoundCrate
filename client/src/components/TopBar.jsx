@@ -50,7 +50,6 @@ export default function TopBar({ setUser, imageURL, changeView, profileData, han
             right="20px"
           />
         </Toolbar>
-
       </AppBar>
       <Drawer anchor="left" open={openDrawer} onClose={toggleDrawer}>
         <div
