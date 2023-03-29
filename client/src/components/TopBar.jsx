@@ -41,11 +41,13 @@ export default function TopBar({ setUser, imageURL, changeView, profileData, han
           <Box
             component="img"
             sx={{
-              width: 300,
-              maxWidth: { xs: 200, md: 250 },
+              width: 350,
+              maxWidth: { xs: 250, md: 300 },
             }}
             alt="Sound Crate logo"
             src="/images/name-and-icon-white.png"
+            position="absolute"
+            right="20px"
           />
         </Toolbar>
 
