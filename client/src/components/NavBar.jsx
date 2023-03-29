@@ -12,11 +12,6 @@ export default function NavBar(props) {
 
   const [value, setValue] = useState(0);
 
-  // useEffect(() => {
-  //   console.log("Changing NavBar to: " + props.changeNavBar);
-  //   setValue(props.changeNavBar);
-  // }, [])
-
   return (
     <BottomNavigation
       id="navBar"
