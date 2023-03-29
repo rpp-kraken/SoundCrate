@@ -54,6 +54,16 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
     }
   };
 
+  const handleDislikeClick = (event) => {
+    event.stopPropagation();
+    setLiked(!liked);
+    try {
+      axios.put('/dislikeSong', { songName: title, songId: id, userId: profileData.id });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Card
       className={classes.card}
@@ -106,7 +116,7 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
           {view !== 'favorites' && <IconButton onClick={handleLikeClick}>
             {liked ? <Favorite /> : <FavoriteBorder />}
           </IconButton>}
-          {view === 'favorites' && <IconButton onClick={handleLikeClick}>
+          {view === 'favorites' && <IconButton onClick={handleDislikeClick}>
           {liked ? <FavoriteBorder /> : <Favorite />}
           </IconButton>}
           <Typography variant="body2" color="textSecondary" component="span">

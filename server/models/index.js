@@ -252,6 +252,21 @@ const addFavoriteSong = async (userId, songId) => {
   }
 }
 
+
+const removeFavoriteSong = async (userId, songId) => {
+  const query = {
+    text: 'DELETE FROM favorites WHERE user_id = $1 AND song_id = $2',
+    values: [userId, songId],
+  };
+  try {
+    await db.query(query);
+    console.log('Song removed from favorites!');
+  } catch (err) {
+    console.error('Error removing song from favorites:', err);
+  }
+}
+
+
 const incrementFavCount = async (songId) => {
   const query = {
     text: 'UPDATE songs SET fav_count = fav_count + 1 WHERE id = $1',
@@ -260,6 +275,19 @@ const incrementFavCount = async (songId) => {
   try {
     const result = await db.query(query);
     console.log(`Fav count for song ${songId} incremented.`);
+  } catch (err) {
+    console.error('Error incrementing fav count:', err);
+  }
+}
+
+const decrementFavCount = async (songId) => {
+  const query = {
+    text: 'UPDATE songs SET fav_count = fav_count - 1 WHERE id = $1',
+    values: [songId]
+  };
+  try {
+    const result = await db.query(query);
+    console.log(`Fav count for song ${songId} decremented.`);
   } catch (err) {
     console.error('Error incrementing fav count:', err);
   }
@@ -288,5 +316,6 @@ module.exports = {
   getUserByid,
   getUserByCol,
   addFavoriteSong,
-  incrementFavCount
+  incrementFavCount,
+  removeFavoriteSong
 };
