@@ -25,7 +25,7 @@ export default function MyReleasedMusic(props) {
     <div>
       {loading
         ? <p>Loading...</p>
-        : <SongCardList songs={songs} />}
+        : <SongCardList songs={songs} changeView={props.changeView} handleSetArtistSongData={props.handleSetArtistSongData} />}
     </div>
   );
 };

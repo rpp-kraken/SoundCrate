@@ -31,7 +31,7 @@ export default function Create(props) {
 
   useEffect(() => {
 
-    console.log("props.profileData, ", props.profileData)
+    // console.log("props.profileData, ", props.profileData)
 
     if (props.collaborateSongPath) {
       let trackUrlSources = [

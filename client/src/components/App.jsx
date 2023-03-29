@@ -18,6 +18,7 @@ import Play from './Play.jsx';
 import FourOhFour from './404.jsx';
 // import { songData } from '../../../DummyData/dummyData.js'
 import Splash from '../components/login/Splash.jsx';
+import TierVerification from './TierVerification.jsx';
 import axios from 'axios';
 
 export default function App() {
@@ -62,7 +63,7 @@ export default function App() {
     // };
   };
 
-  const handleSetArtistSongData = (artistName, songID) => {
+  const handleSetArtistSongData = (artistName, songData) => {
     if (artistName) {
       var artistProfileData;
       axios.get(`/api/userbycol?col=username&val=${artistName}`)
@@ -72,15 +73,18 @@ export default function App() {
       .then(() => {
         axios.get(`/api/songs?user=${artistProfileData.name}`)
         .then((result) => {
-          artistProfileData.songCount = result.data.length;
-          artistProfileData.favoritesCount = result.data.reduce((total, obj) => obj.fav_count + total, 0);
-          artistProfileData.songs = result.data;
+          if (result.data) {
+            artistProfileData.songCount = result.data.length;
+            artistProfileData.favoritesCount = result.data.reduce((total, obj) => obj.fav_count + total, 0);
+            artistProfileData.songs = result.data;
+          }
           setArtistData(artistProfileData);
           changeView('profile');
         })
       })
-    } else if (songID) {
-      return;
+      .catch((err) => console.log('error in artistName', err));
+    } else if (songData) {
+      setSongData(songData);
     }
   }
 
@@ -119,9 +123,7 @@ export default function App() {
       case "splash":
         return <Splash />;
       case "home":
-        return <Home songs={songAllHomeData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} />;
-      // case "discover":
-      //   return <Discover changeView={changeView} />;
+        return <Home songs={songAllHomeData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} profileData={profileData} view={view}/>;
       case "create":
         return <Create changeView={changeView} collaborateSongPath={collaborateSongPath} profileData={profileData} />;
       case "favorites":
@@ -133,11 +135,13 @@ export default function App() {
       case "play":
         return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} profileData={profileData}/>;
       case "myReleasedMusic":
-        return <MyReleasedMusic changeView={changeView} profileData={profileData} />;
+        return <MyReleasedMusic changeView={changeView} profileData={profileData} handleSetArtistSongData={handleSetArtistSongData} />;
       case "confirmLogOut":
         return <ConfirmLogOut changeView={changeView} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "confirmDeleteAccount":
         return <ConfirmDeleteAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
+      case "verify":
+        return <TierVerification profileData={profileData} artistProfileData={artistProfileData} />;
       case "theme":
         return <ThemeExample />;
       default:
@@ -152,7 +156,7 @@ export default function App() {
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>
-      <NavBar changeView={changeView} />
+      { loggedIn && <NavBar changeView={changeView} />}
     </ThemeProvider>
   );
 }

@@ -1,9 +1,9 @@
 const models = require('../models/index');
 
 module.exports = {
-  getSongs: (req, res) => {
+  getSongsByUser: (req, res) => {
     const user = req.query.user.replace('%20', ' ');
-    models.getAllSongs(user)
+    models.getSongsByUser(user)
       .then(songs => {
         res.json(songs);
       })

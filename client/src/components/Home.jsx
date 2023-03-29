@@ -18,13 +18,11 @@ export default function Home(props) {
   //   // console.log("PropsSongs: ");
   // }. [])
 
-  // query the database for the first ten songs
-  // for now, just use dummy data
   let songs = filterData(searchQuery, props.songs);
   return (
     <div className="discover">
       <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      <SongCardList songs={songs} changeView={props.changeView} handleSetArtistSongData={props.handleSetArtistSongData} />
+      <SongCardList songs={songs} changeView={props.changeView} handleSetArtistSongData={props.handleSetArtistSongData} profileData={props.profileData} view={props.view}/>
       <br/><br/><br/>
     </div>
   )
