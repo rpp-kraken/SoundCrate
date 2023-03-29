@@ -3,8 +3,7 @@ const { uploadAudioFile, uploadImageFile, s3 } = require('../s3');
 const models = require('../models/index');
 
 const newUser = async (req, res) => {
-  const data = req.body;
-  const usersTable = process.env.NODE_ENV === 'test' ? 'temp_users' : 'users';
+  const data = req.body || {};
 
   try {
     if (req.body.imageFile !== '') {
@@ -17,7 +16,6 @@ const newUser = async (req, res) => {
     await models.addUser(data);
     res.status(201).json(data);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Failed to add new user' });
   }
 };

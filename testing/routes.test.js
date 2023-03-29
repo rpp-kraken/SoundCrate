@@ -255,20 +255,10 @@ describe('Reviews route', () => {
       await expect(rows[1]).toStrictEqual(response);
     }, 10000);
 
-    // it('Should return a 500 code if song file is not sent', async function () {
-    //   const imageFilePath = path.join(__dirname, 'mocks', 'aaron.jpeg');
-    //   const req = {
-    //     title: 'yum',
-    //     created_at: '2023-03-11T19:43:02+00:00',
-    //     play_count: 0,
-    //     fav_count: 1,
-    //     user: 'calpal',
-    //     imageFile: fs.readFileSync(imageFilePath),
-    //     tags: 'tag1,tag2,tag3'
-    //   };
-
-    //   await postSongFail(req);
-    // });
+    it("Should return \'Failed to add new user\'", async () => {
+      const req = {};
+      await addUserFail(req);
+    });
   });
 
   const postSong = async (req, status = 201) => {
@@ -399,6 +389,13 @@ describe('Reviews route', () => {
       .field('path_to_pic', req.path_to_pic)
       .field('username', req.username)
       .field('imageFile', req.imageFile, 'aaron.jpeg')
+      .expect(status);
+    return body;
+  }
+
+  const addUserFail = async (req, status = 500) => {
+    const { body } = await request(app)
+      .post('/api/user')
       .expect(status);
     return body;
   }
