@@ -1,9 +1,10 @@
 const models = require('../models/index');
 
 module.exports = {
-  artistBadge: (req, res) => {
-    const username = req.query.username;
-    models.getUserByCol('username', username)
+  getUserByCol: (req, res) => {
+    const col = req.query.col;
+    const val = req.query.val;
+    models.getUserByCol(col, val)
       .then(user => {
         res.json(user);
       })

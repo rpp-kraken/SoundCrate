@@ -5,6 +5,14 @@ module.exports = {
     const userId = req.query.userId;
 
     try {
+      // delete all tags associated with that user
+      await models.deleteTagsByUser(userId);
+
+      // delete all songs associated with that user
+      const songs = await models.getSongsByUserId(userId);
+      songs.forEach(async (song) => await models.deleteSong(song.id));
+
+      // delete the user
       await models.deleteUser(userId);
       res.sendStatus(204);
     } catch (err) {

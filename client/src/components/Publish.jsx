@@ -28,6 +28,7 @@ export const Publish = (props) => {
   const [underMax, setUnderMax] =useState(true);
   const [tagNum, setTagNum] = useState(0);
   const [doneRendering, setDoneRendering] = useState(false);
+  const [urlImage, setUrlImage] = useState(false);
 
   const audioRef = React.useRef(null);
 
@@ -85,13 +86,17 @@ export const Publish = (props) => {
 
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    var tagsString = tags.join(',');
-    // console.log("Image in submit: ", image, "    song?  ", props.song);
+    if (tags.length === 0) {
+      alert('please enter at least one tag');
+      event.preventDefault();
+    } else {
+      event.preventDefault();
+      var tagsString = tags.join(',');
+      // console.log("Image in submit: ", image, "    song?  ", props.song);
 
-    // formData type
+      // formData type
 
-    // console.log('here is type of song', typeof props.song);
+      // console.log('here is type of song', typeof props.song);
 
     const formData = new FormData();
     formData.append('audioFile', props.song);
@@ -99,25 +104,29 @@ export const Publish = (props) => {
     formData.append('created_at', new Date().toISOString());
     formData.append('play_count', 0);
     formData.append('fav_count', 0);
-    formData.append('user', 'calpal');
+    formData.append('user', `${props.profileData.username}`);
+    formData.append('userId', `${props.profileData.id}`);
     formData.append('imageFile', image);
     formData.append('tags', tagsString);
 
-    console.log(formData);
-    props.changeView('myReleasedMusic');
+      fetch('/api/uploadSong', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        props.changeView('myReleasedMusic');
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    }
+  };
 
-
-    fetch('/api/uploadSong', {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-    })
-    .catch(error => {
-      console.error(error);
-    });
+  const handleImageChange = (picture) => {
+    setImage(picture);
+    setUrlImage(URL.createObjectURL(picture));
   };
 
   return (
@@ -134,16 +143,17 @@ export const Publish = (props) => {
             Song Image:
             <Button variant="contained" component="label">
               Upload Image
-              <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} style={{ display: 'none' }} />
+              <input type="file" accept="image/*" onChange={(e) => handleImageChange(e.target.files[0])} style={{ display: 'none' }} />
             </Button>
           </label>
+            {urlImage && <img src={urlImage} alt="Song Image Preview" />}
            <label>
             Song Title:
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required/>
           </label>
           <br />
           <label htmlFor="tags">Tags (up to 3):</label>
-          {underMax && <input type="text" name="tags" onKeyPress={handleKeyPress} placeholder="Press enter to create tag" required/>}
+          {underMax && <input type="text" name="tags" onKeyPress={handleKeyPress} placeholder="Press enter to create tag"/>}
             <ul>
             {tags.map((tag, index) => (
               <li key={index}>

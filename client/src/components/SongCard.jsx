@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Play from './Play.jsx';
 import Stack from '@mui/material/Stack';
 import ArtistBadge from './ArtistBadge.jsx'
+import axios from 'axios';
 
 
 const useStyles = makeStyles({
@@ -14,11 +15,9 @@ const useStyles = makeStyles({
     display: 'flex',
   },
   media: {
-    // width: 120,
     width: 156.16,
     height: 'fill',
     objectFit: 'fill',
-    // objectFit: 'cover',
     marginLeft: 'auto'
   },
   content: {
@@ -33,20 +32,24 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView, id }) {
+export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView, id, profileData, view, tags }) {
+
   const theme = useTheme();
   const [liked, setLiked] = useState(isLiked);
   const [playViewOpen, setPlayViewOpen] = useState(false);
   const [otherArtistViewOpen, setOtherArtistViewOpen] = useState(false);
-
 
   const classes = useStyles();
 
   // Favorite Song Event Handling
   const handleLikeClick = (event) => {
     event.stopPropagation();
-    console.log("🚀 handleLikeClick: Handle Heart Click Event Here")
     setLiked(!liked);
+    try {
+      axios.put('/likeSong', { songName: title, songId: id, userId: profileData.id });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -75,7 +78,8 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
             likedCount,
             play_count,
             path_to_song,
-            id
+            id,
+            tags
           }
         );
         changeView('play');
@@ -89,13 +93,12 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
           variant="subtitle1"
           onClick={(event) => {
             event.stopPropagation();
-            handleSetArtistSongData({ artist }, null);
-            changeView('profile');
+            handleSetArtistSongData(artist, null);
           }}
           style={{ cursor: 'pointer', marginTop: '8px' }}
         >
           {artist}
-          <ArtistBadge username={artist}/>
+          <ArtistBadge username={artist} view={view}/>
         </Typography>
         <Stack direction="row" alignItems="center" spacing={1} mt={1}>
           <IconButton onClick={handleLikeClick}>

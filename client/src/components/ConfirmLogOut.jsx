@@ -6,7 +6,7 @@ export default function ConfirmLogOut({ changeView, setProfileData, setLoggedIn 
   const handleLogout = () => {
     setProfileData({})
     setLoggedIn(false);
-    changeView('home');
+    changeView('splash');
   }
 
   const handleCancel = () => {
