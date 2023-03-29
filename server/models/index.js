@@ -138,21 +138,18 @@ const addUser = async (data) => {
 const getUsersFavoriteSongs = async (userId) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   return db.query(`SELECT
-    ${songsTable}.*,
-    ${usersTable}.*,
-    COALESCE(ARRAY_AGG(${tagsTable}.name) FILTER (WHERE ${tagsTable}.name IS NOT NULL), ARRAY[]::text[]) AS tags
-  FROM
-    ${usersTable}
-  JOIN
-    ${favoritesTable} ON ${usersTable}.id = ${favoritesTable}.user_id
-  JOIN
-    ${songsTable} ON ${favoritesTable}.song_id = ${songsTable}.id
-  LEFT JOIN
-    ${tagsTable} ON ${songsTable}.id = ${tagsTable}.song_id
-  WHERE
-    ${usersTable}.id = $1
-  GROUP BY
-    ${songsTable}.id, ${usersTable}.id;
+  ${songsTable}.*,
+  ${usersTable}.*,
+  array_agg(${tagsTable}.name) AS tags
+FROM
+  ${favoritesTable}
+  JOIN ${songsTable} ON ${favoritesTable}.song_id = ${songsTable}.id
+  JOIN ${usersTable} ON ${songsTable}.user_id = ${usersTable}.id
+  LEFT JOIN ${tagsTable} ON ${songsTable}.id = ${tagsTable}.song_id
+WHERE
+  ${favoritesTable}.user_id = $1
+GROUP BY
+  ${songsTable}.id, ${usersTable}.id;
 `, [userId]);
 };
 
