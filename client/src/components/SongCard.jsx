@@ -41,14 +41,13 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
   const [playViewOpen, setPlayViewOpen] = useState(false);
   const [otherArtistViewOpen, setOtherArtistViewOpen] = useState(false);
 
-  const classes = useStyles();
-
+    const classes = useStyles();
   // Favorite Song Event Handling
   const handleLikeClick = (event) => {
     event.stopPropagation();
     setLiked(!liked);
     try {
-      axios.put('/likeSong', { songName: title, songId: id, userId: profileData.id });
+      axios.put('/likeSong', { songName: title, songId: song_id, userId: profileData.id });
     } catch (error) {
       console.error(error);
     }
