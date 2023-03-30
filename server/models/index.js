@@ -249,8 +249,14 @@ const removeFavoriteSong = async (userId, songId) => {
     values: [userId, songId],
   };
   try {
-    await db.query(query);
-    console.log('Song removed from favorites!');
+    console.log('Executing query:', query); // Log the query to debug
+    const result = await db.query(query);
+    console.log('Rows affected:', result.rowCount); // Log the number of affected rows
+    if (result.rowCount > 0) {
+      console.log('Song removed from favorites!');
+    } else {
+      console.log('No matching favorite found for the given userId and songId.');
+    }
   } catch (err) {
     console.error('Error removing song from favorites:', err);
   }
