@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView, id, profileData, view, tags }) {
+export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView, id, profileData, view, tags, songID }) {
 
   const theme = useTheme();
   const [liked, setLiked] = useState(isLiked);
@@ -47,7 +47,7 @@ export default function SongCard({ title, artist, path_to_song, artistImageUrl, 
     event.stopPropagation();
     setLiked(!liked);
     try {
-      axios.put('/likeSong', { songName: title, songId: song_id, userId: profileData.id });
+      axios.put('/likeSong', { songName: title, songId: songID, userId: profileData.id });
     } catch (error) {
       console.error(error);
     }

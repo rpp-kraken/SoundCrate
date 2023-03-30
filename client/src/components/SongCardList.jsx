@@ -19,6 +19,7 @@ export default function SongCardList({ songs, handleSetArtistSongData, changeVie
             artistImageUrl={song.path_to_artwork}
             likedCount={song.fav_count}
             play_count={song.play_count}
+            songID={song.id}
             id={song.song_id}
             tags={tags}
             key={i}
