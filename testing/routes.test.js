@@ -208,7 +208,7 @@ describe('Route Tests:', () => {
     });
   });
 
-  describe('PUT song routes', function() {
+  describe('PUT song routes', function () {
     it('should update the title of a song', async function () {
       const req = {
         title: 'yummy'
@@ -268,6 +268,37 @@ describe('Route Tests:', () => {
       const req = {};
       await addUserFail(req);
     });
+  });
+
+  describe('GET user details route', function () {
+
+    it('should get a user from the email provided', async function () {
+      const body = 'test@123test.com';
+      await getUserByEmail(body);
+
+      const { rows } = await global.client.query(`SELECT *
+        FROM temp_users`);
+
+      expect(rows).toHaveLength(2);
+      expect(rows[1].name).toBe('Mindi Test 123');
+    });
+
+    it('should get a user from the username provided', async function () {
+      const body = 'mintest123';
+      await getUserByUsername(body);
+
+      const { rows } = await global.client.query(`SELECT *
+        FROM temp_users`);
+
+      expect(rows).toHaveLength(2);
+      expect(rows[1].name).toBe('Mindi Test 123');
+    });
+
+    it('should return \'Failed to get user\'', async function () {
+      const req = {};
+      await getUserByColFail(req);
+    });
+
   });
 
   const postSong = async (req, status = 201) => {
@@ -412,6 +443,27 @@ describe('Route Tests:', () => {
   const addUserFail = async (req, status = 500) => {
     const { body } = await request(app)
       .post('/api/user')
+      .expect(status);
+    return body;
+  }
+
+  const getUserByEmail = async (req, status = 200) => {
+    const { body } = await request(app)
+      .get(`/api/userbycol?col=email&val=${body}`)
+      .expect(status);
+    return body;
+  }
+
+  const getUserByUsername = async (req, status = 200) => {
+    const { body } = await request(app)
+      .get(`/api/userbycol?col=username&val=${body}`)
+      .expect(status);
+    return body;
+  }
+
+  const getUserByColFail = async (req, status = 500) => {
+    const { body } = await request(app)
+      .get(`/api/userbycol?col=e&val=${body}`)
       .expect(status);
     return body;
   }
