@@ -195,7 +195,7 @@ const CreateAudioWaveform = (props) => {
 	};
 
 	return (
-		<section className='waveform-container' style={{ width: '100%', background: 'black', margin: '10px' }}>
+		<section className='waveform-container'  data-testid="audio-waveform" style={{ width: '100%', background: 'black', margin: '10px' }}>
 			<div ref={wavesurferRef} id='waveform' />
 			<div ref={timelineRef} id='wave-timeline' />
 			<div className='all-controls'>

@@ -38,23 +38,23 @@ const getAllSongsHome = async () => {
   // const result = await db.query(`SELECT * FROM ${songsTable}`);
   // const result = await db.query(`SELECT songs.*, users.username, ARRAY_AGG(song_tags.name) AS tags FROM songs INNER JOIN users ON songs.user_id = users.id INNER JOIN song_tags ON songs.id = song_tags.song_id GROUP BY songs.id, users.id`);
   const result = await db.query(`SELECT
-    songs.*,
-    users.username,
+    ${songsTable}.*,
+    ${usersTable}.username,
     json_object_agg(
-      song_tags.name,
+      ${tagsTable}.name,
       json_build_object(
-        'id', song_tags.id,
-        'song_id', song_tags.song_id,
-        'name', song_tags.name
+        'id', ${tagsTable}.id,
+        'song_id', ${tagsTable}.song_id,
+        'name', ${tagsTable}.name
       )
     ) AS tags
   FROM
-    songs
-    INNER JOIN users ON songs.user_id = users.id
-    INNER JOIN song_tags ON songs.id = song_tags.song_id
+    ${songsTable}
+    INNER JOIN ${usersTable} ON ${songsTable}.user_id = ${usersTable}.id
+    INNER JOIN ${tagsTable} ON ${songsTable}.id = ${tagsTable}.song_id
   GROUP BY
-    songs.id,
-    users.id`)
+  ${songsTable}.id,
+    ${usersTable}.id`)
     .catch(err => console.log(`error retrieving songs on home tab`, err));
 
   return result.rows;
@@ -138,29 +138,19 @@ const addUser = async (data) => {
 const getUsersFavoriteSongs = async (userId) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   return db.query(`SELECT
-    ${songsTable}.*,
-    ${usersTable}.*,
-    COALESCE(ARRAY_AGG(${tagsTable}.name) FILTER (WHERE ${tagsTable}.name IS NOT NULL), ARRAY[]::text[]) AS tags
-  FROM
-    ${usersTable}
-  JOIN
-    ${favoritesTable} ON ${usersTable}.id = ${favoritesTable}.user_id
-  JOIN
-    ${songsTable} ON ${favoritesTable}.song_id = ${songsTable}.id
-  LEFT JOIN
-    ${tagsTable} ON ${songsTable}.id = ${tagsTable}.song_id
-  WHERE
-    ${usersTable}.id = $1
-  GROUP BY
-    ${songsTable}.id, ${usersTable}.id;
+  ${songsTable}.*,
+  ${usersTable}.*,
+  array_agg(${tagsTable}.name) AS tags
+FROM
+  ${favoritesTable}
+  JOIN ${songsTable} ON ${favoritesTable}.song_id = ${songsTable}.id
+  JOIN ${usersTable} ON ${songsTable}.user_id = ${usersTable}.id
+  LEFT JOIN ${tagsTable} ON ${songsTable}.id = ${tagsTable}.song_id
+WHERE
+  ${favoritesTable}.user_id = $1
+GROUP BY
+  ${songsTable}.id, ${usersTable}.id;
 `, [userId]);
-};
-
-const getUser = async (userEmail) => {
-  db = process.env.NODE_ENV === 'test' ? global.client : db;
-  const user = await db.query(`SELECT * FROM ${usersTable} WHERE email = $1`, [userEmail]);
-  if (!user.rows.length) return {};
-  return user.rows[0];
 };
 
 const deleteUser = async (userId) => {
@@ -260,7 +250,6 @@ module.exports = {
   getSongsByUser,
   getSongsByUserId,
   getSong,
-  getUser,
   deleteSong,
   editTitle,
   editTier,

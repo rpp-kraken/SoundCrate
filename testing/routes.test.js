@@ -10,7 +10,7 @@ const { secrets } = require('docker-secret');
 require('dotenv').config();
 const models = require('../server/models/index');
 
-describe('Reviews route', () => {
+describe('Route Tests:', () => {
   jest.setTimeout(10000);
   let client;
   //Mocking db connection and loading app
@@ -115,7 +115,16 @@ describe('Reviews route', () => {
   });
 
   describe('GET songs route', function () {
-    it('should grab a song correctly', async function () {
+
+    it('should get all songs in database for home tab', async function () {
+      await getSongsHome();
+      const { rows } = await global.client.query(`SELECT *
+        FROM temp_songs`);
+
+      expect(rows).toHaveLength(3);
+    });
+
+    it('should grab a song by user correctly', async function () {
       const response = {
         title: 'yum',
         path_to_song: 'https://google.com',
@@ -199,7 +208,7 @@ describe('Reviews route', () => {
     });
   });
 
-  describe('PUT song routes', function() {
+  describe('PUT song routes', function () {
     it('should update the title of a song', async function () {
       const req = {
         title: 'yummy'
@@ -227,112 +236,71 @@ describe('Reviews route', () => {
     });
   });
 
-  describe('PUT users route', function () {
-    it('Should update a user\'s bio', async function () {
+  describe('POST /api/user', () => {
+    it('Should create a new user', async () => {
+      const imageFilePath = path.join(__dirname, 'mocks', 'aaron.jpeg');
       const req = {
-        bio: 'the cooliest'
+        id: 2,
+        name: 'Mindi Test 123',
+        email: 'test@123test.com',
+        bio: 'my bio',
+        path_to_pic: 'path',
+        username: 'mintest123',
+        imageFile: fs.readFileSync(imageFilePath),
       };
 
-      const initialGet = await global.client.query(`SELECT bio FROM temp_users WHERE id = $1`, [1]);
-
-      await updateBio(req, 204);
-
-      const { rows } = await global.client.query(`SELECT bio FROM temp_users WHERE id = $1`, [1]);
-
-      expect(initialGet.rows[0].bio).toStrictEqual('cool guy');
-      expect(rows[0].bio).toStrictEqual('the cooliest');
-    });
-
-    it('Should return a 404 for a user that doesn\'t exist', async function () {
-      const req = {
-        bio: 'the cooliest'
+      const response = {
+        name: 'Mindi Test 123',
+        email: 'test@123test.com',
+        bio: 'my bio'
       };
-      await updateProfileBioFail(req);
-    });
 
-    it('Should update a user\'s profile pic', async function () {
-      const imageFilePath = path.join(__dirname, 'mocks', 'cat.jpeg');
-      const req = {
-        imageFile: fs.readFileSync(imageFilePath)
-      };
-      await updateProfilePic(req);
+      await addUser(req);
 
-    });
+      const { rows } = await global.client.query(`SELECT name, email, bio
+        FROM temp_users WHERE name = $1`, [req.name]);
 
-    it('Should return a 404 for a user that doesn\'t exist', async function () {
-      const imageFilePath = path.join(__dirname, 'mocks', 'cat.jpeg');
-      const req = {
-        imageFile: fs.readFileSync(imageFilePath)
-      };
-      await updateProfilePicFail(req);
+      await expect(rows).toHaveLength(2);
+      await expect(rows[1]).toStrictEqual(response);
+    }, 10000);
+
+    it("Should return \'Failed to add new user\' when no data is sent", async () => {
+      const req = {};
+      await addUserFail(req);
     });
   });
 
-  describe('DELETE route for /api/deleteUser', () => {
-    it('should delete a user for a given id', async () => {
-      // check the existing table
-      const { rows, rowCount } = await global.client.query(`SELECT * FROM temp_users`);
-      expect(rowCount).not.toBe(0);
+  describe('GET user details route', function () {
 
-      // call the deleteUser route with the first userId entry
-      const userId = rows[0].id;
-      await request(app).delete(`/api/deleteUser?userId=${userId}`);
+    it('should get a user from the email provided', async function () {
+      const body = 'test@123test.com';
+      await getUserByEmail(body);
 
-      // check that the user was deleted
-      const { rows: newRows, rowCount: newRowCount } = await global.client.query(`SELECT * FROM temp_users`);
-      expect(newRowCount).not.toBe(rowCount);
+      const { rows } = await global.client.query(`SELECT *
+        FROM temp_users`);
+
+      expect(rows).toHaveLength(2);
+      expect(rows[1].name).toBe('Mindi Test 123');
     });
 
-    it('should do nothing for a nonexistent userId', async () => {
-      // check the existing table
-      const { rows, rowCount } = await global.client.query(`SELECT * FROM temp_users`);
-      expect(rowCount).not.toBe(0);
+    it('should get a user from the username provided', async function () {
+      const body = 'mintest123';
+      await getUserByUsername(body);
 
-      // call the deleteUser route with an invalid userId entry
-      const userId = 123456;
-      await request(app).delete(`/api/deleteUser?userId=${userId}`);
+      const { rows } = await global.client.query(`SELECT *
+        FROM temp_users`);
 
-      // check that the table is the same
-      const { rows: newRows, rowCount: newRowCount } = await global.client.query(`SELECT * FROM temp_users`);
-      expect(newRowCount).toBe(rowCount);
-      expect(newRows).toEqual(rows);
+      expect(rows).toHaveLength(2);
+      expect(rows[1].name).toBe('Mindi Test 123');
     });
 
-    it('should delete all songs associated with a given user', async () => {
-      const userId = 1;
-      const { rowCount: allSongCount } = await global.client.query(`SELECT * FROM temp_songs`);
-      const { rows: songs, rowCount: songCount } = await global.client.query(`SELECT * FROM temp_songs WHERE user_id = $1`, [userId]);
-      expect(songCount).not.toBe(0);
-      expect(songCount).not.toBe(allSongCount);
-
-      await request(app).delete(`/api/deleteUser?userId=${userId}`);
-
-      const { rowCount: updatedAllSongCount } = await global.client.query(`SELECT * FROM temp_songs`);
-      const { rows: newSongs, rowCount: newSongCount} = await global.client.query(`SELECT * FROM temp_songs WHERE user_id = $1`, [userId]);
-      expect(newSongs.length).toBe(0);
-      expect(updatedAllSongCount).toBe(allSongCount - songCount);
+    it('should return \'Failed to get user\'', async function () {
+      const req = {};
+      await getUserByColFail(req);
     });
 
-    it('should delete all tags associated with a given user', async () => {
-      const userId = 1;
-      const { rows: allTags, rowCount: allTagCount } = await global.client.query(`SELECT * FROM temp_tags`);
-      expect(allTagCount).not.toBe(0);
-
-      const { rows: songs } = await global.client.query(`SELECT * FROM temp_songs WHERE user_id = $1`, [userId]);
-      let userTagCount = 0;
-      songs.forEach(song => userTagCount += allTags.filter(tag => tag.song_id === song.id).length);
-      expect(userTagCount).not.toBe(0);
-      expect(userTagCount).not.toBe(allTagCount);
-
-      await request(app).delete(`/api/deleteUser?userId=${userId}`);
-
-      const { rowCount: updatedAllTagCount } = await global.client.query(`SELECT * FROM temp_tags`);
-      expect(updatedAllTagCount).toBe(allTagCount - userTagCount);
-    });
   });
 
-
-  // HELPER FUNCTIONS
   const postSong = async (req, status = 201) => {
     const { body } = await request(app)
       .post('/api/uploadSong')
@@ -369,11 +337,18 @@ describe('Reviews route', () => {
     return body;
   };
 
+  const getSongsHome = async (req, status = 200) => {
+    const { body } = await request(app)
+      .get('/api/getAllSongsHome')
+      .expect(status);
+    return body;
+  };
+
   const getSongsFail = async (status = 500) => {
     const { body } = await request(app)
       .get('/api/songs?user=aaron')
       .expect(status);
-      return body;
+    return body;
   };
 
   const deleteSong = async (req, status = 204) => {
@@ -451,5 +426,46 @@ describe('Reviews route', () => {
       .expect(status);
     return body;
   };
+
+  const addUser = async (req, status = 201) => {
+    const { body } = await request(app)
+      .post('/api/user')
+      .field('name', req.name)
+      .field('email', req.email)
+      .field('bio', req.bio)
+      .field('path_to_pic', req.path_to_pic)
+      .field('username', req.username)
+      .field('imageFile', req.imageFile, 'aaron.jpeg')
+      .expect(status);
+    return body;
+  }
+
+  const addUserFail = async (req, status = 500) => {
+    const { body } = await request(app)
+      .post('/api/user')
+      .expect(status);
+    return body;
+  }
+
+  const getUserByEmail = async (req, status = 200) => {
+    const { body } = await request(app)
+      .get(`/api/userbycol?col=email&val=${body}`)
+      .expect(status);
+    return body;
+  }
+
+  const getUserByUsername = async (req, status = 200) => {
+    const { body } = await request(app)
+      .get(`/api/userbycol?col=username&val=${body}`)
+      .expect(status);
+    return body;
+  }
+
+  const getUserByColFail = async (req, status = 500) => {
+    const { body } = await request(app)
+      .get(`/api/userbycol?col=e&val=${body}`)
+      .expect(status);
+    return body;
+  }
 
 });
