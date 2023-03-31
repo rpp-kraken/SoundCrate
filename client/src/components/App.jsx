@@ -153,7 +153,7 @@ export default function App() {
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>
-      <NavBar changeView={changeView} />
+      { loggedIn && <NavBar changeView={changeView} />}
     </ThemeProvider>
   );
 }

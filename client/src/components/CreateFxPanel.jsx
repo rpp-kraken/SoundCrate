@@ -69,11 +69,11 @@ const CreateFxPanel = (props) => {
       <Button style={{ padding: '3px', fontSize: '14px' }}onClick={muteSound}>
         {isMuted1 ? 'Unmute' : 'Mute'}
       </Button>
-      <Box class="fx-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Box class="slider-container" style={{ ...sliderStyle  }}>
+      <Box className="fx-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box className="slider-container" style={{ ...sliderStyle  }}>
           <p style={{ fontSize: '14px', margin: '0' }}>{sliderVolumeValue}</p>
           <input
-            class="fx-slider"
+            className="fx-slider"
             orient="vertical"
             type="range"
             min="0"
@@ -86,10 +86,10 @@ const CreateFxPanel = (props) => {
           />
           <p style={{ fontSize: '14px', margin: '0' }}>Volume</p>
         </Box>
-        <Box class="slider-container" style={{ ...sliderStyle  }}>
+        <Box className="slider-container" style={{ ...sliderStyle  }}>
           <p style={{ fontSize: '14px', margin: '0' }}>{sliderPitchValue}</p>
           <input
-            class="fx-slider"
+            className="fx-slider"
             orient="vertical"
             type="range"
             min="-50"
@@ -100,10 +100,10 @@ const CreateFxPanel = (props) => {
           />
           <p style={{ fontSize: '14px', margin: '0' }}>Pitch</p>
         </Box>
-        <Box class="slider-container" style={{ ...sliderStyle  }}>
+        <Box className="slider-container" style={{ ...sliderStyle  }}>
           <p style={{ fontSize: '14px', margin: '0' }}>{tempoValue}</p>
           <input
-            class="fx-slider"
+            className="fx-slider"
             orient="vertical"
             type="range"
             min="-10"
