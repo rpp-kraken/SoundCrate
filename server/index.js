@@ -29,20 +29,21 @@ const { artistBadge } = require('./controllers/artistBadge')
 
 const app = express();
 
+// redirect all http traffic to https
+app.enable('trust proxy');
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production' && !req.secure) {
+    return res.redirect('https://' + req.headers.host + req.url);
+  }
+
+  next();
+});
+
 app.use(express.static('./client/dist'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-// redirect all http traffic to https
-app.enable('trust proxy');
-app.use((req, res, next) => {
-  if (process.env.NODE_ENV === 'production' && !req.secure) {
-    return res.redirect(`https://${req.headers.host}${req.url}`);
-  }
-
-  next();
-});
 
 //ROUTES
 
