@@ -31,7 +31,7 @@ export default function Favorites(props) {
           Ouch! Sorry, your browser doesnt support this video! Get logged in to have some fun!
         </video>
       </div>
-        : <SongCardList songs={songs} view={props.view.name} profileData={props.profileData}/>}
+        : <SongCardList songs={songs} view={props.view.name} profileData={props.profileData} handleSetArtistSongData={props.handleSetArtistSongData}  changeView={props.changeView}/>}
     </div>
   );
 };
