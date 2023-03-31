@@ -61,6 +61,5 @@ jobs:
             sudo docker image prune -af &&
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/sound-crate &&
             sudo docker run -dp 3000:3000 ${{ secrets.DOCKERHUB_USERNAME }}/sound-crate
-            sudo docker ps -aq | sudo xargs docker exec -it | echo ${{ secrets.CERTIFICATE }} > certificate.pem
           '
 

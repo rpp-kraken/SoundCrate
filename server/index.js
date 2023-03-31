@@ -70,7 +70,7 @@ app.put('/dislikeSong', dislikeSong)
 
 
 const port = secrets.PORT || process.env.PORT || 3000;
-const credentials = fs.readFileSync(path.join(__dirname, '..', 'mindi.pem'));
+const credentials = { cert: fs.readFileSync(path.join(__dirname, '..', 'mindi.pem')) };
 const httpsServer = https.createServer(credentials, app);
 
 // const server = process.env.NODE_ENV === 'production' ? httpsServer : app;
