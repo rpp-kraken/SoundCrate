@@ -72,8 +72,11 @@ app.put('/dislikeSong', dislikeSong)
 const port = secrets.PORT || process.env.PORT || 3000;
 const credentials = fs.readFileSync(path.join(__dirname, '..', 'mindi.pem'));
 const httpsServer = https.createServer(credentials, app);
-const server = httpsServer.listen(port, () => {
-  console.log(`listening on port ${port}...`);d
+
+// const server = process.env.NODE_ENV === 'production' ? httpsServer : app;
+// console.log(JSON.stringify(server));
+const server = app.listen(port, () => {
+  console.log(`listening on port ${port}...`);
 });
 
 
