@@ -138,9 +138,11 @@ const addUser = async (data) => {
 const getUsersFavoriteSongs = async (userId) => {
   db = process.env.NODE_ENV === 'test' ? global.client : db;
   return db.query(`SELECT
+  ${favoritesTable}.song_id,
+  ${favoritesTable}.user_id,
   ${songsTable}.*,
   ${usersTable}.*,
-  array_agg(${tagsTable}.name) AS tags
+  COALESCE(array_agg(${tagsTable}.name) FILTER (WHERE ${tagsTable}.name IS NOT NULL), ARRAY[]::text[]) AS tags
 FROM
   ${favoritesTable}
   JOIN ${songsTable} ON ${favoritesTable}.song_id = ${songsTable}.id
@@ -149,7 +151,10 @@ FROM
 WHERE
   ${favoritesTable}.user_id = $1
 GROUP BY
-  ${songsTable}.id, ${usersTable}.id;
+  ${favoritesTable}.song_id,
+  ${favoritesTable}.user_id,
+  ${songsTable}.id,
+  ${usersTable}.id;
 `, [userId]);
 };
 
@@ -242,6 +247,53 @@ const addFavoriteSong = async (userId, songId) => {
   }
 }
 
+
+const removeFavoriteSong = async (userId, songId) => {
+  const query = {
+    text: 'DELETE FROM favorites WHERE user_id = $1 AND song_id = $2',
+    values: [userId, songId],
+  };
+  try {
+    console.log('Executing query:', query); // Log the query to debug
+    const result = await db.query(query);
+    console.log('Rows affected:', result.rowCount); // Log the number of affected rows
+    if (result.rowCount > 0) {
+      console.log('Song removed from favorites!');
+    } else {
+      console.log('No matching favorite found for the given userId and songId.');
+    }
+  } catch (err) {
+    console.error('Error removing song from favorites:', err);
+  }
+}
+
+
+const incrementFavCount = async (songId) => {
+  const query = {
+    text: 'UPDATE songs SET fav_count = fav_count + 1 WHERE id = $1',
+    values: [songId]
+  };
+  try {
+    const result = await db.query(query);
+    console.log(`Fav count for song ${songId} incremented.`);
+  } catch (err) {
+    console.error('Error incrementing fav count:', err);
+  }
+}
+
+const decrementFavCount = async (songId) => {
+  const query = {
+    text: 'UPDATE songs SET fav_count = fav_count - 1 WHERE id = $1',
+    values: [songId]
+  };
+  try {
+    const result = await db.query(query);
+    console.log(`Fav count for song ${songId} decremented.`);
+  } catch (err) {
+    console.error('Error incrementing fav count:', err);
+  }
+}
+
 module.exports = {
   addUser,
   addSong,
@@ -263,5 +315,8 @@ module.exports = {
   editProfilePic,
   getUserByid,
   getUserByCol,
-  addFavoriteSong
+  addFavoriteSong,
+  incrementFavCount,
+  removeFavoriteSong,
+  decrementFavCount
 };
