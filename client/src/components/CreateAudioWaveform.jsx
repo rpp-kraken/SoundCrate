@@ -30,10 +30,7 @@ const CreateAudioWaveform = (props) => {
 					// scrollParent: true,
 					autoCenter: true,
 					cursorColor: '#69207F',
-					loopSelection: true,
-					waveColor: '#211027',
-					// waveColor: '#69207F',
-					progressColor: '#A371B5',
+					waveColor: '#A371B5',
 					responsive: true,
 					barWidth: 1,
 					barHeight: 4,
@@ -54,7 +51,6 @@ const CreateAudioWaveform = (props) => {
 			// once the waveform is ready, play the audio
 			wavesurferObj.on('ready', () => {
 				wavesurferObj.play();
-				wavesurferObj.enableDragSelection({}); // to select the region to be trimmed
 				setDuration(Math.floor(wavesurferObj.getDuration())); // set the duration in local state
 			});
 
@@ -195,8 +191,8 @@ const CreateAudioWaveform = (props) => {
 	};
 
 	return (
-		<section className='waveform-container'  data-testid="audio-waveform" style={{ width: '100%', background: 'black', margin: '10px' }}>
-			<div ref={wavesurferRef} id='waveform' />
+		<section className='waveform-container' data-testid="audio-waveform" style={{ width: '100%' }}>
+			<div ref={wavesurferRef} id='waveform'/>
 			<div ref={timelineRef} id='wave-timeline' />
 			<div className='all-controls'>
 				<div className='left-container'>

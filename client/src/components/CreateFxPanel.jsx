@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import * as Tone from 'tone';
-// import WaveformCanvas from './WaveformCanvas.jsx';
+import { Box, Typography, Card, TableCell, Button, IconButton } from '@mui/material';
 
 const CreateFxPanel = (props) => {
 
-  const [sliderVolumeValue, setSliderVolume] = useState(1);
+  const [sliderVolumeValue, setSliderVolume] = useState(50);
   const [sliderPitchValue, setSliderValue] = useState(0);
-  const [tempoValue, setTempoValue] = useState(1);
+  const [tempoValue, setTempoValue] = useState(0);
   const [mute1prev, setMute1prev] = useState(0);
   const [isMuted1, setIsMuted1] = useState(false);
 
@@ -38,10 +38,6 @@ const CreateFxPanel = (props) => {
     setTempoValue(event.target.value);
   };
 
-  // const onClickDelete = (index) => {
-  //   props.handleDelete(props.index);
-  // };
-
   const muteSound = () => {
     setIsMuted1(!isMuted1);
     if (isMuted1) {
@@ -58,52 +54,69 @@ const CreateFxPanel = (props) => {
   let effectPitch = new Tone.PitchShift(sliderPitchValue).toDestination();
   let gainNode = new Tone.Gain(sliderVolumeValue).connect(effectPitch);
 
+  const sliderStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '75px'
+  }
+
   return (
     // <div className={props.index + 1 === props.active ? null : "hidden"}>
-    <div>
-      <h4> FX: Sound {props.index + 1}</h4>
-      <button className="outline-button-button" onClick={muteSound}>
+    <Box className="fx-box">
+      <h4 style={{ margin: '3px' }}>FX: Sound {props.index + 1}</h4>
+      <Button style={{ padding: '3px', fontSize: '14px' }}onClick={muteSound}>
         {isMuted1 ? 'Unmute' : 'Mute'}
-      </button>
-      {/* <button className="outline-button-button" onClick={onClickDelete}>
-        Delete Track
-      </button> */}
-      <div>
-        <p>Volume Slider value: {sliderVolumeValue}</p>
-        <input
-          type="range"
-          min="0"
-          max="3"
-          step="0.25"
-          value={sliderVolumeValue}
-          onChange={handleChangeVolume}
-          disabled={isMuted1}
-        />
-      </div>
-      <div>
-        <p>Pitch Slider value: {sliderPitchValue}</p>
-        <input
-          type="range"
-          min="-24"
-          max="24"
-          value={sliderPitchValue}
-          onChange={handleChangePitch}
-        />
-      </div>
-      <div>
-        <p>Tempo Slider value: {tempoValue}</p>
-        <input
-          type="range"
-          min="0.2"
-          max="4"
-          step="0.2"
-          value={tempoValue}
-          onChange={handleChangeTempo}
-        />
-      </div>
-      <br />
-      <br />
-    </div>
+      </Button>
+      <Box class="fx-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box class="slider-container" style={{ ...sliderStyle  }}>
+          <p style={{ fontSize: '14px', margin: '0' }}>{sliderVolumeValue}</p>
+          <input
+            class="fx-slider"
+            orient="vertical"
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            value={sliderVolumeValue}
+            onChange={handleChangeVolume}
+            disabled={isMuted1}
+            style={{ width: '10px', height: '100px' }}
+          />
+          <p style={{ fontSize: '14px', margin: '0' }}>Volume</p>
+        </Box>
+        <Box class="slider-container" style={{ ...sliderStyle  }}>
+          <p style={{ fontSize: '14px', margin: '0' }}>{sliderPitchValue}</p>
+          <input
+            class="fx-slider"
+            orient="vertical"
+            type="range"
+            min="-50"
+            max="50"
+            value={sliderPitchValue}
+            onChange={handleChangePitch}
+            style={{ width: '10px', height: '100px'  }}
+          />
+          <p style={{ fontSize: '14px', margin: '0' }}>Pitch</p>
+        </Box>
+        <Box class="slider-container" style={{ ...sliderStyle  }}>
+          <p style={{ fontSize: '14px', margin: '0' }}>{tempoValue}</p>
+          <input
+            class="fx-slider"
+            orient="vertical"
+            type="range"
+            min="-10"
+            max="10"
+            step="0.5"
+            value={tempoValue}
+            onChange={handleChangeTempo}
+            style={{ width: '10px', height: '100px'  }}
+          />
+          <p style={{ fontSize: '14px', margin: '0' }}>Tempo</p>
+        </Box>
+      </Box>
+    </Box>
   )
 }
 

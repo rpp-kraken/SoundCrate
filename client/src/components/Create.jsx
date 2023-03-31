@@ -89,7 +89,11 @@ export default function Create(props) {
   };
 
   const handleDelete = (index) => {
-    setListOfTracks([]);
+    setListOfTracks(prevList => {
+      const newAudioTracks = [...prevList];
+      newAudioTracks.splice(index, 1);
+      return newAudioTracks;
+    });
     setMax(0);
     setIsTrack(false);
   };
@@ -212,7 +216,7 @@ export default function Create(props) {
       <Grid container spacing={1} p={4} sx={{ backgroundColor: theme.palette.background.default, flexDirection: 'column', alignItems: 'center', maxWidth: '300px', minWidth: '300px' }}>
         <Typography color="secondary" variant='bodyText' sx={{ width: '75%', textAlign: 'center', color: 'white' }}>To start creating, upload some audio or record yourself!</Typography>
       </Grid>
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', gap: '15px' }}>
         {underMax &&
         <Button
           id="upload-button"
@@ -236,24 +240,28 @@ export default function Create(props) {
         <MicrophoneRecorder setListOfTracks={setListOfTracks} setMax={setMax} maxTracks={maxTracks} setUnderMax={setUnderMax} underMax={underMax} />
         }
       </Box>
-      {listOfTracks.map((urlTrack, i) => { return <CreateAudioWaveform trackUrl={urlTrack} index={i} key={i} /> })}
+        {listOfTracks.map((urlTrack, i) => { return <CreateAudioWaveform trackUrl={urlTrack} index={i} key={i} /> })}
       <div className="sidescroller">
         {listOfTracks.map((urlTrack, i) => { return <CreateFxPanel trackUrl={urlTrack} index={i} key={i} handleAddPlayer={handleAddPlayer} /> })}
       </div>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', margin: '10px' }}>
         {isTrack &&
         <Button variant="contained" onClick={handlePlayAll}>
-          Play All Sounds with FX
+          Play All
         </Button>}
-        {isTrack &&
-        <Button variant="contained" onClick={handleDelete}>
-          Clear All Tracks
-        </Button>}
+        {
+        isTrack &&
+        <>
+          <Button variant="contained" onClick={handleDelete}>
+            Clear All
+          </Button>
+          <Button variant="contained" onClick={handlePublish}>
+            Publish
+          </Button>
+        </>
+        }
       </Box>
-      {isTrack &&
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Button variant="contained" onClick={handlePublish}> Publish </Button>
-      </Box>}
+
       {openPublish && <Publish setOpenPublish={setOpenPublish} song={song} songUrl={songUrl} profileData={props.profileData} changeView={props.changeView} />}
     </Box>
   );
