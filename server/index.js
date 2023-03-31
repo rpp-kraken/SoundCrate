@@ -68,19 +68,23 @@ app.get('/api/userBadge', artistBadge)
 app.put('/likeSong',addLikedSong)
 app.put('/dislikeSong', dislikeSong)
 
-
 const port = secrets.PORT || process.env.PORT || 3000;
-const credentials = { cert: fs.readFileSync(path.join(__dirname, '..', 'mindi.pem')) };
-const httpsServer = https.createServer(credentials, app);
+let server;
+if (process.env.NODE_ENV === 'production') {
+  const key = fs.readFileSync('/etc/letsencrypt/live/www.sound-crate.com/privkey.pem');
+  const cert = fs.readFileSync('/etc/letsencrypt/live/www.sound-crate.com/fullchain.pem');
+  const credentials = { key, cert };
+  const httpsServer = https.createServer(credentials, app);
+  console.log(JSON.stringify(httpsServer));
+  server = httpsServer.listen(port, () => {
+    console.log(`listening on port ${port}...`);
+  });
+} else {
+  server = app.listen(port, () => {
+    console.log(`listening on port ${port}...`);
+  });
+}
 
-// const server = process.env.NODE_ENV === 'production' ? httpsServer : app;
-// console.log(JSON.stringify(server));
-const server = app.listen(port, () => {
-  console.log(`listening on port ${port}...`);
-});
-
-
-//EXPORT httpsServer <<<<<<<<<<<<<<<<
 module.exports = { app, server };
 
 
