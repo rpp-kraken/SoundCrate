@@ -20,8 +20,8 @@ import FourOhFour from './404.jsx';
 import Splash from '../components/login/Splash.jsx';
 import axios from 'axios';
 
-export default function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+export default function App(props) {
+  const [loggedIn, setLoggedIn] = useState(props.loggedIn);
   const [user, setUser] = useState([]);
   const [profileData, setProfileData] = useState([]);
   const [artistData, setArtistData] = useState();

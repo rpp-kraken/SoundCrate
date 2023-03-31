@@ -7,6 +7,6 @@ import './styles.css';
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <GoogleOAuthProvider clientId="167666531989-d7dfo41ka45sqoc28pbjilvkr9892up3.apps.googleusercontent.com">
-    <App />
+    <App loggedIn={false} />
   </GoogleOAuthProvider>
 );

@@ -20,6 +20,12 @@ let renderComponent = async () => {
   </GoogleOAuthProvider>);
 }
 
+let renderLoggedIn = async () => {
+  return render(<GoogleOAuthProvider clientId="167666531989-d7dfo41ka45sqoc28pbjilvkr9892up3.apps.googleusercontent.com">
+    <App loggedIn={true} />
+  </GoogleOAuthProvider>);
+}
+
 const state = {
   artistData: {
     id: "123",
@@ -122,3 +128,42 @@ describe('Create new user form', () => {
     expect(bio && bioField).toBeInTheDocument();
   });
 });
+
+describe('Logout test', () => {
+  it('Should show logged in options in the drawer', async () => {
+    const { getByTestId } = renderLoggedIn();
+
+    const drawer = await screen.getByTestId('drawer');
+    await fireEvent.click(drawer);
+
+    const myAccount = await screen.getByText('My Account');
+    const myMusic = await screen.getByText('My Music');
+
+    const logout = await screen.getByText('Log Out');
+    const deleteAccount = await screen.getByText('Delete Account');
+
+    expect(myAccount && myMusic).toBeInTheDocument();
+    expect(logout && deleteAccount).toBeInTheDocument();
+  });
+
+  it('Should allow the user to log out', async () => {
+    const { getByTestId } = renderLoggedIn();
+
+    // we're logged in, let's choose log out
+    const drawer = await screen.getByTestId('drawer');
+    await fireEvent.click(drawer);
+    const logout = await screen.getByText('Log Out');
+    await fireEvent.click(logout);
+
+    // are we on the logout page?
+    const confirm = await screen.getByText('Are you sure you want to log out?');
+    expect(confirm).toBeInTheDocument();
+    const yes = await screen.getByText('Yes');
+    expect(yes).toBeInTheDocument();
+
+    // confirm logout
+    await fireEvent.click(yes);
+    const video = await screen.getByTestId('splash');
+    expect(video).toBeInTheDocument();
+  });
+})
