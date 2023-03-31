@@ -9,6 +9,7 @@ export default function NewAccount({ changeView, profileData, setProfileData, se
   const [file, setFile] = useState('');
   const [tempFile, setTempFile] = useState('');
   const [username, setUsername] = useState('');
+  const [isPicture, setIsPicture] = useState(false);
 
   useEffect(() => {
     if (!path_to_pic && profileData.picture) {
@@ -32,6 +33,7 @@ export default function NewAccount({ changeView, profileData, setProfileData, se
   const handleFile = async (e) => {
     await setFile(e.target.files[0])
     setTempFile(e.target.files[0]);
+    setIsPicture(true);
   }
 
   const onSubmit = async (e) => {
@@ -66,15 +68,17 @@ export default function NewAccount({ changeView, profileData, setProfileData, se
 
 
   return (
-    <div>
+    <div style={{padding: '0 1em'}}>
       Are you ready to set up your new account? Let's do it!
       <br /><br />
       <form>
         <div>
           <label htmlFor="path">
             Profile Picture:
-            <br /><img src={path_to_pic} /><br />
-            <Button variant="contained" component="label">
+            <br />
+            {isPicture && <img src={path_to_pic} className="previewPicture"/>}
+            <br />
+            <Button variant="contained" component="label" >
               Update
               <input type="file" name="path" accept="image/*" onChange={(e) => handleFile(e)} style={{ display: 'none' }} required />
             </Button>

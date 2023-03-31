@@ -146,13 +146,15 @@ export const Publish = (props) => {
               <input type="file" accept="image/*" onChange={(e) => handleImageChange(e.target.files[0])} style={{ display: 'none' }} />
             </Button>
           </label>
-            {urlImage && <img src={urlImage} alt="Song Image Preview" />}
+          <br />
+            {urlImage && <img src={urlImage} alt="Song Image Preview" className="previewPicture"/>}
+            <br />
            <label>
             Song Title:
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required/>
           </label>
           <br />
-          <label htmlFor="tags">Tags (up to 3):</label>
+          <label htmlFor="tags">Tags (up to 3): </label>
           {underMax && <input type="text" name="tags" onKeyPress={handleKeyPress} placeholder="Press enter to create tag"/>}
             <ul>
             {tags.map((tag, index) => (
@@ -184,9 +186,10 @@ export const Publish = (props) => {
             onPause={handlePause}
           />
         )} */}
-        <Button variant="contained" onClick={handleClose} sx={{ marginBottom: '4em' }}>Cancel</Button>
         </div>
-          <Button variant="contained" type="submit">Submit</Button>
+        <div sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4em' }}>
+          <Button variant="contained" onClick={handleClose} sx={{ marginRight: '1em' }}>Cancel</Button>      <Button variant="contained" type="submit">Submit</Button>
+        </div>
         </form>
         </div>
       </Modal>
