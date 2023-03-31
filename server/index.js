@@ -21,6 +21,7 @@ const { editProfileBio } = require('./controllers/editProfileBio');
 const { editProfilePic } = require('./controllers/editProfilePic');
 const { playCountIncrement } = require('./controllers/playCountIncrement');
 const { addLikedSong } = require('./controllers/addLikedSong')
+const { dislikeSong } = require('./controllers/dislikeSong')
 
 
 // TO BE TURNED ON WITH SSL CERT/KEY
@@ -74,6 +75,7 @@ app.get('/api/userBadge', artistBadge)
 
 // liked songs routes
 app.put('/likeSong',addLikedSong)
+app.put('/dislikeSong', dislikeSong)
 
 
 

@@ -1,7 +1,12 @@
 
 .badge-icon {
-  width: 30px;
-  height: 30px
+  width: 15px;
+  height: 15px
+}
+
+.badge-icon-profile {
+  width: 40px;
+  height: 40px
 }
 
 .video {

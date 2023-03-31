@@ -68,7 +68,7 @@ export default function ProfileOtherArtist(props) {
             <Button onClick={onClickBackToHome}>Back Arrow</Button>
             <Grid container direction='row' style={{ ...gridItemStyle, fontSize: '12px' }}>
               <Grid item xs={3} style={gridItemStyle}>
-                <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center' }}>Song</Typography>
+                <Typography variant='bodyText' style={{ width: '100%', textAlign: 'center' }}>Songs</Typography>
               </Grid>
 
               <Grid item xs={3} style={gridItemStyle}>

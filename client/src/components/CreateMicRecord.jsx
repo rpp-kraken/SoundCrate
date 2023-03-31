@@ -1,11 +1,12 @@
 import React, { useState, useRef } from 'react';
 import getBlobDuration from 'get-blob-duration';
-import { IconButton } from '@mui/material';
+import { Typography, Card, TableCell, Button, IconButton } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
-
+import { useTheme } from '@mui/material/styles';
 
 
 export const MicrophoneRecorder = (props) => {
+  const theme = useTheme();
   const [recording, setRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
   const mediaRecorderRef = useRef(null);
@@ -57,9 +58,9 @@ export const MicrophoneRecorder = (props) => {
 
 
   return (
-    <IconButton variant="contained" color="secondary" onClick={recording ? stopRecording : startRecording} disabled={!props.underMax}>
+    <Button variant="contained" color="secondary" sx={{ gap: '10px' }} onClick={recording ? stopRecording : startRecording} disabled={!props.underMax}>
       <MicIcon />
       {recording ? 'Stop Recording' : 'Start Recording'}
-    </IconButton>
+    </Button>
   );
 }
