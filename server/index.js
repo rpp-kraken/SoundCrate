@@ -93,8 +93,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const httpPort = 3080;
-server = app.listen(serverPort, () => {
-  console.log(`listening on port ${serverPort}...`);
+server = app.listen(httpPort, () => {
+  console.log(`listening on port ${httpPort}...`);
 });
 
 module.exports = { app, server };
