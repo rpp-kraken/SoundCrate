@@ -68,11 +68,14 @@ export default function Create(props) {
     };
   }
 
-  const handleDelete = (index) => {
-    setListOfTracks([]);
-    setMax(0);
-    setIsTrack(false);
-  };
+  const handlePublish = async () => {
+    if (listOfTracks.length === 0) {
+      alert('There is no song to publish')
+      return;
+    }
+    await handleRender();
+    setOpenPublish(true);
+  }
 
   const handleAddPlayer = (player, tempoValue) => {
     const key = Object.keys(player);
@@ -86,11 +89,7 @@ export default function Create(props) {
   };
 
   const handleDelete = (index) => {
-    setListOfTracks(prevList => {
-      const newAudioTracks = [...prevList];
-      newAudioTracks.splice(index, 1);
-      return newAudioTracks;
-    });
+    setListOfTracks([]);
     setMax(0);
     setIsTrack(false);
   };
