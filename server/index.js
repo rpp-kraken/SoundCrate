@@ -35,7 +35,7 @@ app.use((req, res, next) => {
   console.log(`req.secure: ${req.secure}`);
   if (process.env.NODE_ENV === 'production' && !req.secure) {
     console.log('redirecting...');
-    return res.redirect('https://' + req.headers.host + req.url);
+    return res.redirect('https://' + req.headers.host + req.url + `:${process.env.PORT}`);
   }
 
   next();
