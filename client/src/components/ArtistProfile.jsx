@@ -11,7 +11,6 @@ import axios from 'axios';
 
 export default function ArtistProfile({ artistData, changeView, loggedIn, songData, profileData, handleSetArtistSongData }) {
   const [openEditProfile, setOpenEditProfile] = useState(false);
-  console.log(artistData)
   const theme = useTheme();
   const gridItemStyle = {
     display: 'flex',

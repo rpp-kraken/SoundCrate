@@ -12,12 +12,56 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import App from '../../client/src/components/App.jsx';
 import NewAccount from '../../client/src/components/login/NewAccount.jsx';
 import Splash from '../../client/src/components/login/Splash.jsx';
+import ArtistProfile from '../../client/src/components/ArtistProfile.jsx';
 
 let renderComponent = async () => {
   return render(<GoogleOAuthProvider clientId="167666531989-d7dfo41ka45sqoc28pbjilvkr9892up3.apps.googleusercontent.com">
     <App />
   </GoogleOAuthProvider>);
 }
+
+const state = {
+  artistData: {
+    id: "123",
+    name: "Mindi Test",
+    email: "mindi@test.com",
+    bio: "bio",
+    path_to_pic: "URLpath",
+    songCount: 10,
+    songs: [
+      {
+        created_at: "2023-03-25T02:11:35.367",
+        fav_count: 1000005,
+        id: "555",
+        path_to_artwork: "URLpath",
+        path_to_song: "URLpath",
+        play_count: 10,
+        tags: [],
+        title: "Test Song",
+        user_id: "123",
+        username: "mintest"
+      }
+    ],
+    username: "mintest",
+    tier1: true,
+    tier2: false,
+    tier3: false
+  },
+  changeView: () => console.log('function'),
+  loggedIn: true,
+  profileData: {
+    id: "123",
+    name: "Mindi Test",
+    email: "mindi@test.com",
+    bio: "bio",
+    path_to_pic: "URLpath",
+    username: "mintest",
+    tier1: true,
+    tier2: false,
+    tier3: false
+  },
+  handleSetArtistSongData: () => console.log('function')
+};
 
 describe('Splash page comes first!', () => {
   it('Should display the video first and foremost', async () => {
@@ -38,6 +82,27 @@ describe('Login test', () => {
     const oauth = await screen.getByTestId('google-oauth');
     expect(oauth).toBeInTheDocument();
   });
+
+  it('When logged in, Edit Profile & verification request should appear on the Artist Profile', async () => {
+    await render(<ArtistProfile changeView={state.changeView} artistData={state.artistData} profileData={state.profileData} handleSetArtistSongData={state.handleSetArtistSongData} loggedIn={state.loggedIn} />);
+    const edit = await screen.getByText('Edit Profile');
+    const verify = await screen.getByText('Request Verification');
+
+    expect(edit && verify).toBeInTheDocument();
+  });
+
+  it('When logged in, the user\s details should appear on the Artist Profile', async () => {
+    await render(<ArtistProfile changeView={state.changeView} artistData={state.artistData} profileData={state.profileData} handleSetArtistSongData={state.handleSetArtistSongData} loggedIn={state.loggedIn} />);
+    const name = await screen.getByText('Mindi Test');
+    const username = await screen.getByText('mintest');
+    const songCount = await screen.getByText('10');
+
+    const song = await screen.getByText('Test Song');
+    const playCount = await screen.getByText('1000005');
+
+    expect(name && username && songCount).toBeInTheDocument();
+    expect(song && playCount).toBeInTheDocument();
+  });
 });
 
 describe('Create new user form', () => {
@@ -56,4 +121,4 @@ describe('Create new user form', () => {
     expect(username && userField).toBeInTheDocument();
     expect(bio && bioField).toBeInTheDocument();
   });
-})
+});
