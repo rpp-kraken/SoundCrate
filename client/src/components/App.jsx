@@ -116,7 +116,7 @@ export default function App() {
     },
     [user]
   );
-
+//
   const renderView = () => {
     switch (view.name) {
       case "splash":
