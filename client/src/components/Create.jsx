@@ -68,14 +68,11 @@ export default function Create(props) {
     };
   }
 
-  const handlePublish = async () => {
-    if (listOfTracks.length === 0) {
-      alert('There is no song to publish')
-      return;
-    }
-    await handleRender();
-    setOpenPublish(true);
-  }
+  const handleDelete = (index) => {
+    setListOfTracks([]);
+    setMax(0);
+    setIsTrack(false);
+  };
 
   const handleAddPlayer = (player, tempoValue) => {
     const key = Object.keys(player);
