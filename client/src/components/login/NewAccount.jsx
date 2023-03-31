@@ -81,6 +81,7 @@ export default function NewAccount({ changeView, profileData, setProfileData, se
           </label>
         </div>
         <div>
+          <br />
           <label htmlFor="username">
             Username:
             <input type="text" name="username" data-testid="username" onChange={(e) => handleChange(e)} />
@@ -88,6 +89,7 @@ export default function NewAccount({ changeView, profileData, setProfileData, se
         </div>
         <div>
           <label htmlFor="bio">
+          <br />
             Bio: <br />
             <textarea rows="3" cols="30" name="bio" placeholder="Tell us about you..." onChange={(e) => handleChange(e)} ></textarea>
             <br></br>

@@ -117,8 +117,8 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
           <Button variant="contained" component="label">
             Edit Profile
             <input onClick={() => setOpenEditProfile(true)} style={{ display: 'none' }} />
-          </Button><br />
-          <Button variant="contained" component="label" onClick={onClickRequestVerification}>
+          </Button>
+          <Button variant="contained" component="label" onClick={onClickRequestVerification} style={{margin: '3%'}}>
             Request Verification
           </Button>
           <div>
