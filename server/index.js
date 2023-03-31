@@ -5,6 +5,7 @@ const express = require('express');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
+const path = require('path');
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const { handleUpload } = require('./controllers/handleUpload');
