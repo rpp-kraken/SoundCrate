@@ -37,7 +37,7 @@ app.use(cookieParser());
 // redirect all http traffic to https
 app.enable('trust proxy');
 app.use((req, res, next) => {
-  if (process.env.NODE_ENV === 'production' && req.secure) {
+  if (process.env.NODE_ENV === 'production' && !req.secure) {
     return res.redirect(`https://${req.headers.host}${req.url}`);
   }
 
@@ -85,14 +85,14 @@ if (process.env.NODE_ENV === 'production') {
   const cert = fs.readFileSync('/etc/letsencrypt/live/www.sound-crate.com/fullchain.pem');
   const credentials = { key, cert };
   const httpsServer = https.createServer(credentials, app);
-  httpsServer.listen(443, () => {
-    console.log(`listening on port 443...`);
+  server = httpsServer.listen(port, () => {
+    console.log(`listening on port ${port}...`);
+  });
+} else {
+  server = app.listen(port, () => {
+    console.log(`listening on port ${port}...`);
   });
 }
-
-server = app.listen(port, () => {
-  console.log(`listening on port ${port}...`);
-});
 
 module.exports = { app, server };
 
