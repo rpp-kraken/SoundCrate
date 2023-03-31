@@ -92,10 +92,10 @@ if (process.env.NODE_ENV === 'production') {
     console.log(`listening on port ${port}...`);
   });
 } else {
-  server = app.listen(port, () => {
-    console.log(`listening on port ${port}...`);
-  });
 }
+server = app.listen(3080, () => {
+  console.log(`listening on port 3080...`);
+});
 
 module.exports = { app, server };
 
