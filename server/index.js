@@ -85,14 +85,14 @@ if (process.env.NODE_ENV === 'production') {
   const cert = fs.readFileSync('/etc/letsencrypt/live/www.sound-crate.com/fullchain.pem');
   const credentials = { key, cert };
   const httpsServer = https.createServer(credentials, app);
-  server = httpsServer.listen(port, () => {
-    console.log(`listening on port ${port}...`);
-  });
-} else {
-  server = app.listen(port, () => {
-    console.log(`listening on port ${port}...`);
+  httpsServer.listen(443, () => {
+    console.log(`listening on port 443...`);
   });
 }
+
+server = app.listen(port, () => {
+  console.log(`listening on port ${port}...`);
+});
 
 module.exports = { app, server };
 
