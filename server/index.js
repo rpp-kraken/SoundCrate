@@ -12,7 +12,6 @@ const { getSongsByUser } = require('./controllers/getSongsByUser');
 // const { getOneSong } = require('./controllers/getOneSong');
 const { getAllSongsHome } = require('./controllers/getAllSongsHome');
 const { newUser } = require('./controllers/newUser');
-const { getUser } = require('./controllers/getUser');
 const { getUserByCol } = require('./controllers/getUserByCol');
 const { handleDelete } = require('./controllers/deleteSong');
 const { getFavoriteSongs } = require('./controllers/getFavoriteSongs');
@@ -22,6 +21,7 @@ const { editProfileBio } = require('./controllers/editProfileBio');
 const { editProfilePic } = require('./controllers/editProfilePic');
 const { playCountIncrement } = require('./controllers/playCountIncrement');
 const { addLikedSong } = require('./controllers/addLikedSong')
+const { dislikeSong } = require('./controllers/dislikeSong')
 
 
 // TO BE TURNED ON WITH SSL CERT/KEY
@@ -57,7 +57,6 @@ app.post('/api/uploadSong', upload.fields([
 app.delete('/api/deleteSong', handleDelete);
 
 // user routes
-app.get('/api/user', getUser);
 app.get('/api/userbycol', getUserByCol);
 app.post('/api/user', upload.fields([
   { name: 'imageFile', maxCount: 1 }
@@ -76,6 +75,7 @@ app.get('/api/userBadge', artistBadge)
 
 // liked songs routes
 app.put('/likeSong',addLikedSong)
+app.put('/dislikeSong', dislikeSong)
 
 
 
