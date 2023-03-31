@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createTheme } from '@mui/material/styles';
-import SongCardList from './SongCardList.jsx';
+import SongCardListFavorites from './SongCardListFavorites.jsx';
 
 export default function Favorites(props) {
   const [songs, setSongs] = useState([]);
@@ -31,7 +31,7 @@ export default function Favorites(props) {
           Ouch! Sorry, your browser doesnt support this video! Get logged in to have some fun!
         </video>
       </div>
-        : <SongCardList songs={songs} view={props.view.name} profileData={props.profileData} handleSetArtistSongData={props.handleSetArtistSongData}  changeView={props.changeView}/>}
+        : <SongCardListFavorites songs={songs} view={props.view.name} profileData={props.profileData} handleSetArtistSongData={props.handleSetArtistSongData}  changeView={props.changeView}/>}
     </div>
   );
 };
