@@ -34,6 +34,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
+// redirect all http traffic to https
+app.enable('trust proxy');
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production' && req.secure) {
+    return res.redirect(`https://${req.headers.host}${req.url}`);
+  }
+
+  next();
+});
+
 //ROUTES
 
 // song routes
@@ -75,7 +85,6 @@ if (process.env.NODE_ENV === 'production') {
   const cert = fs.readFileSync('/etc/letsencrypt/live/www.sound-crate.com/fullchain.pem');
   const credentials = { key, cert };
   const httpsServer = https.createServer(credentials, app);
-  console.log(JSON.stringify(httpsServer));
   server = httpsServer.listen(port, () => {
     console.log(`listening on port ${port}...`);
   });
