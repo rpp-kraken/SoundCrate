@@ -37,8 +37,16 @@ export default function Create(props) {
   }, []);
 
   useEffect(() => {
-    setUnderMax(maxTracks < 3);
-    setIsTrack(maxTracks > 0);
+    // setUnderMax(maxTracks < 3);
+    // setIsTrack(maxTracks > 0);
+    if (maxTracks < 3) {
+      setUnderMax(true);
+    } else {
+      setUnderMax(false);
+    };
+    if (maxTracks > 0) {
+      setIsTrack(true);
+    }
   }, [maxTracks]);
 
   const listPlayersObj = {};
@@ -90,6 +98,7 @@ export default function Create(props) {
 
   const handleDelete = (index) => {
     setListOfTracks([]);
+    setListPlayers({});
     setMax(0);
     setIsTrack(false);
   };
@@ -214,47 +223,47 @@ export default function Create(props) {
       </Grid>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', gap: '15px' }}>
         {underMax &&
-        <Button
-          id="upload-button"
-          component="label"
-          color="secondary"
-          htmlFor="upload-audio"
-          sx={{ gap: '10px' }}
-        >
-          <CloudUploadOutlined />
-          Upload File
-          <input
-            id="upload-audio"
-            type="file"
-            accept="audio/*"
-            onChange={handleUploadAudio}
-            hidden
-          />
-        </Button>
+          <Button
+            id="upload-button"
+            component="label"
+            color="secondary"
+            htmlFor="upload-audio"
+            sx={{ gap: '10px' }}
+          >
+            <CloudUploadOutlined />
+            Upload File
+            <input
+              id="upload-audio"
+              type="file"
+              accept="audio/*"
+              onChange={handleUploadAudio}
+              hidden
+            />
+          </Button>
         }
         {underMax &&
-        <MicrophoneRecorder setListOfTracks={setListOfTracks} setMax={setMax} maxTracks={maxTracks} setUnderMax={setUnderMax} underMax={underMax} />
+          <MicrophoneRecorder setListOfTracks={setListOfTracks} setMax={setMax} maxTracks={maxTracks} setUnderMax={setUnderMax} underMax={underMax} />
         }
       </Box>
-        {listOfTracks.map((urlTrack, i) => { return <CreateAudioWaveform trackUrl={urlTrack} index={i} key={i} /> })}
+      {listOfTracks.map((urlTrack, i) => { return <CreateAudioWaveform trackUrl={urlTrack} index={i} key={i} /> })}
       <div className="sidescroller">
         {listOfTracks.map((urlTrack, i) => { return <CreateFxPanel trackUrl={urlTrack} index={i} key={i} handleAddPlayer={handleAddPlayer} /> })}
       </div>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', margin: '10px' }}>
         {isTrack &&
-        <Button variant="contained" onClick={handlePlayAll}>
-          Play All
-        </Button>}
+          <Button variant="contained" onClick={handlePlayAll}>
+            Play All
+          </Button>}
         {
-        isTrack &&
-        <>
-          <Button variant="contained" onClick={handleDelete}>
-            Clear All
-          </Button>
-          <Button variant="contained" onClick={handlePublish}>
-            Publish
-          </Button>
-        </>
+          isTrack &&
+          <>
+            <Button variant="contained" onClick={handleDelete}>
+              Clear All
+            </Button>
+            <Button variant="contained" onClick={handlePublish}>
+              Publish
+            </Button>
+          </>
         }
       </Box>
 
