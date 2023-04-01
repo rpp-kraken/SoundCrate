@@ -126,7 +126,7 @@ export default function App() {
       case "create":
         return <Create changeView={changeView} collaborateSongPath={collaborateSongPath} profileData={profileData} />;
       case "favorites":
-        return <Favorites changeView={changeView} profileData={profileData} view={view}/>;
+        return <Favorites changeView={changeView} profileData={profileData} view={view} handleSetArtistSongData={handleSetArtistSongData}/>;
       case "newAccount":
         return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "profile":
