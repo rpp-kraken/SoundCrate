@@ -80,7 +80,7 @@ app.get('/api/userBadge', artistBadge)
 app.put('/likeSong',addLikedSong)
 app.put('/dislikeSong', dislikeSong)
 
-const port = secrets.PORT || process.env.PORT || 3000;
+const port = secrets.PORT || process.env.PORT || 3080;
 let server;
 if (process.env.NODE_ENV === 'production') {
   const key = fs.readFileSync('/etc/letsencrypt/live/www.sound-crate.com/privkey.pem');
