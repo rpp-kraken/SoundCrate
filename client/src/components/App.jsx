@@ -28,12 +28,25 @@ export default function App() {
   const [songData, setSongData] = useState();
   const [songAllHomeData, setSongAllHomeData] = useState([]);
   const [collaborateSongPath, setCollaborateSongPath] = useState(null);
+  const [firstRender, setFirstRender] = useState(true);
 
   // View State changes on click
   const [view, setView] = useState({ name: 'splash' });
 
   useEffect(() => {
     console.log("Changing view to: " + view.name);
+    if (view.name === 'home') {
+      if (firstRender === true) {
+        setFirstRender(false)
+      } else {
+        axios.get(`/api/getAllSongsHome`)
+        .then((res) => {
+          console.log("New Data from deployed DB: ", res.data);
+          setSongAllHomeData(res.data);
+        })
+        .catch((err) => console.log(err));
+      }
+    }
   }, [view])
 
   useEffect(() => {
