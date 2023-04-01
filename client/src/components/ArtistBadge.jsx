@@ -3,10 +3,11 @@ import axios from 'axios'
 
 export default function ArtistBadge({ username, view }) {
 
-  const [badgeLevelIcon, setBadgeLevel] = useState(null)
+  const [badgeLevelIcon, setBadgeLevel] = useState(null);
+
   useEffect(() => {
     axios
-      .get('/api/userBadge', { params: { username } })
+      .get(`/api/userbycol?col=username&val=${username}`)
       .then((data) => {
         let tier1 = data.data.tier1
         let tier2 = data.data.tier2
@@ -18,7 +19,8 @@ export default function ArtistBadge({ username, view }) {
       .catch((err) => {
         console.error(err)
       })
-  }, [])
+  }, []);
+
   if(!badgeLevelIcon) {
     return
   } else {
@@ -26,5 +28,5 @@ export default function ArtistBadge({ username, view }) {
       <img src={badgeLevelIcon} className="badge-icon" />
     )
   }
-}
+};
 

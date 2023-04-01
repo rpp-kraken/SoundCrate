@@ -25,7 +25,6 @@ const { addLikedSong } = require('./controllers/addLikedSong')
 const { dislikeSong } = require('./controllers/dislikeSong')
 const { handleDeleteUser } = require('./controllers/deleteUser');
 const upload = multer();
-const { artistBadge } = require('./controllers/artistBadge')
 
 const app = express();
 
@@ -72,9 +71,6 @@ app.delete('/api/deleteUser', handleDeleteUser);
 
 // play count routes
 app.put('/api/playCountIncrement', playCountIncrement);
-
-//artist icon badge
-app.get('/api/userBadge', artistBadge)
 
 // liked songs routes
 app.put('/likeSong',addLikedSong)
