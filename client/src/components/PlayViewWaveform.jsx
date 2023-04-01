@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-// import TimelinePlugin from 'wavesurfer.js/dist/plugin/wavesurfer.timeline.min.js';
-// import RegionsPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.regions.min.js';
-// import { FileContext } from '../contexts/fileContext';
+import { createTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import wavesurfer from 'wavesurfer.js';
-// import ToggleButton from './ToggleButton';
+import { Typography, Card, TableCell, Button, IconButton } from '@mui/material';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Unstable_Grid2';
 
 const PlayViewWaveform = (props) => {
+	const theme = useTheme();
+
 	const wavesurferRef = useRef(null);
 	const timelineRef = useRef(null);
 
@@ -181,17 +184,20 @@ const PlayViewWaveform = (props) => {
 
 	return (
 		<section className='waveform-container'>
-			<h2>Play View</h2>
+			<h2 style={{ textAlign: 'center' }}>{props.trackTitle}</h2>
 
 			<div ref={wavesurferRef} id='waveform' />
 			<div ref={timelineRef} id='wave-timeline' />
+			<br/>
 			<div className='all-controls'>
-				<div className='left-container'>
+				<div style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
 
-					<button
+					<Button
 						title='play/pause'
 						className='controls'
-						onClick={handlePlayPause}>
+						onClick={handlePlayPause}
+						p={4}
+						sx={{ padding: '10px' }}>
 						{/* {playing ? (
 							initLoad === false ? (
 								<i className='material-icons'>pause</i>
@@ -202,21 +208,19 @@ const PlayViewWaveform = (props) => {
 							<i className='material-icons'>play_arrow</i>
 						)} */}
 						{playing ? (
-							<i className='material-icons'>pause</i>
+							<i className='material-icons'>Pause</i>
 						) : (
-							<i className='material-icons'>play_arrow</i>
+							<i className='material-icons'>Play</i>
 						)}
-					</button>
-					<button
+					</Button>
+					<Button
 						title='reload'
 						className='controls'
-						onClick={handleReload}>
-						<i className='material-icons'>replay</i>
-					</button>
-				</div>
-				<div className='right-container'>
-					<div className='volume-slide-container'>
-					</div>
+						onClick={handleReload}
+						p={4}
+						sx={{ padding: '10px' }}>
+						<i className='material-icons'>Replay</i>
+					</Button>
 				</div>
 			</div>
 		</section>

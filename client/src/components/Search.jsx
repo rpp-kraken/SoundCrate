@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 
 export default function Search({setSearchQuery}) {
   return (
-    <form className="searchbar">
+    <form className="searchbar" style={{ position: 'relative', margin: '15px' }} >
       <TextField
         id="search-bar"
         className="search-bar-text"
@@ -13,9 +13,11 @@ export default function Search({setSearchQuery}) {
         variant="outlined"
         placeholder="Search..."
         size="small"
+        data-testid="searchBar"
+        style={{  width: '100%' }}
       />
-      <IconButton type="submit" aria-label="search">
-        <SearchIcon style={{ fill: "blue" }} />
+      <IconButton type="submit" aria-label="search" style={{ position: 'absolute', right: '5px' }}>
+        <SearchIcon style={{ fill: 'gray' }} />
       </IconButton>
     </form>
     // <input type="text" placeholder="Search..."></input>

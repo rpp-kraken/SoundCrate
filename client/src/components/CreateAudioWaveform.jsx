@@ -30,19 +30,12 @@ const CreateAudioWaveform = (props) => {
 					// scrollParent: true,
 					autoCenter: true,
 					cursorColor: '#69207F',
-					loopSelection: true,
-					waveColor: '#211027',
-					// waveColor: '#69207F',
-					progressColor: '#A371B5',
+          loopSelection: true,
+					waveColor: 'white',
+          progressColor: '#A371B5',
 					responsive: true,
 					barWidth: 1,
 					barHeight: 4,
-					// plugins: [
-					// 	TimelinePlugin.create({
-					// 		container: '#wave-timeline',
-					// 	}),
-					// RegionsPlugin.create({}),
-					// ],
 				})
 			);
 		}
@@ -60,7 +53,7 @@ const CreateAudioWaveform = (props) => {
 			// once the waveform is ready, play the audio
 			wavesurferObj.on('ready', () => {
 				wavesurferObj.play();
-				wavesurferObj.enableDragSelection({}); // to select the region to be trimmed
+        wavesurferObj.enableDragSelection({}); // to select the region to be trimmed
 				setDuration(Math.floor(wavesurferObj.getDuration())); // set the duration in local state
 			});
 
@@ -201,38 +194,11 @@ const CreateAudioWaveform = (props) => {
 	};
 
 	return (
-		<section className='waveform-container'>
-			{/* <button
-				title='play/pause'
-				className='controls'
-				onClick={handlePlayPause}>
-				{playing ? (
-					<i className='material-icons'>pause</i>
-				) : (
-					<i className='material-icons'>play_arrow</i>
-				)}
-			</button> */}
-			<div ref={wavesurferRef} id='waveform' />
+		<section className='waveform-container' data-testid="audio-waveform" style={{ width: '100%' }}>
+			<div ref={wavesurferRef} id='waveform'/>
 			<div ref={timelineRef} id='wave-timeline' />
 			<div className='all-controls'>
 				<div className='left-container'>
-					{/* <button
-						title='reload'
-						className='controls'
-						onClick={handleReload}>
-						<i className='material-icons'>replay</i>
-					</button> */}
-					{/* <button className='trim' onClick={handleTrim}>
-						<i
-							style={{
-								fontSize: '1.2em',
-								color: 'white',
-							}}
-							className='material-icons'>
-							content_cut
-						</i>
-						Trim
-					</button> */}
 				</div>
 				<div className='right-container'>
 					<div className='volume-slide-container'>

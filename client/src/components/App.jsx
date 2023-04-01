@@ -18,7 +18,6 @@ import Play from './Play.jsx';
 import FourOhFour from './404.jsx';
 // import { songData } from '../../../DummyData/dummyData.js'
 import Splash from '../components/login/Splash.jsx';
-import TierVerification from './TierVerification.jsx';
 import axios from 'axios';
 
 export default function App() {
@@ -28,19 +27,26 @@ export default function App() {
   const [artistData, setArtistData] = useState();
   const [songData, setSongData] = useState();
   const [songAllHomeData, setSongAllHomeData] = useState([]);
-  // const [changeNavBar, setChangeNavBar] = useState(0);
-
   const [collaborateSongPath, setCollaborateSongPath] = useState(null);
-  // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
+  const [firstRender, setFirstRender] = useState(true);
 
   // View State changes on click
   const [view, setView] = useState({ name: 'splash' });
 
   useEffect(() => {
     console.log("Changing view to: " + view.name);
-    // if (view.name === "create") {
-    //   setChangeNavBar(1);
-    // }
+    if (view.name === 'home') {
+      if (firstRender === true) {
+        setFirstRender(false)
+      } else {
+        axios.get(`/api/getAllSongsHome`)
+        .then((res) => {
+          console.log("New Data from deployed DB: ", res.data);
+          setSongAllHomeData(res.data);
+        })
+        .catch((err) => console.log(err));
+      }
+    }
   }, [view])
 
   useEffect(() => {
@@ -50,17 +56,10 @@ export default function App() {
         setSongAllHomeData(res.data);
       })
       .catch((err) => console.log(err));
-
   }, [])
 
-  // Keeping commented out code for potential props handling in the future
-  // const changeView = (name, someProps = {}) => {
   const changeView = (name) => {
     setView({ name });
-    // return (moreProps = {}) => {
-    //   console.log("Changing view to: " + name);
-    //   setView({ name, viewProps: { ...someProps, ...moreProps } });
-    // };
   };
 
   const handleSetArtistSongData = (artistName, songData) => {
@@ -99,7 +98,7 @@ export default function App() {
         })
           .then((res) => {
             setProfileData(res.data);
-            return axios.get(`api/user/?userEmail=${res.data.email}`)
+            return axios.get(`api/userbycol?col=email&val=${res.data.email}`)
           })
           .then(async (res) => {
             let keys = Object.keys(res.data)
@@ -117,7 +116,7 @@ export default function App() {
     },
     [user]
   );
-
+//
   const renderView = () => {
     switch (view.name) {
       case "splash":
@@ -127,7 +126,7 @@ export default function App() {
       case "create":
         return <Create changeView={changeView} collaborateSongPath={collaborateSongPath} profileData={profileData} />;
       case "favorites":
-        return <Favorites changeView={changeView} profileData={profileData} />;
+        return <Favorites changeView={changeView} profileData={profileData} view={view} handleSetArtistSongData={handleSetArtistSongData}/>;
       case "newAccount":
         return <NewAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "profile":
@@ -140,8 +139,6 @@ export default function App() {
         return <ConfirmLogOut changeView={changeView} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
       case "confirmDeleteAccount":
         return <ConfirmDeleteAccount changeView={changeView} profileData={profileData} setProfileData={setProfileData} setLoggedIn={setLoggedIn} />;
-      case "verify":
-        return <TierVerification profileData={profileData} artistProfileData={artistProfileData} />;
       case "theme":
         return <ThemeExample />;
       default:

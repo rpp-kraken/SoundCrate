@@ -7,29 +7,24 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import { useTheme } from '@mui/material/styles';
 
-export default function NavBar(props) {
+export default function NavBar({ changeView }) {
   const theme = useTheme();
 
   const [value, setValue] = useState(0);
 
-  // useEffect(() => {
-  //   console.log("Changing NavBar to: " + props.changeNavBar);
-  //   setValue(props.changeNavBar);
-  // }, [])
 
   return (
     <BottomNavigation
       id="navBar"
       value={value}
       onChange={(event, newValue) => {
-        // console.log("Nav Bar - newValue:", newValue);
         setValue(newValue);
         if (newValue === 0) {
-          props.changeView('home');
+          changeView('home');
         } else if (newValue === 1) {
-          props.changeView('create');
+          changeView('create');
         } else if (newValue === 2) {
-          props.changeView('favorites');
+          changeView('favorites');
         }
       }}
       showLabels
@@ -38,6 +33,7 @@ export default function NavBar(props) {
       <BottomNavigationAction label="" icon={<Home />} />
       <BottomNavigationAction label="" icon={<KeyboardVoiceIcon />} />
       <BottomNavigationAction label="" icon={<FavoriteIcon />} />
+      <BottomNavigationAction label="" style={{ display: 'none' }} />
     </BottomNavigation>
   );
 }

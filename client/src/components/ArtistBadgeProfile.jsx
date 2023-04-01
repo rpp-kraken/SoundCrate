@@ -18,7 +18,7 @@ export default function ArtistBadgeProfile({ tier1, tier2, tier3 }) {
   }
 
   return (
-    <img src={badgeLevelIcon} className="badge-icon" />
+    <img src={badgeLevelIcon} className="badge-icon-profile" />
   );
 }
 

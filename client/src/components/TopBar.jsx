@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { AppBar, Toolbar, IconButton, Avatar, Button, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { Menu, AccountCircle, Edit,  ExitToApp, MusicNote, Delete } from '@material-ui/icons';
+import { Menu, AccountCircle, Edit, ExitToApp, MusicNote, Delete } from '@material-ui/icons';
 import LoginIcon from '@mui/icons-material/Login';
 import { useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
 import axios from 'axios';
 import Login from '../components/login/Login.jsx';
-// import logo from '../../dist/name-and-icon-white.PNG';
 
 export default function TopBar({ setUser, imageURL, changeView, profileData, handleSetArtistSongData, loggedIn }) {
   const theme = useTheme();
+
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const toggleDrawer = () => {
@@ -31,12 +32,23 @@ export default function TopBar({ setUser, imageURL, changeView, profileData, han
 
   return (
     <>
-      <AppBar position="sticky" style={{ backgroundColor: theme.palette.background.secondary, height: '16vh', justifyContent: 'center', boxShadow: 'none' }}>
+      <AppBar position="sticky" style={{ backgroundColor: 'rgb(10, 15, 18)', height: '13vh', justifyContent: 'center', boxShadow: 'none' }}>
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer} data-testid="drawer">
             <Menu />
           </IconButton>
           <Avatar alt="Profile Picture" src={profileData.path_to_pic} style={{ height: '50px', width: '50px' }} />
+          <Box
+            component="img"
+            sx={{
+              width: 350,
+              maxWidth: { xs: 250, md: 300 },
+            }}
+            alt="Sound Crate logo"
+            src="/images/name-and-icon-white.png"
+            position="absolute"
+            right="20px"
+          />
         </Toolbar>
       </AppBar>
       <Drawer anchor="left" open={openDrawer} onClose={toggleDrawer}>
@@ -48,7 +60,7 @@ export default function TopBar({ setUser, imageURL, changeView, profileData, han
           <List>
             {!loggedIn && <ListItem button>
               <ListItemIcon><LoginIcon /></ListItemIcon>
-              <Login setUser={setUser}/>
+              <Login setUser={setUser} />
             </ListItem>}
             {loggedIn && <ListItem button>
               <ListItemIcon><Edit /></ListItemIcon>
@@ -56,16 +68,16 @@ export default function TopBar({ setUser, imageURL, changeView, profileData, han
             </ListItem>}
             {loggedIn && <ListItem button>
               <ListItemIcon><MusicNote /></ListItemIcon>
-              <ListItemText primary="My Music" onClick={onClickMyMusic}/>
+              <ListItemText primary="My Music" onClick={onClickMyMusic} />
             </ListItem>}
             {loggedIn && <ListItem button>
               <ListItemIcon><ExitToApp /></ListItemIcon>
-              <ListItemText primary="Log Out" onClick={onClickLogOut}/>
+              <ListItemText primary="Log Out" onClick={onClickLogOut} />
             </ListItem>}
             {loggedIn && <ListItem button>
               <ListItemIcon><Delete /></ListItemIcon>
               <ListItemText primary="Delete Account" onClick={onClickDeleteAccount} />
-            </ListItem> }
+            </ListItem>}
           </List>
         </div>
       </Drawer>
