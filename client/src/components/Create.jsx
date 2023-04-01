@@ -11,7 +11,8 @@ import audioBufferToWav from 'audiobuffer-to-wav';
 import CreateFxPanel from './CreateFxPanel.jsx';
 import CreateAudioWaveform from './CreateAudioWaveform.jsx'
 import { MicrophoneRecorder } from './CreateMicRecord.jsx';
-import { Publish } from './Publish.jsx';
+// import { Publish } from './Publish.jsx';
+import Publish from './Publish.jsx';
 
 export default function Create(props) {
   const theme = useTheme();
@@ -216,7 +217,8 @@ export default function Create(props) {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, minWidth: 'fit-content', marginBottom: '110px', justifyContent: 'center', alignItems: 'center' }}>
       <Grid container spacing={1} p={4} sx={{ backgroundColor: theme.palette.background.default, flexDirection: 'column', alignItems: 'center', maxWidth: '300px', minWidth: '300px' }}>
-        <Typography color="secondary" variant='bodyText' sx={{ width: '75%', textAlign: 'center', color: 'white' }}>To start creating, upload some audio or record yourself!</Typography>
+        {/* <Typography color="secondary" variant='bodyText' sx={{ width: '75%', textAlign: 'center', color: 'white' }}>To start creating, upload some audio or record yourself!</Typography> */}
+        <Typography color="secondary" variant='bodyText' sx={{ width: '75%', textAlign: 'center', color: 'white' }}></Typography>
       </Grid>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', gap: '15px' }}>
         {underMax &&
