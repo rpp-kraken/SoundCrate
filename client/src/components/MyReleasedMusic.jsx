@@ -6,7 +6,7 @@ export default function MyReleasedMusic(props) {
   const [songs, setSongs] = useState();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    fetch(`http://localhost:3000/api/songs?user=${encodeURIComponent(props.profileData.name)}`)
+    fetch(`http://localhost:3080/api/songs?user=${encodeURIComponent(props.profileData.name)}`)
       .then(res => {
         if (!res.ok) {
           throw 'There was a problem retrieving the user\'s songs';
