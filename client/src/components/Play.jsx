@@ -41,7 +41,6 @@ export default function Play(props) {
       }}>
         {/* <div style={{ fontSize: '24px', color: 'black' }}>Play View</div> */}
         <PlayViewWaveform trackUrl={props.songData.path_to_song} trackTitle={props.songData.title} />
-        <br/>
         {/* <div>{"Song Title: " + props.songData.title}</div> */}
         {/* <Grid container spacing={1} p={4} sx={{ backgroundColor: theme.palette.background.default, flexDirection: 'column', alignItems: 'center', maxWidth: '300px', minWidth: '300px' }}>
           <Typography color="secondary" variant='bodyText' sx={{ width: '100%', textAlign: 'center', color: 'white' }}>{"Artist Name: " + props.songData.artist}</Typography>
@@ -55,10 +54,16 @@ export default function Play(props) {
         <Grid container spacing={1} p={1} sx={{ backgroundColor: theme.palette.background.default, flexDirection: 'column', alignItems: 'center', maxWidth: '300px', minWidth: '300px' }}>
           <Typography color="secondary" variant='bodyText' sx={{ width: '100%', textAlign: 'center', color: 'white' }}>{"Play Count: " + props.songData.play_count}</Typography>
         </Grid> */}
-        <div style={{ textAlign: 'center' }}>{"# " + props.songData.tags}</div>
-        <div style={{ textAlign: 'center' }}>{"Favorited: " + props.songData.likedCount}</div>
-        <div style={{ textAlign: 'center' }}>{"Play Count: " + props.songData.play_count}</div><br/>
-        <div style={{ textAlign: 'center' }}><Button onClick={handleCollab}>Collaborate</Button></div>
+        <div class="play-container" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '10px', margin: '20px' }}>
+          <div class="play-text-container" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
+            <div style={{ textAlign: 'center' }}>{"# " + props.songData.tags}</div>
+            <div style={{ boxSizing: 'border-box', borderLeft: '1px solid gray', height: '15px' }}></div>
+            <div style={{ textAlign: 'center' }}>{"Favorited: " + props.songData.likedCount}</div>
+            <div style={{ boxSizing: 'border-box', borderLeft: '1px solid gray', height: '15px' }}></div>
+            <div style={{ textAlign: 'center' }}>{"Play Count: " + props.songData.play_count}</div>
+          </div>
+          <Button onClick={handleCollab} style={{ margin: '10px auto' }}>Collaborate</Button>
+        </div>
       </div>
     </div>
   );
