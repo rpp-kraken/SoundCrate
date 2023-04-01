@@ -177,7 +177,7 @@ export default function Publish (props) {
             onPlay={handlePlay}
             onPause={handlePause}
           />
-        <Button variant="contained" onClick={handleClose} sx={{ marginBottom: '4em' }}>Cancel</Button>
+        {/* <Button variant="contained" onClick={handleClose} sx={{ marginBottom: '4em' }}>Cancel</Button> */}
         </div>
         <Button variant="contained" onClick={handleClose}>Cancel</Button>    <Button variant="contained" type="submit">Submit</Button>
         </form>
