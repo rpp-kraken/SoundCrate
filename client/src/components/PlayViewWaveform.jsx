@@ -213,6 +213,7 @@ const PlayViewWaveform = (props) => {
 							<i className='material-icons'>Play</i>
 						)}
 					</Button>
+					<br/><br/>
 					<Button
 						title='reload'
 						className='controls'
