@@ -32,7 +32,7 @@ export default function TopBar({ setUser, imageURL, changeView, profileData, han
 
   return (
     <>
-      <AppBar position="sticky" style={{ backgroundColor: theme.palette.background.secondary, height: '16vh', justifyContent: 'center', boxShadow: 'none' }}>
+      <AppBar position="sticky" style={{ backgroundColor: 'rgb(10, 15, 18)', height: '13vh', justifyContent: 'center', boxShadow: 'none' }}>
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer} data-testid="drawer">
             <Menu />
