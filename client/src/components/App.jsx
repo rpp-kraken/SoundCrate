@@ -27,10 +27,7 @@ export default function App() {
   const [artistData, setArtistData] = useState();
   const [songData, setSongData] = useState();
   const [songAllHomeData, setSongAllHomeData] = useState([]);
-  // const [changeNavBar, setChangeNavBar] = useState(0);
-
   const [collaborateSongPath, setCollaborateSongPath] = useState(null);
-  // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
   // View State changes on click
   const [view, setView] = useState({ name: 'splash' });
@@ -46,7 +43,6 @@ export default function App() {
         setSongAllHomeData(res.data);
       })
       .catch((err) => console.log(err));
-
   }, [])
 
   const changeView = (name) => {
@@ -144,7 +140,7 @@ export default function App() {
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>
-      { loggedIn && <NavBar view={view} changeView={changeView} />}
+      { loggedIn && <NavBar changeView={changeView} />}
     </ThemeProvider>
   );
 }

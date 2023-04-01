@@ -23,10 +23,10 @@ export default function ConfirmLogOut({ changeView, setProfileData, setLoggedIn 
   }
 
   return (
-    <div>
+    <div style={{ height: '30vh' }}>
       <br />
       <h3 style={{ textAlign: 'center', margin: '10px' }}>Are you sure you want to log out?</h3>
-      <Box sx={{ width: '100%' }} p={0}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, minWidth: 'fit-content', marginBottom: '110px', justifyContent: 'center', alignItems: 'center' }}>
         <Grid container direction='row' spacing={7} p={4} sx={{ flexDirection: 'row', height: 'fit-content' }}>
 
           <Grid item xs={12} sx={{ ...gridItemStyle, flexDirection: 'row' }}>
