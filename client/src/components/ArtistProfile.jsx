@@ -98,12 +98,12 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
         <Grid container direction='row' style={{ ...gridItemStyle, fontSize: '12px', marginTop: '10px' }}>
 
           <Grid item sx={{ ...gridItemStyle, flexDirection: 'column', minWidth: '80px' }}>
-            <Typography variant='bodyText' style={{ textAlign: 'center' }}>{artistData.songCount}</Typography>
-            <Typography variant='bodyText' style={{ textAlign: 'center' }}>Song</Typography>
+            <Typography variant='bodyText' style={{ textAlign: 'center' }}>{artistData.songCount || 0}</Typography>
+            <Typography variant='bodyText' style={{ textAlign: 'center' }}>Songs</Typography>
           </Grid>
           <div style={{ boxSizing: 'border-box', borderLeft: '1px solid gray', height: '15px' }}></div>
           <Grid item sx={{ ...gridItemStyle, flexDirection: 'column', minWidth: '80px' }}>
-            <Typography variant='bodyText' style={{ textAlign: 'center' }}>{artistData.favoritesCount}</Typography>
+            <Typography variant='bodyText' style={{ textAlign: 'center' }}>{artistData.favoritesCount || 0}</Typography>
             <Typography variant='bodyText' style={{ textAlign: 'center' }}>Favorites</Typography>
           </Grid>
           {(artistData.tier1 || artistData.tier2 || artistData.tier3) &&
@@ -114,11 +114,11 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
         </Grid>
 
         {(loggedIn && artistData.username === profileData.username) && <Grid item xs={12} sx={{ ...gridItemStyle }}>
-          <Button variant="contained" component="label">
+          <Button variant="contained" component="label" style={{ display: 'none' }} >
             Edit Profile
             <input onClick={() => setOpenEditProfile(true)} style={{ display: 'none' }} />
           </Button><br />
-          <Button variant="contained" component="label" onClick={onClickRequestVerification}>
+          <Button variant="contained" component="label" onClick={onClickRequestVerification} >
             Request Verification
           </Button>
           <div>
