@@ -9,9 +9,8 @@ import EditProfile from './EditProfile.jsx';
 import ArtistBadgeProfile from './ArtistBadgeProfile.jsx'
 import axios from 'axios';
 
-export default function ArtistProfile({ artistData, changeView, loggedIn, songData, profileData, handleSetArtistSongData }) {
+export default function ArtistProfile({ artistData, changeView, loggedIn, songData, profileData, setProfileData, handleSetArtistSongData }) {
   const [openEditProfile, setOpenEditProfile] = useState(false);
-  console.log(artistData)
   const theme = useTheme();
   const gridItemStyle = {
     display: 'flex',
@@ -106,7 +105,7 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
             <Typography variant='bodyText' style={{ textAlign: 'center' }}>{artistData.favoritesCount}</Typography>
             <Typography variant='bodyText' style={{ textAlign: 'center' }}>Favorites</Typography>
           </Grid>
-          {(artistData.tier1 || artistData.tier2 || artistData.tier3) &&
+          {(loggedIn && (artistData.tier1 || artistData.tier2 || artistData.tier3)) &&
           <Grid item sx={{ ...gridItemStyle, flexDirection: 'column', minWidth: '80px' }}>
             <ArtistBadgeProfile tier1={artistData.tier1} tier2={artistData.tier2} tier3={artistData.tier3} />
           </Grid>
@@ -122,7 +121,7 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
             Request Verification
           </Button>
           <div>
-            {openEditProfile && <EditProfile setOpenEditProfile={setOpenEditProfile} profileData={profileData} />}      <br /><br />
+            {openEditProfile && <EditProfile setOpenEditProfile={setOpenEditProfile} profileData={profileData} setProfileData={setProfileData} />}      <br /><br />
           </div>
         </Grid>}
 

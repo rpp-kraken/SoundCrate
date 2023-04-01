@@ -24,6 +24,7 @@ export default function EditProfile(props) {
   const [bio, setBio] = useState(props.profileData.bio);
   const [image, setImage] = useState(null);
   const [urlImage, setUrlImage] = useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const paperStyle = {
     backgroundColor: useTheme().palette.primary.dark,
@@ -32,12 +33,9 @@ export default function EditProfile(props) {
     width: '400px',
   };
 
-  const [open, setOpen] = React.useState(true);
-
   const handleClose = () => {
     props.setOpenEditProfile(false);
   };
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -89,6 +87,10 @@ export default function EditProfile(props) {
     .catch(error => {
       console.error(error);
     });
+
+    axios.get(`api/userbycol?col=email&val=${props.profileData.email}`)
+      .then(data => { props.setProfileData(data) })
+      .catch(err => console.log('error in edit profile'));
   };
 
   const handleImageChange = (picture) => {
