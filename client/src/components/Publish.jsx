@@ -145,9 +145,11 @@ export const Publish = (props) => {
               Upload Image
               <input type="file" accept="image/*" onChange={(e) => handleImageChange(e.target.files[0])} style={{ display: 'none' }} />
             </Button>
+            <br />
           </label>
-            {urlImage && <img src={urlImage} alt="Song Image Preview" />}
+            {urlImage && <img src={urlImage} alt="Song Image Preview" className={'picturePreview'}/>}
            <label>
+           <br />
             Song Title:
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required/>
           </label>
@@ -184,9 +186,8 @@ export const Publish = (props) => {
             onPause={handlePause}
           />
         )} */}
-        <Button variant="contained" onClick={handleClose} sx={{ marginBottom: '4em' }}>Cancel</Button>
         </div>
-          <Button variant="contained" type="submit">Submit</Button>
+        <Button variant="contained" onClick={handleClose}>Cancel</Button>    <Button variant="contained" type="submit">Submit</Button>
         </form>
         </div>
       </Modal>
