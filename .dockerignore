@@ -2,3 +2,4 @@
 *bundle.js
 .env
 config.js
+*.pem
