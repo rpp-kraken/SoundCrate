@@ -13,6 +13,7 @@ export default function Play(props) {
   const theme = useTheme();
 
   useEffect(() => {
+    console.log("props.songData.id: ", props.songData, props.songData.id)
     axios.put('/api/playCountIncrement', { id: props.songData.id })
       .then((res) => {
         console.log("PLAY INCREMENT SUCCESS! Data from deployed DB: ", res.data);
