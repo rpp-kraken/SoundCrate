@@ -9,9 +9,8 @@ import EditProfile from './EditProfile.jsx';
 import ArtistBadgeProfile from './ArtistBadgeProfile.jsx'
 import axios from 'axios';
 
-export default function ArtistProfile({ artistData, changeView, loggedIn, songData, profileData, handleSetArtistSongData }) {
+export default function ArtistProfile({ artistData, changeView, loggedIn, songData, profileData, setProfileData, handleSetArtistSongData }) {
   const [openEditProfile, setOpenEditProfile] = useState(false);
-  console.log(artistData)
   const theme = useTheme();
   const gridItemStyle = {
     display: 'flex',
@@ -122,7 +121,7 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
             Request Verification
           </Button>
           <div>
-            {openEditProfile && <EditProfile setOpenEditProfile={setOpenEditProfile} profileData={profileData} />}      <br /><br />
+            {openEditProfile && <EditProfile setOpenEditProfile={setOpenEditProfile} handleSetArtistSongData={handleSetArtistSongData} setProfileData={setProfileData} profileData={profileData} changeView={changeView} />}      <br /><br />
           </div>
         </Grid>}
 
