@@ -67,24 +67,30 @@ export default function EditProfile(props) {
       return response.text();
     })
     .then(data => {
-      console.log(data);
-    })
-    .catch(error => {
-      console.error(error);
-    });
-
-    //Bio
-   fetch(`/api/editProfileBio?userId=${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ bio })
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      // props.changeView('myReleasedMusic');
+      //Bio
+      fetch(`/api/editProfileBio?userId=${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ bio })
+        })
+        .then(() => {
+          setOpen(false);
+          fetch(`/api/userbycol?col=name&val=${props.profileData.name}`, {
+            method: 'GET'
+          })
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            props.setProfileData(data);
+            props.handleSetArtistSongData(data.username, null);
+          })
+        })
+        .catch(error => {
+          console.error(error);
+        });
     })
     .catch(error => {
       console.error(error);
@@ -119,14 +125,14 @@ export default function EditProfile(props) {
         <div style={paperStyle}>
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <Button variant="contained" component="label" style={{ width: 'fit-content' }}>
-                New Profile Image
+              New Profile Image
+              <input type="file" accept="image/*" onChange={(e) => handleImageChange(e.target.files[0])} style={{ display: 'none' }} />
             </Button>
-            <input type="file" accept="image/*" onChange={(e) => handleImageChange(e.target.files[0])} style={{ display: 'none' }} />
-            {urlImage && <img src={urlImage} alt="Profile Image Preview" />}
+            {urlImage && <img className="picturePreview" src={urlImage} alt="Profile Image Preview" />}
             <label>
               Edit Bio:
+              <input type="text" onChange={handleChangeBio} value={bio} style={{ display: 'block', width: '100%', height: '75px' }}/>
             </label>
-            <input type="text" onChange={handleChangeBio} value={bio} style={{ display: 'block', width: '100%', height: '75px' }}/>
             <Button variant="contained" onClick={handleClose} style={{ width: 'fit-content' }}>Cancel</Button>
             <Button variant="contained" type="submit" style={{ width: 'fit-content' }}>Submit</Button>
           </form>

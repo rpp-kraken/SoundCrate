@@ -13,14 +13,16 @@ export default function SongCardList({ songs, handleSetArtistSongData, changeVie
         return (
           <SongCard
             title={song.title}
+            // user_id={song.user_id}
             user_id={song.user_id}
             artist={song.username}
             path_to_song={song.path_to_song}
             artistImageUrl={song.path_to_artwork}
             likedCount={song.fav_count}
             play_count={song.play_count}
+            id={song.id}
             songID={song.id}
-            id={song.song_id}
+            // id={song.song_id}
             tags={tags}
             key={i}
             handleSetArtistSongData={handleSetArtistSongData}
