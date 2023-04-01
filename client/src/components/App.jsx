@@ -33,13 +33,10 @@ export default function App() {
   // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
   // View State changes on click
-  const [view, setView] = useState({ name: 'splash' });
+  const [view, setView] = useState({ name: 'confirmDeleteAccount' });
 
   useEffect(() => {
     console.log("Changing view to: " + view.name);
-    // if (view.name === "create") {
-    //   setChangeNavBar(1);
-    // }
   }, [view])
 
   useEffect(() => {
@@ -52,14 +49,8 @@ export default function App() {
 
   }, [])
 
-  // Keeping commented out code for potential props handling in the future
-  // const changeView = (name, someProps = {}) => {
   const changeView = (name) => {
     setView({ name });
-    // return (moreProps = {}) => {
-    //   console.log("Changing view to: " + name);
-    //   setView({ name, viewProps: { ...someProps, ...moreProps } });
-    // };
   };
 
   const handleSetArtistSongData = (artistName, songData) => {
@@ -153,7 +144,7 @@ export default function App() {
       <Container id='main-app-container' maxWidth={'sm'} sx={{ padding: 0 }}>
         <Suspense fallback={<p>Loading...</p>}>{renderView()}</Suspense>
       </Container>
-      { loggedIn && <NavBar changeView={changeView} />}
+      { loggedIn && <NavBar view={view} changeView={changeView} />}
     </ThemeProvider>
   );
 }
