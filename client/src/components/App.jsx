@@ -27,19 +27,13 @@ export default function App() {
   const [artistData, setArtistData] = useState();
   const [songData, setSongData] = useState();
   const [songAllHomeData, setSongAllHomeData] = useState([]);
-  // const [changeNavBar, setChangeNavBar] = useState(0);
-
   const [collaborateSongPath, setCollaborateSongPath] = useState(null);
-  // const views = ['profile', 'create', 'discover', 'play', 'publish', 'theme', 'songcard'];
 
   // View State changes on click
   const [view, setView] = useState({ name: 'splash' });
 
   useEffect(() => {
     console.log("Changing view to: " + view.name);
-    // if (view.name === "create") {
-    //   setChangeNavBar(1);
-    // }
   }, [view])
 
   useEffect(() => {
@@ -49,17 +43,10 @@ export default function App() {
         setSongAllHomeData(res.data);
       })
       .catch((err) => console.log(err));
-
   }, [])
 
-  // Keeping commented out code for potential props handling in the future
-  // const changeView = (name, someProps = {}) => {
   const changeView = (name) => {
     setView({ name });
-    // return (moreProps = {}) => {
-    //   console.log("Changing view to: " + name);
-    //   setView({ name, viewProps: { ...someProps, ...moreProps } });
-    // };
   };
 
   const handleSetArtistSongData = (artistName, songData) => {

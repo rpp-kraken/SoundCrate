@@ -5,6 +5,7 @@ const express = require('express');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
+const path = require('path');
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const { handleUpload } = require('./controllers/handleUpload');
@@ -22,20 +23,22 @@ const { editProfilePic } = require('./controllers/editProfilePic');
 const { playCountIncrement } = require('./controllers/playCountIncrement');
 const { addLikedSong } = require('./controllers/addLikedSong')
 const { dislikeSong } = require('./controllers/dislikeSong')
-
-
-// TO BE TURNED ON WITH SSL CERT/KEY
-// const privateKey  = fs.readFileSync('/Users/briankuzma/Desktop/HR/Kraken/SoundCrate/server/key.pem', 'utf8');
-// const certificate = fs.readFileSync('/Users/briankuzma/Desktop/HR/Kraken/SoundCrate/server/cert.pem', 'utf8');
-// const credentials = {key: privateKey, cert: certificate};
-
 const { handleDeleteUser } = require('./controllers/deleteUser');
 const upload = multer();
 const { artistBadge } = require('./controllers/artistBadge')
 
-
 const app = express();
 
+// redirect all http traffic to https
+app.enable('trust proxy');
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production' && !req.secure) {
+    console.log('redirecting to https://sound-crate.com...');
+    return res.redirect('https://sound-crate.com');
+  }
+
+  next();
+});
 
 app.use(express.static('./client/dist'));
 app.use(express.urlencoded({ extended: true }));
@@ -77,45 +80,23 @@ app.get('/api/userBadge', artistBadge)
 app.put('/likeSong',addLikedSong)
 app.put('/dislikeSong', dislikeSong)
 
+const port = secrets.PORT || process.env.PORT || 3080;
+let server;
+if (process.env.NODE_ENV === 'production') {
+  const key = fs.readFileSync('/etc/letsencrypt/live/www.sound-crate.com/privkey.pem');
+  const cert = fs.readFileSync('/etc/letsencrypt/live/www.sound-crate.com/fullchain.pem');
+  const credentials = { key, cert };
+  const httpsServer = https.createServer(credentials, app);
+  httpsServer.listen(port, () => {
+    console.log(`listening on port ${port}...`);
+  });
+}
 
-
-// Key and Cert should be included as config for httpsServer when created.
-
-
-//NOT NEEDED
-// const httpPort = 3000;
-// const httpServer = http.createServer(app);
-// httpServer.listen(port, () => {
-//   console.log(`HTTP Server running on port ${port}`);
-// });
-
-// let server = {};
-
-// console.log(process.env.NODE_ENV)
-// if (process.env.NODE_ENV === "production") {
-//   const httpsPort = 443;
-//   const httpsServer = https.createServer(credentials, app);
-//   httpsServer.listen(httpsPort, () => {
-//     console.log(`HTTPS Server running on port ${httpsPort}`);
-//   });
-// } else {
-//   server = app.listen(port, () => {
-//     console.log(`listening on port ${port}...`);
-//   });
-// };
-
-const port = secrets.PORT || process.env.PORT || 3000;
-// const credentials = {
-//   key: secrets.CERT_PRIVATE_KEY || process.env.CERT_PRIVATE_KEY,
-//   cert: secrets.AWS_CERTIFICATE || process.env.AWS_CERTIFICATE
-// }
-// const httpsServer = https.createServer(credentials, app);
-const server = app.listen(port, () => {
-  console.log(`listening on port ${port}...`);
+const httpPort = 3080;
+server = app.listen(httpPort, () => {
+  console.log(`listening on port ${httpPort}...`);
 });
 
-
-//EXPORT httpsServer <<<<<<<<<<<<<<<<
 module.exports = { app, server };
 
 

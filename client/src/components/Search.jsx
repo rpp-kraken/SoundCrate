@@ -13,6 +13,7 @@ export default function Search({setSearchQuery}) {
         variant="outlined"
         placeholder="Search..."
         size="small"
+        data-testid="searchBar"
       />
       <IconButton type="submit" aria-label="search">
         <SearchIcon style={{ fill: "blue" }} />

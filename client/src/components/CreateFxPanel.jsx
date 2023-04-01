@@ -4,9 +4,9 @@ import { Box, Typography, Card, TableCell, Button, IconButton } from '@mui/mater
 
 const CreateFxPanel = (props) => {
 
-  const [sliderVolumeValue, setSliderVolume] = useState(50);
+  const [sliderVolumeValue, setSliderVolume] = useState(1);
   const [sliderPitchValue, setSliderValue] = useState(0);
-  const [tempoValue, setTempoValue] = useState(0);
+  const [tempoValue, setTempoValue] = useState(1);
   const [mute1prev, setMute1prev] = useState(0);
   const [isMuted1, setIsMuted1] = useState(false);
 
@@ -77,8 +77,8 @@ const CreateFxPanel = (props) => {
             orient="vertical"
             type="range"
             min="0"
-            max="100"
-            step="1"
+            max="3"
+            step="0.25"
             value={sliderVolumeValue}
             onChange={handleChangeVolume}
             disabled={isMuted1}
@@ -92,8 +92,8 @@ const CreateFxPanel = (props) => {
             className="fx-slider"
             orient="vertical"
             type="range"
-            min="-50"
-            max="50"
+            min="-24"
+            max="24"
             value={sliderPitchValue}
             onChange={handleChangePitch}
             style={{ width: '10px', height: '100px'  }}
@@ -106,9 +106,9 @@ const CreateFxPanel = (props) => {
             className="fx-slider"
             orient="vertical"
             type="range"
-            min="-10"
-            max="10"
-            step="0.5"
+            min="0.2"
+            max="4"
+            step="0.2"
             value={tempoValue}
             onChange={handleChangeTempo}
             style={{ width: '10px', height: '100px'  }}
