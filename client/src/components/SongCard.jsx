@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardMedia, IconButton, Typography } from '@material-ui/core';
 import { FavoriteBorder, Favorite } from '@material-ui/icons';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
@@ -35,6 +35,9 @@ const useStyles = makeStyles({
 });
 
 export default function SongCard({ title, artist, path_to_song, artistImageUrl, isLiked, likedCount, play_count, handleSetArtistSongData, changeView, id, profileData, view, tags, songID }) {
+  // useEffect(() => {
+  //   console.log("ID: ", id, songID)
+  // }, [])
 
   const theme = useTheme();
   const [liked, setLiked] = useState(isLiked);

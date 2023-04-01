@@ -190,7 +190,7 @@ const PlayViewWaveform = (props) => {
 			<div ref={timelineRef} id='wave-timeline' />
 			<br/>
 			<div className='all-controls'>
-				<div className='left-container' style={{ textAlign: 'center' }}>
+				<div style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
 
 					<Button
 						title='play/pause'
@@ -213,7 +213,6 @@ const PlayViewWaveform = (props) => {
 							<i className='material-icons'>Play</i>
 						)}
 					</Button>
-					<br/><br/>
 					<Button
 						title='reload'
 						className='controls'
@@ -222,10 +221,6 @@ const PlayViewWaveform = (props) => {
 						sx={{ padding: '10px' }}>
 						<i className='material-icons'>Replay</i>
 					</Button>
-				</div>
-				<div className='right-container'>
-					<div className='volume-slide-container'>
-					</div>
 				</div>
 			</div>
 		</section>
