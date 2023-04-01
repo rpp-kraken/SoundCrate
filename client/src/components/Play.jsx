@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { createTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import PlayViewWaveform from './PlayViewWaveform.jsx';
 import axios from 'axios';
+import { Typography, Card, TableCell, Button, IconButton } from '@mui/material';
+import CloudUploadOutlined from '@mui/icons-material/CloudUploadOutlined';
+
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Unstable_Grid2';
 
 export default function Play(props) {
-  // const handleClosePlayView = (event) => {
-  //   event.stopPropagation();
-  //   props.handleClose();
-  // }
+  const theme = useTheme();
 
   useEffect(() => {
     axios.put('/api/playCountIncrement', { id: props.songData.id })
@@ -37,15 +40,24 @@ export default function Play(props) {
         overflow: 'auto'
       }}>
         {/* <div style={{ fontSize: '24px', color: 'black' }}>Play View</div> */}
-        <PlayViewWaveform trackUrl={props.songData.path_to_song} />
-        <div>{"Song Title: " + props.songData.title}</div>
-        <div>{"Artist Name: " + props.songData.artist}</div>
-        <div>{"Tags: " + props.songData.tags}</div>
-        {/* <div>{"Tags: " + props.songData.tag_names_string}</div> */}
-        <div>{"Favorited: " + props.songData.likedCount}</div>
-        <div>{"PlayCount: " + props.songData.play_count}</div>
-        {/* <button onClick={handleClosePlayView}>Back Arrow</button> */}
-        <button onClick={handleCollab}>Collaborate</button>
+        <PlayViewWaveform trackUrl={props.songData.path_to_song} trackTitle={props.songData.title} />
+        {/* <div>{"Song Title: " + props.songData.title}</div> */}
+        {/* <Grid container spacing={1} p={4} sx={{ backgroundColor: theme.palette.background.default, flexDirection: 'column', alignItems: 'center', maxWidth: '300px', minWidth: '300px' }}>
+          <Typography color="secondary" variant='bodyText' sx={{ width: '100%', textAlign: 'center', color: 'white' }}>{"Artist Name: " + props.songData.artist}</Typography>
+        </Grid>
+        <Grid container spacing={1} p={1} sx={{ backgroundColor: theme.palette.background.default, flexDirection: 'column', alignItems: 'center', maxWidth: '300px', minWidth: '300px' }}>
+          <Typography color="secondary" variant='bodyText' sx={{ width: '100%', textAlign: 'center', color: 'white' }}>{"# " + props.songData.tags}</Typography>
+        </Grid>
+        <Grid container spacing={1} p={1} sx={{ backgroundColor: theme.palette.background.default, flexDirection: 'column', alignItems: 'center', maxWidth: '300px', minWidth: '300px' }}>
+          <Typography color="secondary" variant='bodyText' sx={{ width: '100%', textAlign: 'center', color: 'white' }}>{"Favorited: " + props.songData.likedCount}</Typography>
+        </Grid>
+        <Grid container spacing={1} p={1} sx={{ backgroundColor: theme.palette.background.default, flexDirection: 'column', alignItems: 'center', maxWidth: '300px', minWidth: '300px' }}>
+          <Typography color="secondary" variant='bodyText' sx={{ width: '100%', textAlign: 'center', color: 'white' }}>{"Play Count: " + props.songData.play_count}</Typography>
+        </Grid> */}
+        <div style={{ textAlign: 'center' }}>{"# " + props.songData.tags}</div>
+        <div style={{ textAlign: 'center' }}>{"Favorited: " + props.songData.likedCount}</div>
+        <div style={{ textAlign: 'center' }}>{"Play Count: " + props.songData.play_count}</div><br/>
+        <div style={{ textAlign: 'center' }}><Button onClick={handleCollab}>Collaborate</Button></div>
       </div>
     </div>
   );
