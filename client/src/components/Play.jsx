@@ -37,7 +37,7 @@ export default function Play(props) {
         maxWidth: '100%',
         // maxHeight: '100%',
         maxHeight: '100vh',
-        overflow: 'auto',
+        overflow: 'auto'
       }}>
         {/* <div style={{ fontSize: '24px', color: 'black' }}>Play View</div> */}
         <PlayViewWaveform trackUrl={props.songData.path_to_song} trackTitle={props.songData.title} />
