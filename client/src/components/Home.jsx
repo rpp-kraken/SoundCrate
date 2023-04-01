@@ -7,7 +7,7 @@ const filterData = (query, data) => {
   return !query ? data : data.filter((d) => {
     const keys = Object.keys(d.tags);
     return d.title.toLowerCase().includes(query.toLowerCase()) ||
-      d.user_id.toLowerCase().includes(query.toLowerCase()) ||
+      d.username.toLowerCase().includes(query.toLowerCase()) ||
       (keys[0] && keys[0].toLowerCase().includes(query.toLowerCase())) ||
       (keys[1] && keys[1].toLowerCase().includes(query.toLowerCase())) ||
       (keys[2] && keys[2].toLowerCase().includes(query.toLowerCase()))
