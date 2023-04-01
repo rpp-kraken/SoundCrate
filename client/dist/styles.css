@@ -16,10 +16,20 @@
   max-width: 100%;
 }
 
+.picturePreview {
+  display: 'block';
+  text-align: center;
+  margin: 3%;
+  width: 40%;
+  height: 40%;
+}
+
 @media (max-width: 500px) {
   .video {
     width: 100%;
     height: auto;
   }
+
+
 }
 

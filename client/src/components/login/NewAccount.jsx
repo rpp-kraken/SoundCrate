@@ -9,6 +9,8 @@ export default function NewAccount({ changeView, profileData, setProfileData, se
   const [file, setFile] = useState('');
   const [tempFile, setTempFile] = useState('');
   const [username, setUsername] = useState('');
+  const [isPicture, setIsPicture] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(true);
 
   useEffect(() => {
     if (!path_to_pic && profileData.picture) {
@@ -30,8 +32,11 @@ export default function NewAccount({ changeView, profileData, setProfileData, se
   }
 
   const handleFile = async (e) => {
+    console.log('inside Handle Submti', e)
     await setFile(e.target.files[0])
-    setTempFile(e.target.files[0]);
+    setTempFile(URL.createObjectURL(e.target.files[0]));
+    setIsUpdated(false);
+    setIsPicture(true);
   }
 
   const onSubmit = async (e) => {
@@ -73,7 +78,7 @@ export default function NewAccount({ changeView, profileData, setProfileData, se
         <div>
           <label htmlFor="path">
             Profile Picture:
-            <br /><img src={path_to_pic} /><br />
+            <br />{isUpdated && <img src={path_to_pic} className={'picturePreview'}/>} {isPicture && <img src={tempFile} className={'picturePreview'}/>}<br />
             <Button variant="contained" component="label">
               Update
               <input type="file" name="path" accept="image/*" onChange={(e) => handleFile(e)} style={{ display: 'none' }} required />
