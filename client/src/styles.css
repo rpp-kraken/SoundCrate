@@ -6,6 +6,10 @@
   color: #b061ff !important;
 }
 
+.MuiDrawer-paperAnchorLeft {
+  background: #864ff2 !important;
+  color: white !important;
+}
 /* the container where wavesurfer adds the audio waveform */
 .waveform-container {
   margin: 0 auto;
