@@ -117,26 +117,20 @@ export default function EditProfile(props) {
         style={style}
       >
         <div style={paperStyle}>
-        <form onSubmit={handleSubmit}>
-          <label>
-            <Button variant="contained" component="label">
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <Button variant="contained" component="label" style={{ width: 'fit-content' }}>
                 New Profile Image
-              <input type="file" accept="image/*" onChange={(e) => handleImageChange(e.target.files[0])} style={{ display: 'none' }} />
             </Button>
-          </label>
+            <input type="file" accept="image/*" onChange={(e) => handleImageChange(e.target.files[0])} style={{ display: 'none' }} />
             {urlImage && <img src={urlImage} alt="Profile Image Preview" />}
-           <label>
-            Edit Bio:
-            <input type="text" onChange={handleChangeBio} value={bio} />
-          </label>
-          <br />
-            <div>
-            <br />
-        <Button variant="contained" onClick={handleClose} sx={{ marginBottom: '4em' }}>Cancel</Button>
+            <label>
+              Edit Bio:
+            </label>
+            <input type="text" onChange={handleChangeBio} value={bio} style={{ display: 'block', width: '100%', height: '75px' }}/>
+            <Button variant="contained" onClick={handleClose} style={{ width: 'fit-content' }}>Cancel</Button>
+            <Button variant="contained" type="submit" style={{ width: 'fit-content' }}>Submit</Button>
+          </form>
         </div>
-          <Button variant="contained" type="submit">Submit</Button>
-        </form>
-      </div>
       </Modal>
     </div>
   );
