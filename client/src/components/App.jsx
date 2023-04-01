@@ -49,7 +49,6 @@ export default function App(props) {
         setSongAllHomeData(res.data);
       })
       .catch((err) => console.log(err));
-
   }, [])
 
   // Keeping commented out code for potential props handling in the future

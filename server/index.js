@@ -10,7 +10,6 @@ const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const { handleUpload } = require('./controllers/handleUpload');
 const { getSongsByUser } = require('./controllers/getSongsByUser');
-// const { getOneSong } = require('./controllers/getOneSong');
 const { getAllSongsHome } = require('./controllers/getAllSongsHome');
 const { newUser } = require('./controllers/newUser');
 const { getUserByCol } = require('./controllers/getUserByCol');
@@ -25,7 +24,6 @@ const { addLikedSong } = require('./controllers/addLikedSong')
 const { dislikeSong } = require('./controllers/dislikeSong')
 const { handleDeleteUser } = require('./controllers/deleteUser');
 const upload = multer();
-const { artistBadge } = require('./controllers/artistBadge')
 
 const app = express();
 
@@ -72,9 +70,6 @@ app.delete('/api/deleteUser', handleDeleteUser);
 
 // play count routes
 app.put('/api/playCountIncrement', playCountIncrement);
-
-//artist icon badge
-app.get('/api/userBadge', artistBadge)
 
 // liked songs routes
 app.put('/likeSong',addLikedSong)
