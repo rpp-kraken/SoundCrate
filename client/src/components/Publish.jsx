@@ -20,7 +20,7 @@ const buttonContainerStyle = {
   justifyContent: 'center',
 };
 
-export const Publish = (props) => {
+export default function Publish (props) {
   const theme = useTheme();
   const [image, setImage] = useState();
   const [title, setTitle] = useState('');
@@ -130,7 +130,7 @@ export const Publish = (props) => {
   };
 
   return (
-    <div>
+    <div data-testid="publish" >
       <Modal
         open={open}
         aria-labelledby="modal-modal-title"
@@ -141,7 +141,7 @@ export const Publish = (props) => {
         <form onSubmit={handleSubmit}>
           <label>
             Song Image:
-            <Button variant="contained" component="label">
+            <Button variant="contained" component="label" >
               Upload Image
               <input type="file" accept="image/*" onChange={(e) => handleImageChange(e.target.files[0])} style={{ display: 'none' }} />
             </Button>
@@ -175,15 +175,6 @@ export const Publish = (props) => {
             onPlay={handlePlay}
             onPause={handlePause}
           />
-        {/* {props.song && (
-          <audio
-            ref={audioRef}
-            src={props.song}
-            controls
-            onPlay={handlePlay}
-            onPause={handlePause}
-          />
-        )} */}
         <Button variant="contained" onClick={handleClose} sx={{ marginBottom: '4em' }}>Cancel</Button>
         </div>
           <Button variant="contained" type="submit">Submit</Button>
