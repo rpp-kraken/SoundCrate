@@ -10,7 +10,9 @@ module.exports = {
 
       // delete all songs associated with that user
       const songs = await models.getSongsByUserId(userId);
-      songs.forEach(async (song) => await models.deleteSong(song.id));
+      if (songs) {
+        songs.forEach(async (song) => await models.deleteSong(song.id));
+      }
 
       // delete the user
       await models.deleteUser(userId);
