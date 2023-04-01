@@ -114,9 +114,9 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
         </Grid>
 
         {(loggedIn && artistData.username === profileData.username) && <Grid item xs={12} sx={{ ...gridItemStyle }}>
-          <Button variant="contained" component="label" style={{ display: 'none' }} >
+          <Button variant="contained" component="label" style={{ margin: '3px' }} >
             Edit Profile
-            <input onClick={() => setOpenEditProfile(true)} style={{ display: 'none' }} />
+            <input onClick={() => setOpenEditProfile(true)} style={{ display: 'none', margin: '3px' }} />
           </Button><br />
           <Button variant="contained" component="label" onClick={onClickRequestVerification} >
             Request Verification
