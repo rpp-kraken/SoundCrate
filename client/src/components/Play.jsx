@@ -41,6 +41,7 @@ export default function Play(props) {
       }}>
         {/* <div style={{ fontSize: '24px', color: 'black' }}>Play View</div> */}
         <PlayViewWaveform trackUrl={props.songData.path_to_song} trackTitle={props.songData.title} />
+        <br/>
         {/* <div>{"Song Title: " + props.songData.title}</div> */}
         {/* <Grid container spacing={1} p={4} sx={{ backgroundColor: theme.palette.background.default, flexDirection: 'column', alignItems: 'center', maxWidth: '300px', minWidth: '300px' }}>
           <Typography color="secondary" variant='bodyText' sx={{ width: '100%', textAlign: 'center', color: 'white' }}>{"Artist Name: " + props.songData.artist}</Typography>

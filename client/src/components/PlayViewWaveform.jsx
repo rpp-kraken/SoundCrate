@@ -188,13 +188,16 @@ const PlayViewWaveform = (props) => {
 
 			<div ref={wavesurferRef} id='waveform' />
 			<div ref={timelineRef} id='wave-timeline' />
+			<br/>
 			<div className='all-controls'>
 				<div className='left-container' style={{ textAlign: 'center' }}>
 
 					<Button
 						title='play/pause'
 						className='controls'
-						onClick={handlePlayPause}>
+						onClick={handlePlayPause}
+						p={4}
+						sx={{ padding: '10px' }}>
 						{/* {playing ? (
 							initLoad === false ? (
 								<i className='material-icons'>pause</i>
@@ -213,7 +216,9 @@ const PlayViewWaveform = (props) => {
 					<Button
 						title='reload'
 						className='controls'
-						onClick={handleReload}>
+						onClick={handleReload}
+						p={4}
+						sx={{ padding: '10px' }}>
 						<i className='material-icons'>Replay</i>
 					</Button>
 				</div>
