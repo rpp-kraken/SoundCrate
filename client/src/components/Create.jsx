@@ -217,6 +217,7 @@ export default function Create(props) {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, minWidth: 'fit-content', marginBottom: '110px', justifyContent: 'center', alignItems: 'center' }}>
 
+
       {/* <Grid container spacing={1} p={4} sx={{ backgroundColor: theme.palette.background.default, flexDirection: 'column', alignItems: 'center', maxWidth: '300px', minWidth: '300px' }}>
         <Typography color="secondary" variant='bodyText' sx={{ width: '75%', textAlign: 'center', color: 'white' }}>To start creating, upload some audio or record yourself!</Typography>
       </Grid> */}
@@ -228,6 +229,7 @@ export default function Create(props) {
         }
 
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', gap: '15px' }}>
+      <br/>
         {underMax &&
         <Button
           id="upload-button"
@@ -250,8 +252,10 @@ export default function Create(props) {
         {underMax &&
         <MicrophoneRecorder setListOfTracks={setListOfTracks} setMax={setMax} maxTracks={maxTracks} setUnderMax={setUnderMax} underMax={underMax} />
         }
+        <br/>
       </Box>
         {listOfTracks.map((urlTrack, i) => { return <CreateAudioWaveform trackUrl={urlTrack} index={i} key={i} /> })}
+        <br/>
       <div className="sidescroller">
         {listOfTracks.map((urlTrack, i) => { return <CreateFxPanel trackUrl={urlTrack} index={i} key={i} handleAddPlayer={handleAddPlayer} /> })}
       </div>
