@@ -11,7 +11,8 @@ import audioBufferToWav from 'audiobuffer-to-wav';
 import CreateFxPanel from './CreateFxPanel.jsx';
 import CreateAudioWaveform from './CreateAudioWaveform.jsx'
 import { MicrophoneRecorder } from './CreateMicRecord.jsx';
-import { Publish } from './Publish.jsx';
+// import { Publish } from './Publish.jsx';
+import Publish from './Publish.jsx';
 
 export default function Create(props) {
   const theme = useTheme();
