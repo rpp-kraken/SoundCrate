@@ -1,5 +1,5 @@
 describe('example test', () => {
   it('should assert true is true', () => {
-    expect(true).toBe(false);
+    expect(true).toBe(true);
   });
 });
