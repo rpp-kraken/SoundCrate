@@ -26,12 +26,12 @@ export default function Favorites(props) {
       {songs.length === 0
         ?
         <div>
-        <video autoPlay muted className="video" >
-          <source src="snarkyFavoritesSplash.mp4" type="video/mp4" />
-          Ouch! Sorry, your browser doesnt support this video! Get logged in to have some fun!
-        </video>
-      </div>
-        : <SongCardListFavorites songs={songs} view={props.view.name} profileData={props.profileData} handleSetArtistSongData={props.handleSetArtistSongData}  changeView={props.changeView}/>}
+          <video autoPlay muted className="video" >
+            <source src="snarkyFavoritesSplash.mp4" type="video/mp4" />
+            Ouch! Sorry, your browser doesnt support this video! Get logged in to have some fun!
+          </video>
+        </div>
+        : <SongCardListFavorites songs={songs} view={props.view.name} profileData={props.profileData} handleSetArtistSongData={props.handleSetArtistSongData} changeView={props.changeView} />}
     </div>
   );
 };

@@ -1,26 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { createTheme } from '@mui/material/styles';
 import SongCardList from './SongCardList.jsx';
+import { songData } from '../../../DummyData/dummyDataMy.js'
+
 
 export default function MyReleasedMusic(props) {
-  const [songs, setSongs] = useState();
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    fetch(`http://localhost:3080/api/songs?user=${encodeURIComponent(props.profileData.name)}`)
-      .then(res => {
-        if (!res.ok) {
-          throw 'There was a problem retrieving the user\'s songs';
-        }
-        return res.json();
-      })
-      .then(songs => {
-        setSongs(songs);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, [props.profileData.name]);
+  const [songs, setSongs] = useState(songData);
+  const [loading, setLoading] = useState(false);
+
   return (
     <div>
       {loading

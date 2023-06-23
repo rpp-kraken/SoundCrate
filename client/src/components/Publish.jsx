@@ -20,12 +20,12 @@ const buttonContainerStyle = {
   justifyContent: 'center',
 };
 
-export default function Publish (props) {
+export default function Publish(props) {
   const theme = useTheme();
   const [image, setImage] = useState();
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState([]);
-  const [underMax, setUnderMax] =useState(true);
+  const [underMax, setUnderMax] = useState(true);
   const [tagNum, setTagNum] = useState(0);
   const [doneRendering, setDoneRendering] = useState(false);
   const [urlImage, setUrlImage] = useState(false);
@@ -39,7 +39,7 @@ export default function Publish (props) {
       if (tags.length < 3) {
         setTags([...tags, tag]);
         e.target.value = "";
-        await setTagNum( tagNum + 1 )
+        await setTagNum(tagNum + 1)
         if (tagNum === 2) {
           setUnderMax(false);
         }
@@ -49,7 +49,7 @@ export default function Publish (props) {
 
   const handleDelete = (index) => {
     setTags([...tags.slice(0, index), ...tags.slice(index + 1)]);
-    setTagNum( tagNum - 1);
+    setTagNum(tagNum - 1);
     setUnderMax(true);
   };
 
@@ -92,35 +92,30 @@ export default function Publish (props) {
     } else {
       event.preventDefault();
       var tagsString = tags.join(',');
-      // console.log("Image in submit: ", image, "    song?  ", props.song);
 
-      // formData type
-
-      // console.log('here is type of song', typeof props.song);
-
-    const formData = new FormData();
-    formData.append('audioFile', props.song);
-    formData.append('title', title);
-    formData.append('created_at', new Date().toISOString());
-    formData.append('play_count', 0);
-    formData.append('fav_count', 0);
-    formData.append('user', `${props.profileData.username}`);
-    formData.append('userId', `${props.profileData.id}`);
-    formData.append('imageFile', image);
-    formData.append('tags', tagsString);
+      const formData = new FormData();
+      formData.append('audioFile', props.song);
+      formData.append('title', title);
+      formData.append('created_at', new Date().toISOString());
+      formData.append('play_count', 0);
+      formData.append('fav_count', 0);
+      formData.append('user', `${props.profileData.username}`);
+      formData.append('userId', `${props.profileData.id}`);
+      formData.append('imageFile', image);
+      formData.append('tags', tagsString);
 
       fetch('/api/uploadSong', {
         method: 'POST',
         body: formData
       })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        props.changeView('myReleasedMusic');
-      })
-      .catch(error => {
-        console.error(error);
-      });
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          props.changeView('myReleasedMusic');
+        })
+        .catch(error => {
+          console.error(error);
+        });
     }
   };
 
@@ -138,49 +133,49 @@ export default function Publish (props) {
         style={style}
       >
         <div style={paperStyle}>
-        <form onSubmit={handleSubmit}>
-          <label>
-            Song Image:
-            <Button variant="contained" component="label" >
-              Upload Image
-              <input type="file" accept="image/*" onChange={(e) => handleImageChange(e.target.files[0])} style={{ display: 'none' }} />
-            </Button>
+          <form onSubmit={handleSubmit}>
+            <label>
+              Song Image:
+              <Button variant="contained" component="label" >
+                Upload Image
+                <input type="file" accept="image/*" onChange={(e) => handleImageChange(e.target.files[0])} style={{ display: 'none' }} />
+              </Button>
+              <br />
+            </label>
+            {urlImage && <img src={urlImage} alt="Song Image Preview" className={'picturePreview'} />}
+            <label>
+              <br />
+              Song Title:
+              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+            </label>
             <br />
-          </label>
-            {urlImage && <img src={urlImage} alt="Song Image Preview" className={'picturePreview'}/>}
-           <label>
-           <br />
-            Song Title:
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required/>
-          </label>
-          <br />
-          <label htmlFor="tags">Tags (up to 3):</label>
-          {underMax && <input type="text" name="tags" onKeyPress={handleKeyPress} placeholder="Press enter to create tag"/>}
+            <label htmlFor="tags">Tags (up to 3):</label>
+            {underMax && <input type="text" name="tags" onKeyPress={handleKeyPress} placeholder="Press enter to create tag" />}
             <ul>
-            {tags.map((tag, index) => (
-              <li key={index}>
-                {tag}
-                <button type="button" onClick={() => handleDelete(index)} sx={{ marginBottom: '4em' }}>
-                  X
-                </button>
-              </li>
-            ))}
+              {tags.map((tag, index) => (
+                <li key={index}>
+                  {tag}
+                  <button type="button" onClick={() => handleDelete(index)} sx={{ marginBottom: '4em' }}>
+                    X
+                  </button>
+                </li>
+              ))}
             </ul>
             <div>
-            <br />
-          Preview: <br />
-          {props.songUrl ? null : "Recording and rendering your song..."}
-          <audio
-            ref={audioRef}
-            src={props.songUrl}
-            controls
-            onPlay={handlePlay}
-            onPause={handlePause}
-          />
-        {/* <Button variant="contained" onClick={handleClose} sx={{ marginBottom: '4em' }}>Cancel</Button> */}
-        </div>
-        <Button variant="contained" onClick={handleClose}>Cancel</Button>    <Button variant="contained" type="submit">Submit</Button>
-        </form>
+              <br />
+              Preview: <br />
+              {props.songUrl ? null : "Recording and rendering your song..."}
+              <audio
+                ref={audioRef}
+                src={props.songUrl}
+                controls
+                onPlay={handlePlay}
+                onPause={handlePause}
+              />
+              {/* <Button variant="contained" onClick={handleClose} sx={{ marginBottom: '4em' }}>Cancel</Button> */}
+            </div>
+            <Button variant="contained" onClick={handleClose}>Cancel</Button>    <Button variant="contained" type="submit">Submit</Button>
+          </form>
         </div>
       </Modal>
     </div>

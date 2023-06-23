@@ -20,7 +20,6 @@ export default function Home(props) {
   let songs = filterData(searchQuery, props.songs);
   return (
     <div className="discover">
-      <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       {songs.length > 0 ? (
         <SongCardList songs={songs} changeView={props.changeView} handleSetArtistSongData={props.handleSetArtistSongData} profileData={props.profileData} view={props.view}/>
       ) : (

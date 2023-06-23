@@ -24,13 +24,12 @@ const PlayViewWaveform = (props) => {
 	const [initLoad, setInitLoad] = useState(true); // init load play button ternary
 	const [duration, setDuration] = useState(0); // duration is used to set the default region of selection for trimming the audio
 
-	// create the waveform inside the correct component
+	// create the waveform inside the component
 	useEffect(() => {
 		if (wavesurferRef.current && !wavesurferObj) {
 			setWavesurferObj(
 				wavesurfer.create({
 					container: '#waveform',
-					// scrollParent: true,
 					autoCenter: true,
 					cursorColor: 'violet',
 					loopSelection: true,
@@ -40,12 +39,7 @@ const PlayViewWaveform = (props) => {
 					autoPlay: true,
 					barWidth: 3,
 					barHeight: 7,
-					// plugins: [
-					// 	TimelinePlugin.create({
-					// 		container: '#wave-timeline',
-					// 	}),
-					// RegionsPlugin.create({}),
-					// ],
+
 				})
 			);
 		}
@@ -64,7 +58,6 @@ const PlayViewWaveform = (props) => {
 			// once the waveform is ready, play the audio
 			wavesurferObj.on('ready', () => {
 				wavesurferObj.play();
-				// wavesurferObj.enableDragSelection({}); // to select the region to be trimmed
 				setDuration(Math.floor(wavesurferObj.getDuration())); // set the duration in local state
 			});
 
@@ -185,28 +178,17 @@ const PlayViewWaveform = (props) => {
 	return (
 		<section className='waveform-container'>
 			<h2 style={{ textAlign: 'center' }}>{props.trackTitle}</h2>
-
 			<div ref={wavesurferRef} id='waveform' />
 			<div ref={timelineRef} id='wave-timeline' />
 			<br/>
 			<div className='all-controls'>
 				<div style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
-
 					<Button
 						title='play/pause'
 						className='controls'
 						onClick={handlePlayPause}
 						p={4}
 						sx={{ padding: '10px' }}>
-						{/* {playing ? (
-							initLoad === false ? (
-								<i className='material-icons'>pause</i>
-							) : (
-								<i className='material-icons'>unmute play view</i>
-							)
-						) : (
-							<i className='material-icons'>play_arrow</i>
-						)} */}
 						{playing ? (
 							<i className='material-icons'>Pause</i>
 						) : (

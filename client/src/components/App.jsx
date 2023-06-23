@@ -14,115 +14,81 @@ import MyReleasedMusic from './MyReleasedMusic.jsx';
 import ConfirmLogOut from './ConfirmLogOut.jsx';
 import ConfirmDeleteAccount from './ConfirmDeleteAccount.jsx';
 import Play from './Play.jsx';
-// import Publish from './Publish.jsx';
 import FourOhFour from './404.jsx';
-// import { songData } from '../../../DummyData/dummyData.js'
+import { songData } from '../../../DummyData/dummyData.js'
 import Splash from '../components/login/Splash.jsx';
 import axios from 'axios';
 
 export default function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
   const [user, setUser] = useState([]);
   const [profileData, setProfileData] = useState([]);
   const [artistData, setArtistData] = useState();
-  const [songData, setSongData] = useState();
+  const [songDataIndividual, setSongData] = useState();
   const [songAllHomeData, setSongAllHomeData] = useState([]);
   const [collaborateSongPath, setCollaborateSongPath] = useState(null);
   const [firstRender, setFirstRender] = useState(true);
 
-  // View State changes on click
-  const [view, setView] = useState({ name: 'splash' });
+  const [view, setView] = useState({ name: 'home' });
 
   useEffect(() => {
-    console.log("Changing view to: " + view.name);
     if (view.name === 'home') {
       if (firstRender === true) {
         setFirstRender(false)
-      } else {
-        axios.get(`/api/getAllSongsHome`)
-        .then((res) => {
-          console.log("New Data from deployed DB: ", res.data);
-          setSongAllHomeData(res.data);
-        })
-        .catch((err) => console.log(err));
       }
     }
   }, [view])
 
   useEffect(() => {
-    axios.get(`/api/getAllSongsHome`)
-      .then((res) => {
-        console.log("Data from deployed DB: ", res.data);
-        setSongAllHomeData(res.data);
-      })
-      .catch((err) => console.log(err));
+    setSongAllHomeData(songData);
   }, [])
 
   const changeView = (name) => {
     setView({ name });
   };
 
-  const handleSetArtistSongData = (artistName, songData) => {
-    if (artistName) {
-      var artistProfileData;
-      axios.get(`/api/userbycol?col=username&val=${artistName}`)
-      .then((result) => {
-        artistProfileData = result.data;
-      })
-      .then(() => {
-        axios.get(`/api/songs?user=${artistProfileData.name}`)
-        .then((result) => {
-          if (result.data) {
-            artistProfileData.songCount = result.data.length;
-            artistProfileData.favoritesCount = result.data.reduce((total, obj) => obj.fav_count + total, 0);
-            artistProfileData.songs = result.data;
-          }
-          setArtistData(artistProfileData);
-          changeView('profile');
-        })
-      })
-      .catch((err) => console.log('error in artistName', err));
-    } else if (songData) {
-      setSongData(songData);
-    }
+  const handleSetArtistSongData = (artistData, songData) => {
+    // console.log(artistData, songData);
+    setArtistData(artistData);
+    setSongData(songData);
   }
 
-  useEffect(
-    () => {
-      if (user.length !== 0) {
-        axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-          headers: {
-            Authorization: `Bearer ${user.access_token}`,
-            Accept: 'application/json'
-          }
-        })
-          .then((res) => {
-            setProfileData(res.data);
-            return axios.get(`api/userbycol?col=email&val=${res.data.email}`)
-          })
-          .then(async (res) => {
-            let keys = Object.keys(res.data)
-            if (keys.length === 0) {
-              changeView('newAccount');
-            } else {
-              setLoggedIn(true);
-              setProfileData(res.data);
-              changeView('home');
-            }
-            setUser({});
-          })
-          .catch((err) => console.log('error in oauth', err));
-      }
-    },
-    [user]
-  );
-//
+  // useEffect(
+  //   () => {
+  //     if (user.length !== 0) {
+  //       axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${user.access_token}`,
+  //           Accept: 'application/json'
+  //         }
+  //       })
+  //         .then((res) => {
+  //           setProfileData(res.data);
+  //           return axios.get(`api/userbycol?col=email&val=${res.data.email}`)
+  //         })
+  //         .then(async (res) => {
+  //           let keys = Object.keys(res.data)
+  //           if (keys.length === 0) {
+  //             changeView('newAccount');
+  //           } else {
+  //             setLoggedIn(true);
+  //             setProfileData(res.data);
+  //             changeView('home');
+  //           }
+  //           setUser({});
+  //         })
+  //         .catch((err) => console.log('error in oauth', err));
+  //     }
+  //   },
+  //   [user]
+  // );
+
   const renderView = () => {
     switch (view.name) {
       case "splash":
         return <Splash />;
       case "home":
-        return <Home songs={songAllHomeData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} profileData={profileData} view={view}/>;
+        return <Home songs={songData} changeView={changeView} handleSetArtistSongData={handleSetArtistSongData} profileData={profileData} view={view}/>;
       case "create":
         return <Create changeView={changeView} collaborateSongPath={collaborateSongPath} profileData={profileData} />;
       case "favorites":
@@ -132,7 +98,8 @@ export default function App() {
       case "profile":
         return <ArtistProfile changeView={changeView} artistData={artistData} profileData={profileData} setProfileData={setProfileData} handleSetArtistSongData={handleSetArtistSongData} loggedIn={loggedIn} />;
       case "play":
-        return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} profileData={profileData}/>;
+        // return <Play changeView={changeView} songData={songData} setCollaborateSongPath={setCollaborateSongPath} profileData={profileData}/>;
+        return <Play changeView={changeView} songData={songDataIndividual} setCollaborateSongPath={setCollaborateSongPath} />;
       case "myReleasedMusic":
         return <MyReleasedMusic changeView={changeView} profileData={profileData} handleSetArtistSongData={handleSetArtistSongData} />;
       case "confirmLogOut":

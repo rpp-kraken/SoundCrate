@@ -8,6 +8,8 @@ import SongCardList from './SongCardList.jsx';
 import EditProfile from './EditProfile.jsx';
 import ArtistBadgeProfile from './ArtistBadgeProfile.jsx'
 import axios from 'axios';
+import { artistData } from '../../../DummyData/artistData.js'
+
 
 export default function ArtistProfile({ artistData, changeView, loggedIn, songData, profileData, setProfileData, handleSetArtistSongData }) {
   const [openEditProfile, setOpenEditProfile] = useState(false);
@@ -23,8 +25,6 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
   };
 
   const onClickRequestVerification = (event) => {
-    console.log("🚀 ~ file: ArtistProfile.jsx:25 ~ artistData.favoritesCount: ", artistData.favoritesCount)
-
     let bronze = 250000;
     let silver = 500000;
     let gold = 1000000;
@@ -37,15 +37,10 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
 
 
     if (artistData.favoritesCount >= bronze) {
-      // tillNextTier = silver - likes;
-      // currentTier = 'tier1';
       newTiers.newTier = "tier1";
     } else if (artistData.favoritesCount <= silver && artistData.favoritesCount >= gold) {
-      // tillNextTier = gold - artistData.favoritesCount;
-      // currentTier = 'tier2';
       newTiers.newTier = "tier2";
     } else if (artistData.favoritesCount >= gold) {
-      // currentTier = 'tier3';
       newTiers.newTier = "tier3";
     }
 
@@ -53,7 +48,6 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
     if (artistData.tier2) newTiers.oldTier = "tier2";
     if (artistData.tier3) newTiers.oldTier = "tier3";
 
-    console.log("🚀 ~ file: ArtistProfile.jsx:69 ~ onClickRequestVerification ~ newTiers:", newTiers)
     if (newTiers.newTier && newTiers.newTier !== newTiers.oldTier) {
       axios.put(`/api/editTier?userId=${artistData.id}`, newTiers)
         .then((result) => {
@@ -126,11 +120,11 @@ export default function ArtistProfile({ artistData, changeView, loggedIn, songDa
         </Grid>}
 
       </Grid>
-      {
+      {/* {
         artistData.songs ?
           <SongCardList songs={artistData.songs} handleSetArtistSongData={handleSetArtistSongData} changeView={changeView} /> :
           null
-      }
+      } */}
     </Box>
   );
 }

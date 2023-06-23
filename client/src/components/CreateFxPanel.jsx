@@ -41,16 +41,14 @@ const CreateFxPanel = (props) => {
   const muteSound = () => {
     setIsMuted1(!isMuted1);
     if (isMuted1) {
-      // console.log('unmuting Track');
       setSliderVolume(mute1prev);
     } else {
       setMute1prev(sliderVolumeValue);
-      // console.log('Muting Track');
       setSliderVolume(0);
     }
   }
 
-  // FX Needed for BMR
+  // Available Sound FX
   let effectPitch = new Tone.PitchShift(sliderPitchValue).toDestination();
   let gainNode = new Tone.Gain(sliderVolumeValue).connect(effectPitch);
 
@@ -63,7 +61,6 @@ const CreateFxPanel = (props) => {
   }
 
   return (
-    // <div className={props.index + 1 === props.active ? null : "hidden"}>
     <Box className="fx-box">
       <h4 style={{ margin: '3px' }}>FX: Sound {props.index + 1}</h4>
       <Button style={{ padding: '3px', fontSize: '14px' }}onClick={muteSound}>

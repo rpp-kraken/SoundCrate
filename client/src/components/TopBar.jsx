@@ -37,7 +37,7 @@ export default function TopBar({ setUser, imageURL, changeView, profileData, han
           <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer} data-testid="drawer">
             <Menu />
           </IconButton>
-          <Avatar alt="Profile Picture" src={profileData.path_to_pic} style={{ height: '50px', width: '50px' }} />
+          <Avatar alt="Profile Picture" src={'https://i.imgur.com/iSFHSQo.png'} style={{ height: '50px', width: '50px' }} />
           <Box
             component="img"
             sx={{
@@ -62,10 +62,10 @@ export default function TopBar({ setUser, imageURL, changeView, profileData, han
               <ListItemIcon><LoginIcon /></ListItemIcon>
               <Login setUser={setUser} />
             </ListItem>}
-            {loggedIn && <ListItem button>
+            {/* {loggedIn && <ListItem button>
               <ListItemIcon><Edit /></ListItemIcon>
               <ListItemText primary="My Account" onClick={onClickMyAccount} />
-            </ListItem>}
+            </ListItem>} */}
             {loggedIn && <ListItem button>
               <ListItemIcon><MusicNote /></ListItemIcon>
               <ListItemText primary="My Music" onClick={onClickMyMusic} />
